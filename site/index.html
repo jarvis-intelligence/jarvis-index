@@ -108,6 +108,13 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 @media (max-width: 767px) {
   .section { padding: 56px 0; }
 }
+.diagram { margin-top: 28px; }
+.diagram svg { width: 100%; height: auto; min-width: 680px; color: var(--ink-muted); }
+.diagram .node { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.diagram .label { fill: var(--ink); font-family: var(--mono); font-size: 12px; }
+.diagram .sub { fill: var(--ink-muted); font-family: var(--mono); font-size: 10.5px; }
+.diagram .flow { stroke: var(--accent); stroke-width: 1.5; marker-end: url(#arrow); }
+.caption { font-size: 14px; color: var(--ink-muted); margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -141,6 +148,44 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
     </div>
     <code class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</code>
     <p class="fineprint">macOS and Linux · MIT</p>
+  </section>
+
+  <section class="wrap section" id="pipeline">
+    <p class="eyebrow">Pipeline</p>
+    <h2>Index locally, query locally.</h2>
+    <p>A language indexer emits SCIP protobuf. <code>jarvis index</code> converts it to SQLite and builds the Zoekt index. <code>jarvis-server</code> answers over stdio. Every arrow runs on your machine.</p>
+    <div class="diagram scroll-x">
+      <svg viewBox="0 0 980 190" role="img" aria-labelledby="pipeline-title pipeline-desc">
+        <title id="pipeline-title">The jarvis indexing pipeline</title>
+        <desc id="pipeline-desc">A language indexer — scip-swift, scip-python, scip-typescript, or scip-java — emits SCIP protobuf. The jarvis index command converts that into SQLite plus a Zoekt index and an optional semantic index. The jarvis-server process then answers nine MCP tools over stdio.</desc>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#3B82F6"/>
+          </marker>
+        </defs>
+        <rect class="node" x="1" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="16" y="66">language indexer</text>
+        <text class="sub" x="16" y="86">scip-swift · scip-python</text>
+        <text class="sub" x="16" y="102">scip-typescript · scip-java</text>
+        <line class="flow" x1="205" y1="86" x2="253" y2="86"/>
+        <text class="sub" x="207" y="76">SCIP</text>
+        <rect class="node" x="261" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="276" y="66">jarvis index</text>
+        <text class="sub" x="276" y="86">converts protobuf</text>
+        <text class="sub" x="276" y="102">builds indexes</text>
+        <line class="flow" x1="465" y1="86" x2="513" y2="86"/>
+        <rect class="node" x="521" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="536" y="66">SQLite + Zoekt</text>
+        <text class="sub" x="536" y="86">+ optional semantic</text>
+        <text class="sub" x="536" y="102">read-only at query time</text>
+        <line class="flow" x1="725" y1="86" x2="773" y2="86"/>
+        <rect class="node" x="781" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="796" y="66">jarvis-server</text>
+        <text class="sub" x="796" y="86">nine MCP tools</text>
+        <text class="sub" x="796" y="102">over stdio</text>
+      </svg>
+    </div>
+    <p class="caption">No step in this pipeline contacts a network service.</p>
   </section>
 </main>
 </body>
