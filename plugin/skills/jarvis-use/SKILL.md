@@ -70,6 +70,7 @@ Before any structural tool call, check freshness:
   claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]" jarvis-server
   codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]" jarvis-server
   ```
+  In Cursor there is no `mcp add` CLI — add the same entry to `~/.cursor/mcp.json` by hand.
   Then call `semanticSearch` through `jarvis-semantic` instead of `jarvis`.
 - **`blastRadius` only sees already-indexed repos.** Index the dependency first, or re-run `jarvis index`/`reindex` after indexing it, for an edge to appear.
 - **One language per repo.** No multi-language merge — a polyglot repo indexes only its plurality language.

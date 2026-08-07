@@ -1,6 +1,6 @@
 # jarvis
 
-Local-first code intelligence: SCIP navigation and Zoekt search over your own indexed repositories. Installs as a plugin for **Codex CLI** and **Claude Code**, exposing nine MCP tools and three agent skills.
+Local-first code intelligence: SCIP navigation and Zoekt search over your own indexed repositories. Installs as a plugin for **Codex CLI**, **Claude Code**, and **Cursor**, exposing nine MCP tools and three agent skills.
 
 ## What it gives you
 
@@ -40,12 +40,43 @@ Then run the `jarvis-setup` skill (or follow its steps manually): install extern
 
 Then the same `setup.sh` + `jarvis index` flow.
 
+### Cursor
+
+Cursor has no CLI for adding a marketplace, so there are two paths.
+
+**Team marketplace** (Teams/Enterprise plans) — an admin imports this repo once and it becomes
+installable for the whole org:
+
+1. Dashboard → **Plugins** → **Add Marketplace** → **Import from Repo**
+2. Point it at `https://github.com/jarvis-intelligence/jarvis-index`
+3. Members install it from the **Customize** sidebar, at project or user scope.
+
+**Local install** (any plan) — clone and symlink the `plugin/` directory:
+
+```bash
+git clone https://github.com/jarvis-intelligence/jarvis-index.git
+ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis
+```
+
+Then restart Cursor or run **Developer: Reload Window**. Symlink `plugin/`, not the repo root —
+the plugin manifest lives at `plugin/.cursor-plugin/plugin.json`.
+
+Either path auto-registers the `jarvis` MCP server from the bundled `plugin/mcp.json`. Then the
+same `setup.sh` + `jarvis index` flow.
+
 ### Optional extras
 
 - `[semantic]` for `semanticSearch` — install with `uv tool install "jarvis-mcp[semantic]"`, then register a second MCP server (the `jarvis` name is already taken by the plugin's default registration):
   ```bash
   codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]" jarvis-server
   claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]" jarvis-server
+  ```
+  Cursor has no `mcp add` CLI — add the same server to `~/.cursor/mcp.json` (global) or
+  `.cursor/mcp.json` (project) by hand:
+  ```json
+  { "mcpServers": { "jarvis-semantic": {
+      "command": "uvx",
+      "args": ["--from", "jarvis-mcp[semantic]", "jarvis-server"] } } }
   ```
 - `[watch]` for `jarvis watch` (foreground auto-reindex on file changes).
 

@@ -1,0 +1,17 @@
+{
+  "name": "jarvis",
+  "owner": {
+    "name": "phuongddx",
+    "email": "95doanphuong@gmail.com"
+  },
+  "metadata": {
+    "description": "Local-first code intelligence for Cursor — SCIP navigation and Zoekt search over your own repositories."
+  },
+  "plugins": [
+    {
+      "name": "jarvis",
+      "source": "./plugin",
+      "description": "SCIP navigation and Zoekt search MCP server, plus skills for setup, everyday structural queries, and bug reporting."
+    }
+  ]
+}
