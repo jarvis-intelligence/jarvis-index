@@ -16,6 +16,9 @@ files only to viewers of the owning repo, and jarvis's development repo is priva
 See [`plugin/README.md`](plugin/README.md) for the full tool roster, the optional
 `[semantic]` extra, and the privacy notes.
 
-Contents here are published automatically from the development repo. Do not edit
-files here directly — they are overwritten on the next release. (This README is the
-one exception; it describes this repo and has no counterpart upstream.)
+`setup.sh` is published automatically from the development repo — do not edit it
+here; it is overwritten on the next release. Everything else (`plugin/`,
+`.claude-plugin/`, this README) lives HERE as its source of truth: edit directly,
+and bump `plugin/.claude-plugin/plugin.json`'s version when plugin content changes
+so installed plugins pick up the update. The plugin versions independently of the
+`jarvis-mcp` package on PyPI.
