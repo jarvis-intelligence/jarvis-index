@@ -131,6 +131,10 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .col p { font-size: 14px; }
 .then { margin-top: 32px; }
 @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+#roadmap .cols { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) {
+  #roadmap .cols { grid-template-columns: 1fr; }
+}
 .claims { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 15px; min-width: 560px; }
 .claims th, .claims td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .claims th { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; }
@@ -324,7 +328,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
     <p class="eyebrow">Roadmap</p>
     <h2>What is next <span class="badge">Not shipped</span></h2>
     <p>Nothing below is available today, and none of it carries a date.</p>
-    <div class="cols" style="grid-template-columns: repeat(2, 1fr)">
+    <div class="cols">
       <div class="col">
         <h3>Near term, local</h3>
         <ul class="roadmap-list">
