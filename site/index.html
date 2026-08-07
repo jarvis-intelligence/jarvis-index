@@ -136,6 +136,14 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .claims th { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; }
 .claims td:first-child { font-weight: 560; color: var(--ink); width: 38%; }
 .claims td:last-child { color: var(--ink-muted); }
+.badge {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: 4px 10px; color: var(--ink-muted); margin-left: 10px; vertical-align: middle;
+}
+.roadmap-list { margin: 0; padding-left: 20px; color: var(--ink-muted); font-size: 15px; }
+.roadmap-list li { margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -304,6 +312,31 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="wrap section" id="roadmap">
+    <p class="eyebrow">Roadmap</p>
+    <h2>What is next <span class="badge">Not shipped</span></h2>
+    <p>Nothing below is available today, and none of it carries a date.</p>
+    <div class="cols" style="grid-template-columns: repeat(2, 1fr)">
+      <div class="col">
+        <h3>Near term, local</h3>
+        <ul class="roadmap-list">
+          <li>A public Cursor marketplace listing.</li>
+          <li>Swift indexing on Intel Macs, via an x86_64 <code>scip-swift</code> asset.</li>
+          <li><code>setup.sh --verify</code>, to self-diagnose PATH shadowing and pin mismatches.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>jarvis Cloud, opt-in</h3>
+        <ul class="roadmap-list">
+          <li>Hosted indexing.</li>
+          <li>Team index sharing — index once in CI, teammates pull instead of each re-indexing.</li>
+          <li>Enterprise self-hosted, as a deployment mode of the same thing.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Local stays the default. Cloud is opt-in and never required — the guarantees above describe how jarvis behaves on your machine, and that does not change.</p>
   </section>
 </main>
 </body>
