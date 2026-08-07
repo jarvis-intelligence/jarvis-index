@@ -271,6 +271,24 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
     </div>
   </section>
 
+  <section class="wrap section" id="architecture">
+    <p class="eyebrow">Architecture</p>
+    <h2>Three repositories, one product.</h2>
+    <div class="scroll-x">
+      <table class="claims">
+        <thead><tr><th scope="col">Repository</th><th scope="col">Role</th><th scope="col">Visibility</th></tr></thead>
+        <tbody>
+          <tr><td><code>jarvis</code></td><td>Python MCP server, published to PyPI as <code>jarvis-mcp</code>.</td><td>Private</td></tr>
+          <tr><td><code>scip-swift</code></td><td>Swift SCIP indexer. Reads an Xcode IndexStoreDB and emits SCIP protobuf.</td><td>Public</td></tr>
+          <tr><td><code>jarvis-index</code></td><td>Installer, plugins, binary release assets, issue tracker.</td><td>Public</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:44px">Why jarvis ships a patched <code>scip</code></h3>
+    <p>Upstream <code>scip</code> through v0.9.0 never populates <code>global_symbols.relationships</code>, which makes <code>typeHierarchy</code> unanswerable. jarvis builds from a fork carrying the fix and hosts the binary itself.</p>
+    <p>The exit ramp is written down: when upstream merges the fix and cuts a release, jarvis repoints at it and deletes the build pipeline. A patched dependency is a liability to be retired, not a moat.</p>
+  </section>
+
   <section class="wrap section" id="local-first">
     <p class="eyebrow">Local-first</p>
     <h2>Four claims, each with the mechanism that enforces it.</h2>
