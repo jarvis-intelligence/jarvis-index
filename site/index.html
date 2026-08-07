@@ -71,13 +71,77 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: var(--measure); margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; gap: 28px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 640; letter-spacing: -0.01em; }
+.brand svg { width: 26px; height: 26px; border-radius: 6px; display: block; }
+.nav a { color: var(--ink-muted); text-decoration: none; font-size: 15px; }
+.nav a:hover { color: var(--ink); }
+.nav-links { display: flex; gap: 22px; margin-left: auto; }
+.hero { padding: 104px 0 88px; }
+.hero p.lede { font-size: 20px; max-width: 58ch; color: var(--ink-muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 28px; }
+.cta {
+  display: inline-block; padding: 11px 20px; border-radius: 8px;
+  border: 1px solid var(--rule); color: var(--ink); text-decoration: none;
+  font-size: 15px; font-weight: 560; transition: border-color .15s ease;
+}
+.cta:hover { border-color: var(--accent); }
+.cta-primary { background: var(--cta-bg); border-color: var(--cta-bg); color: var(--cta-fg); }
+.cta-primary:hover { opacity: .92; }
+.cmd {
+  display: block; padding: 14px 16px; border-radius: 8px;
+  background: var(--bg-raised); border: 1px solid var(--rule);
+  color: var(--ink); white-space: pre; overflow-x: auto; max-width: 100%;
+}
+.fineprint { font-size: 14px; color: var(--ink-muted); margin-top: 14px; }
+@media (max-width: 767px) {
+  .nav-links { display: none; }
+  .hero { padding: 64px 0 56px; }
+}
 @media (max-width: 767px) {
   .section { padding: 56px 0; }
 }
 </style>
 </head>
 <body>
-<main class="wrap">
+<header class="nav">
+  <div class="nav-inner">
+    <span class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect width="64" height="64" rx="12" fill="#0F172A"/>
+        <circle cx="28" cy="28" r="12" fill="none" stroke="#3B82F6" stroke-width="4"/>
+        <line x1="37" y1="37" x2="48" y2="48" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      jarvis
+    </span>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#tools">Tools</a>
+      <a href="#install">Install</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <h1>Code intelligence that runs on your machine.</h1>
+    <p class="lede">SCIP navigation and Zoekt search over your own indexed repositories. Nine MCP tools for Claude Code, Codex CLI, and Cursor. No telemetry, no outbound calls during queries.</p>
+    <div class="cta-row">
+      <a class="cta cta-primary" href="#install">Install</a>
+      <a class="cta" href="#pipeline">How it works</a>
+    </div>
+    <code class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</code>
+    <p class="fineprint">macOS and Linux · MIT</p>
+  </section>
 </main>
 </body>
 </html>
