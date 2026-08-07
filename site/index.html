@@ -16,6 +16,7 @@
   --accent-ink: #1D4ED8;
   --cta-bg: #1D4ED8;
   --cta-fg: #FFFFFF;
+  --cta-shadow: rgba(15, 23, 42, 0.25);
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --measure: 1080px;
@@ -30,6 +31,7 @@
     --accent-ink: #93C5FD;
     --cta-bg: #3B82F6;
     --cta-fg: #0F172A;
+    --cta-shadow: rgba(0, 0, 0, 0.45);
   }
 }
 :root[data-theme="dark"] {
@@ -41,6 +43,7 @@
   --accent-ink: #93C5FD;
   --cta-bg: #3B82F6;
   --cta-fg: #0F172A;
+  --cta-shadow: rgba(0, 0, 0, 0.45);
 }
 * { box-sizing: border-box; }
 body {
@@ -94,7 +97,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 }
 .cta:hover { border-color: var(--accent); }
 .cta-primary { background: var(--cta-bg); border-color: var(--cta-bg); color: var(--cta-fg); }
-.cta-primary:hover { border-color: var(--cta-bg); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); }
+.cta-primary:hover { border-color: var(--cta-bg); box-shadow: 0 4px 14px var(--cta-shadow); }
 .cmd {
   display: block; padding: 14px 16px; border-radius: 8px;
   background: var(--bg-raised); border: 1px solid var(--rule);
@@ -117,17 +120,29 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .caption { font-size: 14px; color: var(--ink-muted); margin-top: 16px; }
 .group { margin-top: 36px; }
 .group > h3 { color: var(--ink); margin-bottom: 14px; }
-.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
-.tool { background: var(--bg); padding: 18px 18px 20px; }
+.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.tool { background: var(--bg); padding: 18px 18px 20px; border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); }
+.tool:nth-child(3n+1) { border-left: none; }
+.tool:nth-child(-n+3) { border-top: none; }
 .tool-name { font-family: var(--mono); font-size: 13.5px; color: var(--accent-ink); display: block; margin-bottom: 6px; }
 .tool p { font-size: 14.5px; margin: 0; }
 .note { font-size: 14px; color: var(--ink-muted); border-left: 2px solid var(--accent); padding-left: 14px; margin-top: 32px; max-width: 66ch; }
-@media (max-width: 900px) { .tool-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px) { .tool-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  .tool:nth-child(3n+1) { border-left: 1px solid var(--rule); }
+  .tool:nth-child(2n+1) { border-left: none; }
+  .tool:nth-child(-n+3) { border-top: 1px solid var(--rule); }
+  .tool:nth-child(-n+2) { border-top: none; }
+}
+@media (max-width: 620px) {
+  .tool-grid { grid-template-columns: 1fr; }
+  .tool { border-left: none; border-top: 1px solid var(--rule); }
+  .tool:first-child { border-top: none; }
+}
 .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
 .col { border: 1px solid var(--rule); border-radius: 10px; padding: 20px; background: var(--bg-raised); min-width: 0; }
 .col h3 { margin-bottom: 12px; }
-.col .cmd { font-size: 12.5px; margin-bottom: 8px; background: var(--bg); }
+.col .cmd { font-size: 12.5px; margin-bottom: 8px; background: var(--bg); white-space: pre-wrap; overflow-wrap: anywhere; }
 .col p { font-size: 14px; }
 .then { margin-top: 32px; }
 @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
@@ -284,7 +299,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
     </div>
     <div class="then">
       <h3>Then, on every client</h3>
-      <p>Install the external binaries, then index a repo. <code>setup.sh</code> fetches seven dependencies into <code>~/.jarvis/bin</code>, verifies each tarball's SHA256, and skips whatever is already present.</p>
+      <p>Install the external binaries, then index a repo. <code>setup.sh</code> installs the external binaries, verifies each downloaded tarball's SHA256, and skips whatever is already present.</p>
       <code class="cmd">jarvis index /path/to/repo</code>
     </div>
   </section>
@@ -316,7 +331,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
         <thead><tr><th scope="col">Claim</th><th scope="col">Enforcement</th></tr></thead>
         <tbody>
           <tr><td>No telemetry, no analytics</td><td>No analytics code, and no outbound calls during queries.</td></tr>
-          <tr><td>The only network egress is the wheel fetch</td><td><code>uvx</code> on first server start, plus a one-time embedding-model download if you install the <code>[semantic]</code> extra.</td></tr>
+          <tr><td>The only network egress at runtime is the wheel fetch</td><td><code>uvx</code> on first server start, plus a one-time embedding-model download if you install the <code>[semantic]</code> extra.</td></tr>
           <tr><td>Indexes are read-only</td><td>Opened <code>mode=ro&amp;immutable=1</code>.</td></tr>
           <tr><td>Dependencies are pinned and verified</td><td>Exact commit or tag pins, each with a written justification; every tarball SHA256-verified before install.</td></tr>
         </tbody>
