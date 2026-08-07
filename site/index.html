@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jarvis — local-first code intelligence</title>
+<meta name="description" content="SCIP navigation and Zoekt search over your own indexed repositories. Nine MCP tools for Claude Code, Codex CLI, and Cursor.">
+<style>
+:root {
+  --bg: #FCFCFD;
+  --bg-raised: #FFFFFF;
+  --ink: #0F172A;
+  --ink-muted: #475569;
+  --rule: #E2E8F0;
+  --accent: #3B82F6;
+  --accent-ink: #1D4ED8;
+  --cta-bg: #1D4ED8;
+  --cta-fg: #FFFFFF;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --measure: 1080px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F172A;
+    --bg-raised: #16213A;
+    --ink: #E2E8F0;
+    --ink-muted: #94A3B8;
+    --rule: #1E293B;
+    --accent-ink: #93C5FD;
+    --cta-bg: #3B82F6;
+    --cta-fg: #0F172A;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F172A;
+  --bg-raised: #16213A;
+  --ink: #E2E8F0;
+  --ink-muted: #94A3B8;
+  --rule: #1E293B;
+  --accent-ink: #93C5FD;
+  --cta-bg: #3B82F6;
+  --cta-fg: #0F172A;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 24px; }
+.section { padding: 88px 0; border-top: 1px solid var(--rule); }
+.section:first-of-type { border-top: 0; }
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 16px; }
+h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 680; }
+h2 { font-size: clamp(26px, 3.4vw, 34px); font-weight: 640; }
+h3 { font-size: 17px; font-weight: 620; }
+p { margin: 0 0 16px; color: var(--ink-muted); max-width: 62ch; }
+code, pre { font-family: var(--mono); font-size: 14px; }
+a { color: var(--accent-ink); }
+a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-muted); margin: 0 0 12px;
+}
+.scroll-x { overflow-x: auto; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+@media (max-width: 767px) {
+  .section { padding: 56px 0; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+</main>
+</body>
+</html>
