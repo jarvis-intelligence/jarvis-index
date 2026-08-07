@@ -125,7 +125,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 @media (max-width: 900px) { .tool-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .tool-grid { grid-template-columns: 1fr; } }
 .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
-.col { border: 1px solid var(--rule); border-radius: 10px; padding: 20px; background: var(--bg-raised); }
+.col { border: 1px solid var(--rule); border-radius: 10px; padding: 20px; background: var(--bg-raised); min-width: 0; }
 .col h3 { margin-bottom: 12px; }
 .col .cmd { font-size: 12.5px; margin-bottom: 8px; background: var(--bg); }
 .col p { font-size: 14px; }
@@ -144,6 +144,12 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 }
 .roadmap-list { margin: 0; padding-left: 20px; color: var(--ink-muted); font-size: 15px; }
 .roadmap-list li { margin-bottom: 8px; }
+.foot { border-top: 1px solid var(--rule); margin-top: 24px; padding: 40px 0 64px; }
+.foot-inner { max-width: var(--measure); margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; font-size: 14px; color: var(--ink-muted); }
+.foot a { color: var(--ink-muted); }
+.foot a:hover { color: var(--ink); }
+.foot .meta { margin-left: auto; font-family: var(--mono); font-size: 12.5px; }
+@media (max-width: 620px) { .foot .meta { margin-left: 0; } }
 </style>
 </head>
 <body>
@@ -339,5 +345,14 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
     <p class="note">Local stays the default. Cloud is opt-in and never required — the guarantees above describe how jarvis behaves on your machine, and that does not change.</p>
   </section>
 </main>
+<footer class="foot">
+  <div class="foot-inner">
+    <a href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    <a href="https://pypi.org/project/jarvis-mcp/">PyPI</a>
+    <a href="https://github.com/jarvis-intelligence/jarvis-index/issues">Issues</a>
+    <a href="https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/README.md">Docs</a>
+    <span class="meta">MIT · plugin v0.7.0</span>
+  </div>
+</footer>
 </body>
 </html>
