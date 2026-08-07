@@ -115,6 +115,15 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .diagram .sub { fill: var(--ink-muted); font-family: var(--mono); font-size: 10.5px; }
 .diagram .flow { stroke: var(--accent); stroke-width: 1.5; marker-end: url(#arrow); }
 .caption { font-size: 14px; color: var(--ink-muted); margin-top: 16px; }
+.group { margin-top: 36px; }
+.group > h3 { color: var(--ink); margin-bottom: 14px; }
+.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.tool { background: var(--bg); padding: 18px 18px 20px; }
+.tool-name { font-family: var(--mono); font-size: 13.5px; color: var(--accent-ink); display: block; margin-bottom: 6px; }
+.tool p { font-size: 14.5px; margin: 0; }
+.note { font-size: 14px; color: var(--ink-muted); border-left: 2px solid var(--accent); padding-left: 14px; margin-top: 32px; max-width: 66ch; }
+@media (max-width: 900px) { .tool-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .tool-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -186,6 +195,41 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
       </svg>
     </div>
     <p class="caption">No step in this pipeline contacts a network service.</p>
+  </section>
+
+  <section class="wrap section" id="tools">
+    <p class="eyebrow">Tools</p>
+    <h2>Nine MCP tools, grouped by what you are asking.</h2>
+    <p>Each takes <code>repo</code> — the slug produced by <code>jarvis index</code>.</p>
+
+    <div class="group">
+      <h3>Navigate</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">documentSymbols</span><p>Every top-level symbol in a file, each with its range.</p></div>
+        <div class="tool"><span class="tool-name">goToDefinition</span><p>Resolve a symbol's definition site or sites.</p></div>
+        <div class="tool"><span class="tool-name">findReferences</span><p>Every occurrence of a symbol.</p></div>
+        <div class="tool"><span class="tool-name">callHierarchy</span><p>Single-level incoming and outgoing calls.</p></div>
+        <div class="tool"><span class="tool-name">typeHierarchy</span><p>Supertypes and subtypes.</p></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Search</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">searchCode</span><p>Lexical search via Zoekt, on a lazy-started webserver.</p></div>
+        <div class="tool"><span class="tool-name">semanticSearch</span><p>Vector, Zoekt, and SCIP symbol-definition hybrid, fused by reciprocal rank.</p></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Cross-repo and status</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">blastRadius</span><p>Two-hop package-dependency breadth-first search across indexed repos.</p></div>
+        <div class="tool"><span class="tool-name">getIndexStatus</span><p>Whether a repo has a published index, and how fresh it is.</p></div>
+      </div>
+    </div>
+
+    <p class="note"><strong>One caveat worth knowing up front.</strong> <code>semanticSearch</code> needs the <code>[semantic]</code> extra, and the plugin's default MCP registration deliberately omits it so cold start stays free of lancedb and torch. Using it means registering a second, differently-named server — <code>jarvis-semantic</code>.</p>
   </section>
 </main>
 </body>
