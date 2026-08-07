@@ -53,7 +53,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 24px; }
-.section { padding: 88px 0; border-top: 1px solid var(--rule); }
+.section { padding-top: 88px; padding-bottom: 88px; border-top: 1px solid var(--rule); }
 .section:first-of-type { border-top: 0; }
 h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 16px; }
 h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 680; }
@@ -84,7 +84,7 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .nav a { color: var(--ink-muted); text-decoration: none; font-size: 15px; }
 .nav a:hover { color: var(--ink); }
 .nav-links { display: flex; gap: 22px; margin-left: auto; }
-.hero { padding: 104px 0 88px; }
+.hero { padding-top: 104px; padding-bottom: 88px; }
 .hero p.lede { font-size: 20px; max-width: 58ch; color: var(--ink-muted); }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 28px; }
 .cta {
@@ -103,10 +103,10 @@ a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offs
 .fineprint { font-size: 14px; color: var(--ink-muted); margin-top: 14px; }
 @media (max-width: 767px) {
   .nav-links { display: none; }
-  .hero { padding: 64px 0 56px; }
+  .hero { padding-top: 64px; padding-bottom: 56px; }
 }
 @media (max-width: 767px) {
-  .section { padding: 56px 0; }
+  .section { padding-top: 56px; padding-bottom: 56px; }
 }
 .diagram { margin-top: 28px; }
 .diagram svg { width: 100%; height: auto; min-width: 680px; color: var(--ink-muted); }
