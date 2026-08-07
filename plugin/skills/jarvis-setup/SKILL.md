@@ -35,7 +35,7 @@ semantic search work; navigation does not). See CLAUDE.md for the detail.
 
 ## 3. Register the MCP server
 
-If you installed the Codex **or** Claude Code plugin, the bundled `plugin/.mcp.json` auto-registers the `jarvis` MCP server — skip this step. (Both clients consume the same stdio `.mcp.json`.)
+If you installed the Codex, Claude Code, **or** Cursor plugin, the bundled MCP config auto-registers the `jarvis` MCP server — skip this step. (Codex and Claude Code read `plugin/.mcp.json`; Cursor reads `plugin/mcp.json`. Same stdio server, same contents — two filenames because the clients disagree on the convention.)
 
 For a manual registration without the plugin:
 
@@ -51,7 +51,13 @@ Claude Code:
 claude mcp add jarvis --scope user -- jarvis-server
 ```
 
-Cursor / other MCP clients: point them at the stdio command `jarvis-server`. No HTTP server, no auth, no network.
+Cursor (no `mcp add` CLI — edit `~/.cursor/mcp.json` for global, or `.cursor/mcp.json` for one project):
+
+```json
+{ "mcpServers": { "jarvis": { "command": "jarvis-server" } } }
+```
+
+Other MCP clients: point them at the stdio command `jarvis-server`. No HTTP server, no auth, no network.
 
 ## 4. Index a repo
 

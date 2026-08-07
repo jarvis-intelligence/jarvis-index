@@ -1,0 +1,32 @@
+{
+  "name": "jarvis",
+  "displayName": "jarvis",
+  "version": "0.7.0",
+  "description": "Local-first SCIP code navigation and Zoekt search over your own indexed repositories, with skills that teach the agent to prefer structural queries over grep.",
+  "author": {
+    "name": "phuongddx",
+    "email": "95doanphuong@gmail.com"
+  },
+  "homepage": "https://github.com/jarvis-intelligence/jarvis-index",
+  "repository": "https://github.com/jarvis-intelligence/jarvis-index",
+  "license": "MIT",
+  "logo": "assets/app-icon.png",
+  "category": "developer-tools",
+  "keywords": [
+    "mcp",
+    "code-intelligence",
+    "code-search",
+    "code-navigation",
+    "scip",
+    "zoekt"
+  ],
+  "tags": [
+    "mcp",
+    "code-navigation",
+    "code-search",
+    "scip",
+    "zoekt"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}
