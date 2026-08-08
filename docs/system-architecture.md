@@ -63,7 +63,7 @@ directly.
    │                   ┌────────────────────────────────────────────┐
    │                   │ plugin/.mcp.json  (Claude Code, Codex)      │
    │                   │ plugin/mcp.json   (Cursor)   auto-register: │
-   │                   │   uvx --from jarvis-mcp>=0.0.1 jarvis-server│
+   │                   │   uvx --from jarvis-mcp>=0.6.0 jarvis-server│
    │                   │ plugin/skills/ → 3 skills loaded            │
    │                   └────────────────────────────────────────────┘
    │                        │

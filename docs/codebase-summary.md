@@ -81,7 +81,7 @@ Eight lines each, and the reason plugin users never run `mcp add`:
 
 ```json
 { "mcpServers": { "jarvis": {
-    "command": "uvx", "args": ["--from", "jarvis-mcp>=0.0.1", "jarvis-server"] } } }
+    "command": "uvx", "args": ["--from", "jarvis-mcp>=0.6.0", "jarvis-server"] } } }
 ```
 
 **Two files, identical contents.** Claude Code and Codex CLI read `.mcp.json`; Cursor reads

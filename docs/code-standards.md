@@ -101,8 +101,13 @@ carry no version and rarely change.
 both or neither.** They are duplicated rather than symlinked because a git symlink does not
 survive checkout on Windows without developer mode, and Cursor supports Windows.
 
-`--from jarvis-mcp>=0.0.1` must remain a valid `>=` minimum against what is actually published on
+`--from jarvis-mcp>=0.6.0` must remain a valid `>=` minimum against what is actually published on
 PyPI. Do not pin it to an exact version — that would strand users on a stale server.
+
+The floor must also never drop below **0.6.0**, the first release published as wheels-only.
+Every earlier version (0.0.1 – 0.5.1) ships an sdist alongside a single `py3-none-any` wheel, so a
+lower floor lets `uvx` resolve a distribution it has to Cython-compile from source — inside the MCP
+client's 30s connect window, which it will not fit.
 
 Do not add the `[semantic]` extra to either registration. Keeping lancedb/torch out of every
 plugin user's cold start is a deliberate, settled trade-off; users who need `semanticSearch`
