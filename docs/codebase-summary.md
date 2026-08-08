@@ -1,14 +1,14 @@
 # Codebase Summary — jarvis-index
 
 **Scale:** 14 text files, ~1,300 LOC. No build step, no test suite, no CI in this repo.
-`setup.sh` accounts for 758 lines (~58%); everything else is Markdown and JSON.
+`setup.sh` accounts for 798 lines (~59%); everything else is Markdown and JSON.
 
 ## File inventory
 
 ```
 jarvis-index/
 ├── README.md                              24    Repo purpose, install one-liners, edit rules
-├── setup.sh                              758    POSIX-sh dependency bootstrapper (SYNCED — do not edit)
+├── setup.sh                              798    POSIX-sh dependency bootstrapper (SYNCED — do not edit)
 ├── .claude-plugin/
 │   └── marketplace.json                   17    Claude Code marketplace entry → ./plugin
 ├── .cursor-plugin/
@@ -27,7 +27,7 @@ jarvis-index/
     │   └── jarvis-small.svg                     Codex `composerIcon`
     └── skills/
         ├── jarvis-setup/
-        │   ├── SKILL.md                   87    Zero-to-working onboarding + troubleshooting table
+        │   ├── SKILL.md                   95    Zero-to-working onboarding + troubleshooting table
         │   └── agents/openai.yaml               Codex interface block
         ├── jarvis-use/
         │   ├── SKILL.md                   82    Decision matrix, symbol format, gotchas
@@ -42,7 +42,10 @@ jarvis-index/
 
 ### `setup.sh` — the installer
 
-Installs external binaries into `~/.jarvis/bin` and appends that directory to the shell rc.
+Installs external binaries into `~/.jarvis/bin` and appends that directory to the shell rc, and
+runs `uv tool install jarvis-mcp` (soft-skipped with a warning if `uv` isn't on `PATH`) — pre-warming
+the cache the plugin's `uvx` launch reuses, so the first MCP connect doesn't pay a cold
+resolve-and-build cost inside the client's 30s connect window ([jarvis-index#4](https://github.com/jarvis-intelligence/jarvis-index/issues/4)).
 Strictly POSIX sh because `curl | sh` ignores the shebang. See
 [system-architecture.md](system-architecture.md#setupsh-internal-structure) for the section-by-section
 breakdown and the dependency sourcing map.
@@ -51,7 +54,7 @@ breakdown and the dependency sourcing map.
 
 ```
 setup.sh [--only <name>] [--force] [--help]
-  --only   scip | zoekt | scip-swift | scip-typescript | scip-python | scip-java | bash-shim
+  --only   scip | zoekt | scip-swift | scip-typescript | scip-python | scip-java | bash-shim | jarvis-mcp
   --force  reinstall even if present
 
 Env: JARVIS_BIN_DIR (install dir), JARVIS_DATA_DIR (shim dir, default ~/.jarvis)
@@ -72,7 +75,7 @@ Three separate JSON files, each read by a different consumer. They are easy to c
 | `.cursor-plugin/marketplace.json` | Cursor, at marketplace import | Marketplace listing; `source` → `./plugin`. **Carries no version.** |
 | `plugin/.cursor-plugin/plugin.json` | Cursor, at plugin install | `version`, `displayName`, `category`, `tags`, `logo`, plus explicit `skills`/`mcpServers` path fields |
 
-All three `version` fields are currently **0.7.0** and must be bumped together — see
+All three `version` fields are currently **0.7.2** and must be bumped together — see
 [code-standards.md](code-standards.md#version-bumps-are-the-delivery-mechanism).
 
 ### `plugin/.mcp.json` + `plugin/mcp.json` — MCP registration

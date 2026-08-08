@@ -20,20 +20,19 @@ To take a machine from zero to "jarvis answering queries", run these in order.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
-uv tool install jarvis-mcp
 ```
 
-`setup.sh` installs every binary jarvis needs into `~/.jarvis/bin` and appends it to the shell rc. It is idempotent — re-running skips what's present. Options: `--only <name>` (one dependency), `--force` (reinstall), `--help`.
+`setup.sh` installs every binary jarvis needs into `~/.jarvis/bin` and appends it to the shell rc, **and** runs `uv tool install jarvis-mcp` itself — pre-warming the cache before any MCP client tries to connect (skipped with a warning if `uv` isn't on `PATH` yet). It is idempotent — re-running skips what's present. Options: `--only <name>` (one dependency, including `jarvis-mcp`), `--force` (reinstall), `--help`.
 
-Binaries installed: `scip` (a fork build — upstream v0.9.0 plus the scip#465 relationships fix that makes `typeHierarchy` work; the install is version-gated, so re-running setup.sh upgrades an older binary automatically), `zoekt-git-index` / `zoekt-webserver` (search), and one indexer per language: `scip-typescript`, `scip-python`, `scip-swift` (macOS arm64 only), `scip-java` (a JVM launcher; needs `java` on `PATH`).
+Binaries installed: `scip` (a fork build — upstream v0.9.0 plus the scip#465 relationships fix that makes `typeHierarchy` work; the install is version-gated, so re-running setup.sh upgrades an older binary automatically), `zoekt-git-index` / `zoekt-webserver` (search), one indexer per language: `scip-typescript`, `scip-python`, `scip-swift` (macOS arm64 only), `scip-java` (a JVM launcher; needs `java` on `PATH`), plus `jarvis-mcp` itself (`jarvis` the CLI, `jarvis-server` the MCP server) via `uv tool install`.
 
 Java/Kotlin repos have real limits: Android/Gradle projects and Kotlin repos not on the pinned
 Kotlin version cannot produce a SCIP index, and are published search-only instead (lexical and
 semantic search work; navigation does not). See CLAUDE.md for the detail.
 
-`uv tool install` puts `jarvis` (the CLI) and `jarvis-server` (the MCP server) on `PATH`. Optional extras: `uv tool install "jarvis-mcp[semantic]"` for `semanticSearch`, `[watch]` for `jarvis watch`.
+Optional extras aren't covered by the default install: `uv tool install "jarvis-mcp[semantic]"` for `semanticSearch`, `[watch]` for `jarvis watch`.
 
-Plugin users: run it anyway, before the first tool call. The plugin registration launches the server through `uvx`, and on a cold cache that first launch pays the full resolve-and-build cost inside the MCP client's 30s connect window — which it loses. Installing once fills the cache the plugin then reuses.
+Plugin users: this step used to require a separate `uv tool install jarvis-mcp` before the first tool call, to avoid the plugin's `uvx` launch losing the race against the MCP client's 30s connect window on a cold cache — setup.sh now does that for you. Run `uv tool install jarvis-mcp` by hand if you skipped setup.sh, used `--only` to install a single native binary, or ran a setup.sh from before this fix.
 
 ## 3. Register the MCP server
 
@@ -83,8 +82,8 @@ Then call a tool through the MCP client, e.g. `goToDefinition(repo: "<slug>", sy
 
 | Symptom | Fix |
 |---|---|
-| `command not found: jarvis` | The plugin runs the MCP *server* via `uvx` without ever installing the CLI, so all 9 tools can work while `jarvis` itself is absent. Fix: `uv tool install jarvis-mcp` (step 2's second command) — or skip installing and run one-off commands as `uvx --from jarvis-mcp jarvis index /path/to/repo`. |
-| `MCP server ... connection timed out after 30000ms` on the very first connect | The plugin's registration launches the server with `uvx`, which on a cold cache resolves *and builds* the dependency tree before the server can answer — some deps (e.g. `cryptography`) compile Rust and can run for minutes, well past the client's 30s connect window. Fix: run step 2's `uv tool install jarvis-mcp` once, then reconnect (`/mcp` → jarvis). That populates the same cache `uvx` reads, so later cold starts take seconds. Nothing is wrong with the index or the install. |
+| `command not found: jarvis` | The plugin runs the MCP *server* via `uvx` without ever installing the CLI, so all 9 tools can work while `jarvis` itself is absent. Fix: `uv tool install jarvis-mcp` (what step 2's setup.sh already runs by default) — or skip installing and run one-off commands as `uvx --from jarvis-mcp jarvis index /path/to/repo`. |
+| `MCP server ... connection timed out after 30000ms` on the very first connect | The plugin's registration launches the server with `uvx`, which on a cold cache resolves *and builds* the dependency tree before the server can answer — some deps (e.g. `cryptography`, pulled in transitively via `mcp`'s own `pyjwt[crypto]` dependency) compile Rust and can run for minutes, well past the client's 30s connect window; this is upstream of jarvis and not something a version floor can fix. setup.sh's default run now pre-warms this cache automatically, so this should only surface if you skipped setup.sh, ran `--only` for a single native binary, or ran a setup.sh from before this fix. Fix: run `uv tool install jarvis-mcp` once, then reconnect (`/mcp` → jarvis). That populates the same cache `uvx` reads, so later cold starts take seconds. Nothing is wrong with the index or the install. |
 | `command not found: scip` / `zoekt-git-index` | `~/.jarvis/bin` not on `PATH`. Open a new shell, or `source ~/.zshrc` (or `~/.bashrc`). Still missing after that? Re-run `setup.sh --only zoekt --force` — the flag value is `zoekt` (not `zoekt-git-index`); it installs both `zoekt-git-index` and `zoekt-webserver` from the same tarball. |
 | `typeHierarchy` errors on a fresh index / `scip` predates the pinned fork build | Re-run setup.sh — the scip install is version-gated and replaces a non-matching binary automatically (heed its warning if an older `scip` earlier on `PATH` shadows the new one) — then `jarvis reindex <slug>`. |
 | Swift: "multiple schemes" / wrong build | Pass `--scheme <name>` on the first `jarvis index`. It's stored in the registry and reused by `reindex`/`watch`. |
