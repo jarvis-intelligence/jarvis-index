@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JARVIS — logo and avatar</title>
+<meta name="description" content="The JARVIS identity: the aperture mark, its construction, colour treatments, wordmark lockups, and the GitHub organisation avatar.">
+<link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f7fa;
+  --surface: #e9edf2;
+  --fg: #12181d;
+  --muted: #58626a;
+  --border: #c3cad0;
+  --accent: #29527d;
+  --accent-strong: #0a3966;
+  --accent-soft: #cfe0f3;
+  --ink-plate: #0a0e11;
+  --chip-fg: #e1e5e8;
+  --chip-accent: #7cafe4;
+  --card-shadow: 0 18px 48px rgba(18, 24, 38, 0.08);
+  --radius: 0.5rem;
+  --frame: min(100% - 3rem, 72rem);
+  --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --logo: "Rajdhani", "Geist", system-ui, sans-serif;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+h1, h2, h3 { margin: 0; letter-spacing: 0; text-wrap: balance; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; border-radius: 4px; }
+
+.frame { width: var(--frame); margin-inline: auto; }
+.section { padding-block: 4.5rem; border-top: 1px solid var(--border); }
+.eyebrow {
+  font-size: 0.75rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.9rem;
+}
+.section-title { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 740; line-height: 1.05; max-width: 44rem; }
+.lede { margin-top: 1.25rem; max-width: 42rem; font-size: 1rem; line-height: 1.65; color: var(--muted); }
+.note-sm { margin-top: 1rem; font-size: 0.8125rem; line-height: 1.6; color: var(--muted); }
+code { font-family: var(--mono); font-size: 0.9em; color: var(--accent); }
+
+.tap { transition: color 0.2s var(--ease), background-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease); }
+.tap:active { transform: scale(0.96); }
+.primary-action {
+  display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem;
+  padding: 0 1.4rem; border-radius: 0.75rem; background: var(--accent); color: var(--bg);
+  font-size: 0.9375rem; font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent-strong) 30%, transparent), 0 14px 28px rgba(33, 82, 148, 0.16);
+}
+.primary-action:hover { background: var(--accent-strong); color: var(--bg); }
+.secondary-action {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.5rem;
+  padding: 0 1rem; border-radius: 0.75rem; background: var(--surface); color: var(--fg);
+  font-size: 0.875rem; font-weight: 600; box-shadow: inset 0 0 0 1px var(--border);
+}
+.secondary-action:hover { box-shadow: inset 0 0 0 1px var(--accent); }
+.text-link { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.5rem; font-size: 0.875rem; font-weight: 600; color: var(--accent); }
+.text-link:hover { color: var(--accent-strong); }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(243, 247, 250, 0.92);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner { width: var(--frame); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.85rem; }
+.brand { display: inline-flex; align-items: center; gap: 0.7rem; min-height: 2.5rem; }
+.brand:hover { opacity: 0.9; }
+.wordmark {
+  font-family: var(--logo); font-weight: 700; font-size: 1.28rem; line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.075em;
+  transform: scaleX(1.1); transform-origin: left; color: var(--fg);
+}
+
+/* ---------- mark primitive ---------- */
+/* stroke follows `color`, core follows the inherited `fill` — no var() in SVG attributes */
+.mark { display: block; color: var(--accent); fill: var(--fg); }
+.mark.on-dark { color: var(--chip-accent); fill: var(--chip-fg); }
+.mark.mono-ink { color: var(--fg); fill: var(--fg); }
+.mark.mono-rev { color: var(--chip-fg); fill: var(--chip-fg); }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 4rem 4.5rem; }
+.hero-grid { display: grid; gap: 3rem; align-items: center; }
+@media (min-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1fr) auto; gap: 4rem; } }
+.hero-mark {
+  display: grid; place-items: center; width: 17rem; height: 17rem; border-radius: var(--radius);
+  background: color-mix(in oklch, var(--surface) 55%, transparent);
+  box-shadow: inset 0 0 0 1px var(--border), var(--card-shadow);
+}
+.hero-mark .mark { width: 9rem; height: 9rem; }
+
+.meaning { display: grid; gap: 1.25rem; margin-top: 2.5rem; }
+@media (min-width: 760px) { .meaning { grid-template-columns: repeat(3, 1fr); } }
+.meaning-item { padding-top: 1rem; border-top: 1px solid var(--border); }
+.meaning-item dt { font-size: 0.9375rem; font-weight: 600; }
+.meaning-item dd { margin: 0.5rem 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+
+/* ---------- generic tiles ---------- */
+.tiles { display: grid; gap: 1.25rem; margin-top: 2.5rem; }
+@media (min-width: 640px) { .tiles.two { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .tiles.four { grid-template-columns: repeat(4, 1fr); } .tiles.three { grid-template-columns: repeat(3, 1fr); } }
+.tile { border-radius: var(--radius); overflow: hidden; box-shadow: inset 0 0 0 1px var(--border), var(--card-shadow); }
+.tile-art { display: grid; place-items: center; min-height: 11rem; padding: 1.5rem; }
+.tile-art.light { background: var(--bg); }
+.tile-art.surface { background: var(--surface); }
+.tile-art.dark { background: var(--ink-plate); }
+.tile-art .mark { width: 4.5rem; height: 4.5rem; }
+.tile-cap { padding: 0.9rem 1.1rem 1.1rem; background: color-mix(in oklch, var(--surface) 40%, transparent); }
+.tile-cap strong { display: block; font-size: 0.875rem; font-weight: 600; }
+.tile-cap span { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.04em; color: var(--muted); }
+
+/* ---------- construction ---------- */
+.build { display: grid; gap: 2.5rem; margin-top: 2.5rem; align-items: center; }
+@media (min-width: 900px) { .build { grid-template-columns: auto minmax(0, 1fr); gap: 3.5rem; } }
+.build-art { width: min(100%, 20rem); border-radius: var(--radius); background: var(--bg); box-shadow: inset 0 0 0 1px var(--border); padding: 1.25rem; }
+.build-art svg { width: 100%; height: auto; display: block; }
+.spec { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.spec th, .spec td { padding: 0.85rem 0; text-align: left; border-top: 1px solid var(--border); vertical-align: top; }
+.spec tr:first-child th, .spec tr:first-child td { border-top: 0; }
+.spec th { font-weight: 500; color: var(--muted); width: 45%; }
+.spec td { font-family: var(--mono); font-size: 0.8125rem; color: var(--fg); }
+
+/* ---------- size ladder ---------- */
+.ladder { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 2.25rem; margin-top: 2.5rem; padding: 2rem 1.75rem; border-radius: var(--radius); background: color-mix(in oklch, var(--surface) 45%, transparent); box-shadow: inset 0 0 0 1px var(--border); }
+.rung { display: flex; flex-direction: column; align-items: center; gap: 0.85rem; }
+.rung span { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--muted); }
+.rung.limit span { color: var(--accent); }
+
+/* ---------- lockups ---------- */
+.lockup-row { display: flex; align-items: center; gap: 0.85rem; }
+.lockup-row .mark { width: 2.75rem; height: 2.75rem; }
+.lockup-row .wordmark { font-size: 2.1rem; }
+.lockup-stack { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.lockup-stack .mark { width: 3.25rem; height: 3.25rem; }
+.lockup-stack .wordmark { font-size: 1.5rem; transform: scaleX(1.1); transform-origin: center; }
+.tile-art .lockup-row .wordmark, .tile-art .lockup-stack .wordmark { color: var(--fg); }
+.tile-art.dark .wordmark { color: var(--chip-fg); }
+
+/* ---------- avatar ---------- */
+.avatar-lab { display: grid; gap: 2.5rem; margin-top: 2.5rem; align-items: start; }
+@media (min-width: 900px) { .avatar-lab { grid-template-columns: auto minmax(0, 1fr); gap: 3.5rem; } }
+.avatar-hero { width: 16rem; height: 16rem; border-radius: var(--radius); overflow: hidden; box-shadow: inset 0 0 0 1px var(--border), var(--card-shadow); }
+.avatar-hero svg { width: 100%; height: 100%; display: block; }
+.avatar-sizes { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 2rem; }
+.av { display: flex; flex-direction: column; align-items: center; gap: 0.85rem; }
+.av span { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--muted); text-align: center; }
+.av-box { overflow: hidden; box-shadow: 0 0 0 1px var(--border); }
+.av-box.rounded { border-radius: 22%; }
+.av-box.circle { border-radius: 50%; }
+.av-box svg { width: 100%; height: 100%; display: block; }
+.downloads { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+/* ---------- misuse ---------- */
+.dont-art { position: relative; }
+.dont-art::after {
+  content: "✕";
+  position: absolute; top: 0.6rem; right: 0.7rem;
+  width: 1.5rem; height: 1.5rem; border-radius: 999px;
+  display: grid; place-items: center;
+  background: var(--fg); color: var(--bg);
+  font-size: 0.75rem; line-height: 1;
+}
+
+/* ---------- footer ---------- */
+.site-footer { border-top: 1px solid var(--border); background: color-mix(in oklch, var(--surface) 40%, transparent); }
+.footer-inner { width: var(--frame); margin-inline: auto; padding-block: 2.5rem 3.5rem; display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; align-items: center; font-size: 0.8125rem; color: var(--muted); }
+.footer-inner a { display: inline-flex; align-items: center; min-height: 2.5rem; }
+.footer-inner a:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="7.5" stroke-linecap="round">
+      <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
+      <path d="M43.18 15.42A20 20 0 0 1 48.58 43.18"/>
+      <path d="M43.18 48.58A20 20 0 0 1 26.49 51.23"/>
+    </g>
+    <circle cx="32" cy="32" r="6"/>
+  </symbol>
+  <symbol id="avatar" viewBox="0 0 512 512">
+    <rect width="512" height="512" fill="#0a0e11"/>
+    <g fill="none" stroke="#7cafe4" stroke-width="45" stroke-linecap="round">
+      <path d="M178.87 347.92A120 120 0 0 1 276.84 137.82"/>
+      <path d="M323.10 156.52A120 120 0 0 1 355.48 323.10"/>
+      <path d="M323.10 355.48A120 120 0 0 1 222.92 371.35"/>
+    </g>
+    <circle cx="256" cy="256" r="36" fill="#e1e5e8"/>
+  </symbol>
+</svg>
+
+<header class="site-header" data-od-id="site-header">
+  <div class="header-inner">
+    <a class="brand tap" href="index.html" data-od-id="brand">
+      <svg class="mark" style="width:1.75rem;height:1.75rem" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">jarvis</span>
+    </a>
+    <a class="text-link tap" href="index.html" data-od-id="back-to-site">Back to the site</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ THE MARK ============ -->
+  <section class="frame hero" data-od-id="section-mark">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Identity</p>
+        <h1 class="section-title">An aperture, not a face.</h1>
+        <p class="lede">J.A.R.V.I.S. was never a robot on screen — it was a presence that listened and answered. The mark takes that idea rather than the artwork: a solid core wrapped by three arc blades that never quite close.</p>
+        <p class="note-sm">The mark is original. It deliberately avoids the arc reactor, the Stark HUD, and every other protected element of the films.</p>
+      </div>
+      <div class="hero-mark" data-od-id="mark-primary">
+        <svg class="mark" aria-label="The JARVIS mark" role="img"><use href="#mark"/></svg>
+      </div>
+    </div>
+
+    <dl class="meaning">
+      <div class="meaning-item" data-od-id="meaning-core">
+        <dt>The core is your agent</dt>
+        <dd>One solid, bright form at the centre. Everything else exists to serve it.</dd>
+      </div>
+      <div class="meaning-item" data-od-id="meaning-blades">
+        <dt>Three blades: know, remember, do</dt>
+        <dd>Unequal lengths, so the ring reads as focusing rather than idling — a system in the middle of paying attention.</dd>
+      </div>
+      <div class="meaning-item" data-od-id="meaning-gaps">
+        <dt>The gaps stay open</dt>
+        <dd>The ring never closes. Local-first, inspectable, and not a sealed box around your work.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ============ CONSTRUCTION ============ -->
+  <section class="frame section" data-od-id="section-construction">
+    <p class="eyebrow">Construction</p>
+    <h2 class="section-title">Everything sits on one circle.</h2>
+    <p class="lede">All three blades share a single radius and stroke. Only their arc lengths differ, which is what keeps the mark from reading as a loading spinner.</p>
+
+    <div class="build">
+      <div class="build-art" data-od-id="construction-diagram">
+        <svg viewBox="0 0 64 64" role="img" aria-label="Construction diagram: a 64 unit grid with the blade radius at 20 units and the core radius at 6 units.">
+          <g stroke="#c3cad0" stroke-width="0.4" fill="none">
+            <rect x="0.2" y="0.2" width="63.6" height="63.6"/>
+            <circle cx="32" cy="32" r="20"/>
+            <circle cx="32" cy="32" r="23.75" stroke-dasharray="1.5 1.5"/>
+            <path d="M32 0V64M0 32H64"/>
+          </g>
+          <g fill="none" stroke="#29527d" stroke-width="7.5" stroke-linecap="round" opacity="0.9">
+            <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
+            <path d="M43.18 15.42A20 20 0 0 1 48.58 43.18"/>
+            <path d="M43.18 48.58A20 20 0 0 1 26.49 51.23"/>
+          </g>
+          <circle cx="32" cy="32" r="6" fill="#12181d"/>
+          <g fill="#58626a" font-family="monospace" font-size="3">
+            <text x="33.4" y="21.5">R20</text>
+            <text x="33.4" y="30.4">r6</text>
+          </g>
+        </svg>
+      </div>
+
+      <table class="spec" data-od-id="construction-spec">
+        <tr><th scope="row">Grid</th><td>64 × 64</td></tr>
+        <tr><th scope="row">Blade radius</th><td>20</td></tr>
+        <tr><th scope="row">Blade stroke</th><td>7.5, round cap</td></tr>
+        <tr><th scope="row">Blade arcs</th><td>150° · 90° · 50°</td></tr>
+        <tr><th scope="row">Gaps</th><td>24° · 22° · 24°</td></tr>
+        <tr><th scope="row">Core radius</th><td>6</td></tr>
+        <tr><th scope="row">Clear space</th><td>= core diameter (12) on every side</td></tr>
+        <tr><th scope="row">Minimum size</th><td>20 px</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ SIZE ============ -->
+  <section class="frame section" data-od-id="section-size">
+    <p class="eyebrow">Scale</p>
+    <h2 class="section-title">Holds to 20 pixels.</h2>
+    <p class="lede">Below 20 px the gaps begin to close and the mark flattens into a disc. Use the wordmark alone rather than shrinking it further.</p>
+
+    <div class="ladder" data-od-id="size-ladder">
+      <div class="rung"><svg class="mark" style="width:96px;height:96px" aria-hidden="true"><use href="#mark"/></svg><span>96</span></div>
+      <div class="rung"><svg class="mark" style="width:64px;height:64px" aria-hidden="true"><use href="#mark"/></svg><span>64</span></div>
+      <div class="rung"><svg class="mark" style="width:40px;height:40px" aria-hidden="true"><use href="#mark"/></svg><span>40</span></div>
+      <div class="rung"><svg class="mark" style="width:32px;height:32px" aria-hidden="true"><use href="#mark"/></svg><span>32</span></div>
+      <div class="rung"><svg class="mark" style="width:24px;height:24px" aria-hidden="true"><use href="#mark"/></svg><span>24</span></div>
+      <div class="rung limit"><svg class="mark" style="width:20px;height:20px" aria-hidden="true"><use href="#mark"/></svg><span>20 min</span></div>
+    </div>
+  </section>
+
+  <!-- ============ COLOUR ============ -->
+  <section class="frame section" data-od-id="section-colour">
+    <p class="eyebrow">Colour</p>
+    <h2 class="section-title">Four treatments, no others.</h2>
+    <p class="lede">The blades carry the accent and the core carries the ink. On a single-colour surface — an embroidery, a stamp, a partner's logo wall — collapse both to one value.</p>
+
+    <div class="tiles four">
+      <div class="tile" data-od-id="colour-tile-light">
+        <div class="tile-art light"><svg class="mark" aria-hidden="true"><use href="#mark"/></svg></div>
+        <div class="tile-cap"><strong>Primary</strong><span>#29527d · #12181d</span></div>
+      </div>
+      <div class="tile" data-od-id="colour-tile-dark">
+        <div class="tile-art dark"><svg class="mark on-dark" aria-hidden="true"><use href="#mark"/></svg></div>
+        <div class="tile-cap"><strong>On dark</strong><span>#7cafe4 · #e1e5e8</span></div>
+      </div>
+      <div class="tile" data-od-id="colour-tile-mono">
+        <div class="tile-art surface"><svg class="mark mono-ink" aria-hidden="true"><use href="#mark"/></svg></div>
+        <div class="tile-cap"><strong>Single colour</strong><span>#12181d</span></div>
+      </div>
+      <div class="tile" data-od-id="colour-tile-reversed">
+        <div class="tile-art dark"><svg class="mark mono-rev" aria-hidden="true"><use href="#mark"/></svg></div>
+        <div class="tile-cap"><strong>Reversed</strong><span>#e1e5e8</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOCKUPS ============ -->
+  <section class="frame section" data-od-id="section-lockups">
+    <p class="eyebrow">Lockups</p>
+    <h2 class="section-title">The wordmark stays one colour.</h2>
+    <p class="lede">Rajdhani Bold, uppercase, tracked to 0.075 em and stretched 110% horizontally. It used to be two-tone; now that the mark carries the blue, the letters stay ink so the pair does not compete.</p>
+
+    <div class="tiles three">
+      <div class="tile" data-od-id="lockup-horizontal">
+        <div class="tile-art light" style="min-height:13rem">
+          <div class="lockup-row">
+            <svg class="mark" aria-hidden="true"><use href="#mark"/></svg>
+            <span class="wordmark">jarvis</span>
+          </div>
+        </div>
+        <div class="tile-cap"><strong>Horizontal</strong><span>Default · gap = 0.31 × mark</span></div>
+      </div>
+      <div class="tile" data-od-id="lockup-stacked">
+        <div class="tile-art surface" style="min-height:13rem">
+          <div class="lockup-stack">
+            <svg class="mark" aria-hidden="true"><use href="#mark"/></svg>
+            <span class="wordmark">jarvis</span>
+          </div>
+        </div>
+        <div class="tile-cap"><strong>Stacked</strong><span>Square placements</span></div>
+      </div>
+      <div class="tile" data-od-id="lockup-reversed">
+        <div class="tile-art dark" style="min-height:13rem">
+          <div class="lockup-row">
+            <svg class="mark on-dark" aria-hidden="true"><use href="#mark"/></svg>
+            <span class="wordmark">jarvis</span>
+          </div>
+        </div>
+        <div class="tile-cap"><strong>Reversed</strong><span>Dark surfaces</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AVATAR ============ -->
+  <section class="frame section" data-od-id="section-avatar">
+    <p class="eyebrow">GitHub organisation</p>
+    <h2 class="section-title">The avatar is the mark on ink, full bleed.</h2>
+    <p class="lede">No rounded corners baked in and no wordmark — GitHub applies its own crop, and at 20 px in a repo list the letters would be mud. The blades run slightly heavier here than in the web mark so they survive that crop.</p>
+
+    <div class="avatar-lab">
+      <div class="avatar-hero" data-od-id="avatar-preview-large">
+        <svg role="img" aria-label="The JARVIS GitHub organisation avatar"><use href="#avatar"/></svg>
+      </div>
+
+      <div>
+        <div class="avatar-sizes" data-od-id="avatar-size-previews">
+          <div class="av">
+            <div class="av-box rounded" style="width:96px;height:96px"><svg aria-hidden="true"><use href="#avatar"/></svg></div>
+            <span>96<br>profile</span>
+          </div>
+          <div class="av">
+            <div class="av-box rounded" style="width:40px;height:40px"><svg aria-hidden="true"><use href="#avatar"/></svg></div>
+            <span>40<br>repo list</span>
+          </div>
+          <div class="av">
+            <div class="av-box rounded" style="width:20px;height:20px"><svg aria-hidden="true"><use href="#avatar"/></svg></div>
+            <span>20<br>inline</span>
+          </div>
+          <div class="av">
+            <div class="av-box circle" style="width:64px;height:64px"><svg aria-hidden="true"><use href="#avatar"/></svg></div>
+            <span>64<br>circle crop</span>
+          </div>
+        </div>
+
+        <p class="note-sm">Upload <code>jarvis-avatar-512.png</code> at <strong>Organisation settings → Profile → Upload new picture</strong>. GitHub does not accept SVG for avatars, so the PNG is the one to use; the SVG is the source.</p>
+
+        <div class="downloads">
+          <a class="primary-action tap" href="assets/jarvis-avatar-512.png" download data-od-id="download-avatar-png">Download avatar PNG <span aria-hidden="true">↓</span></a>
+          <a class="secondary-action tap" href="assets/jarvis-avatar-1024.png" download>1024 px</a>
+          <a class="secondary-action tap" href="assets/jarvis-avatar.svg" download>Avatar source</a>
+          <a class="secondary-action tap" href="assets/jarvis-mark.svg" download>Mark SVG</a>
+          <a class="secondary-action tap" href="assets/jarvis-mark-inverse.svg" download>Mark SVG, reversed</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MISUSE ============ -->
+  <section class="frame section" data-od-id="section-misuse">
+    <p class="eyebrow">Misuse</p>
+    <h2 class="section-title">Four things that break it.</h2>
+
+    <div class="tiles four">
+      <div class="tile" data-od-id="misuse-rotate">
+        <div class="tile-art surface dont-art">
+          <svg class="mark" style="transform:rotate(52deg)" aria-hidden="true"><use href="#mark"/></svg>
+        </div>
+        <div class="tile-cap"><strong>Do not rotate</strong><span>The long blade holds the top-left</span></div>
+      </div>
+      <div class="tile" data-od-id="misuse-stretch">
+        <div class="tile-art surface dont-art">
+          <svg class="mark" style="transform:scaleX(1.55)" aria-hidden="true"><use href="#mark"/></svg>
+        </div>
+        <div class="tile-cap"><strong>Do not stretch</strong><span>Scale on both axes only</span></div>
+      </div>
+      <div class="tile" data-od-id="misuse-recolour">
+        <div class="tile-art surface dont-art">
+          <svg class="mark" style="color:#c1462f;fill:#e0a21b" aria-hidden="true"><use href="#mark"/></svg>
+        </div>
+        <div class="tile-cap"><strong>Do not recolour</strong><span>Four treatments, no others</span></div>
+      </div>
+      <div class="tile" data-od-id="misuse-effects">
+        <div class="tile-art surface dont-art">
+          <svg class="mark" style="filter:drop-shadow(0 6px 10px rgba(41,82,125,.75))" aria-hidden="true"><use href="#mark"/></svg>
+        </div>
+        <div class="tile-cap"><strong>Do not add effects</strong><span>No glow, shadow, or bevel</span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-od-id="site-footer">
+  <div class="footer-inner">
+    <a class="tap" href="index.html">Site</a>
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:0.75rem">Identity v1 · MIT</span>
+  </div>
+</footer>
+
+</body>
+</html>

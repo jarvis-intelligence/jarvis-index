@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="JARVIS">
+  <title>JARVIS</title>
+  <rect width="512" height="512" fill="#0a0e11"/>
+  <g fill="none" stroke="#7cafe4" stroke-width="45" stroke-linecap="round">
+    <path d="M178.87 347.92A120 120 0 0 1 276.84 137.82"/>
+    <path d="M323.10 156.52A120 120 0 0 1 355.48 323.10"/>
+    <path d="M323.10 355.48A120 120 0 0 1 222.92 371.35"/>
+  </g>
+  <circle cx="256" cy="256" r="36" fill="#e1e5e8"/>
+</svg>
