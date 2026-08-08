@@ -10,7 +10,7 @@ This repo is a distribution surface, so its "architecture" is a set of flows: ho
 | Repo | Role | Visibility |
 |---|---|---|
 | `jarvis/` | Python MCP server (`jarvis-mcp` on PyPI) — SCIP navigation, Zoekt search, blast radius, semantic search | **Private** |
-| `scip-swift/` | Swift SCIP indexer — reads IndexStoreDB, emits `scip.proto` protobuf | Public (`phuongddx/scip-swift`) |
+| `scip-swift/` | Swift SCIP indexer — reads IndexStoreDB, emits `scip.proto` protobuf | Public (`jarvis-intelligence/scip-swift`) |
 | `jarvis-index/` | **This repo** — installer, plugins, binary release assets, issue tracker | Public (`jarvis-intelligence/jarvis-index`) |
 
 ## Inbound: how artifacts arrive
@@ -31,7 +31,7 @@ This repo is a distribution surface, so its "architecture" is a set of flows: ho
    └──────────────────────────────────┘        │                                  │
                                                │  plugin/         (EDITED HERE)   │
    ┌──────────────────────────────────┐        │  .claude-plugin/ (EDITED HERE)   │
-   │ phuongddx/scip-swift (public)    │        │  .codex-plugin/  (EDITED HERE)   │
+   │ jarvis-intelligence/scip-swift   │        │  .codex-plugin/  (EDITED HERE)   │
    │  Releases: scip-swift-vX-macos-  │        │  .cursor-plugin/ (EDITED HERE)   │
    │            arm64.tar.gz          │        │  README.md       (EDITED HERE)   │
    └──────────────────────────────────┘        └──────────────────────────────────┘
@@ -63,7 +63,7 @@ directly.
    │                   ┌────────────────────────────────────────────┐
    │                   │ plugin/.mcp.json  (Claude Code, Codex)      │
    │                   │ plugin/mcp.json   (Cursor)   auto-register: │
-   │                   │   uvx --from jarvis-mcp>=0.0.1 jarvis-server│
+   │                   │   uvx --from jarvis-mcp>=0.6.0 jarvis-server│
    │                   │ plugin/skills/ → 3 skills loaded            │
    │                   └────────────────────────────────────────────┘
    │                        │
@@ -141,7 +141,7 @@ Where each binary actually comes from, and why:
 |---|---|---|
 | `scip` | **This repo's releases** (`scip-<commit>`), built from the `phuongddx/scip` fork | Upstream through v0.9.0 never populates `global_symbols.relationships` (scip-code/scip#464), which makes `typeHierarchy` unanswerable. Fork carries the #465 fix. Exit ramp: when upstream merges #465 and cuts a release, repoint and delete the build workflow. |
 | `zoekt-git-index`, `zoekt-webserver` | **This repo's releases** (`zoekt-<commit>`) | `sourcegraph/zoekt` publishes no releases at all. One tarball ships both binaries. |
-| `scip-swift` | `phuongddx/scip-swift` releases, macOS arm64 only | Swift indexing reads an Xcode-produced IndexStore — inherently macOS-only. |
+| `scip-swift` | `jarvis-intelligence/scip-swift` releases, macOS arm64 only | Swift indexing reads an Xcode-produced IndexStore — inherently macOS-only. |
 | `scip-java` | `scip-code/scip-java` releases (upstream) | Self-contained POSIX-sh launcher with an embedded JAR; runs on any JVM, so no os/arch gating. |
 | `scip-typescript`, `scip-python` | npm | Installed via the shared `install_npm_indexer` helper. |
 | `bash` shim | Symlink to an existing bash ≥ 4.4 | macOS ships bash 3.2; scip-java's generated `javac` wrapper uses `set -eu` + an unguarded `"${ARR[@]}"`, which dies on 3.2. Never runs `brew` — installing a shell is the user's call. |

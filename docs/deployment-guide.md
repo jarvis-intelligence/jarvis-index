@@ -118,10 +118,15 @@ check — that would strand every existing install on broken `typeHierarchy` for
 
 ## Channel 4 — `scip-swift` (separate public repo)
 
-**Trigger:** a `phuongddx/scip-swift` release.
+**Trigger:** a `jarvis-intelligence/scip-swift` release.
 **Mechanism:** assets are published on that repo; `setup.sh` pins the version.
 **Your action:** bump `SCIP_SWIFT_VERSION` in `jarvis/setup.sh` — it reaches users via the next
 jarvis release sync. Asset naming uses `macos`, not `darwin`, and only arm64 is published.
+
+Releases on this repo are cut by hand, and the tags did not survive the move off the old
+`phuongddx/scip-swift` owner — which silently 404'd every `setup.sh --only scip-swift` run. When
+tagging a version, confirm both assets (`.tar.gz` and `.tar.gz.sha256`) are actually attached
+before bumping the pin.
 
 ---
 

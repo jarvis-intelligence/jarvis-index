@@ -33,6 +33,8 @@ semantic search work; navigation does not). See CLAUDE.md for the detail.
 
 `uv tool install` puts `jarvis` (the CLI) and `jarvis-server` (the MCP server) on `PATH`. Optional extras: `uv tool install "jarvis-mcp[semantic]"` for `semanticSearch`, `[watch]` for `jarvis watch`.
 
+Plugin users: run it anyway, before the first tool call. The plugin registration launches the server through `uvx`, and on a cold cache that first launch pays the full resolve-and-build cost inside the MCP client's 30s connect window — which it loses. Installing once fills the cache the plugin then reuses.
+
 ## 3. Register the MCP server
 
 If you installed the Codex, Claude Code, **or** Cursor plugin, the bundled MCP config auto-registers the `jarvis` MCP server — skip this step. (Codex and Claude Code read `plugin/.mcp.json`; Cursor reads `plugin/mcp.json`. Same stdio server, same contents — two filenames because the clients disagree on the convention.)
@@ -82,6 +84,7 @@ Then call a tool through the MCP client, e.g. `goToDefinition(repo: "<slug>", sy
 | Symptom | Fix |
 |---|---|
 | `command not found: jarvis` | The plugin runs the MCP *server* via `uvx` without ever installing the CLI, so all 9 tools can work while `jarvis` itself is absent. Fix: `uv tool install jarvis-mcp` (step 2's second command) — or skip installing and run one-off commands as `uvx --from jarvis-mcp jarvis index /path/to/repo`. |
+| `MCP server ... connection timed out after 30000ms` on the very first connect | The plugin's registration launches the server with `uvx`, which on a cold cache resolves *and builds* the dependency tree before the server can answer — some deps (e.g. `cryptography`) compile Rust and can run for minutes, well past the client's 30s connect window. Fix: run step 2's `uv tool install jarvis-mcp` once, then reconnect (`/mcp` → jarvis). That populates the same cache `uvx` reads, so later cold starts take seconds. Nothing is wrong with the index or the install. |
 | `command not found: scip` / `zoekt-git-index` | `~/.jarvis/bin` not on `PATH`. Open a new shell, or `source ~/.zshrc` (or `~/.bashrc`). Still missing after that? Re-run `setup.sh --only zoekt --force` — the flag value is `zoekt` (not `zoekt-git-index`); it installs both `zoekt-git-index` and `zoekt-webserver` from the same tarball. |
 | `typeHierarchy` errors on a fresh index / `scip` predates the pinned fork build | Re-run setup.sh — the scip install is version-gated and replaces a non-matching binary automatically (heed its warning if an older `scip` earlier on `PATH` shadows the new one) — then `jarvis reindex <slug>`. |
 | Swift: "multiple schemes" / wrong build | Pass `--scheme <name>` on the first `jarvis index`. It's stored in the registry and reused by `reindex`/`watch`. |
