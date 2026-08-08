@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="JARVIS">
+  <title>JARVIS</title>
+  <g fill="none" stroke="#7cafe4" stroke-width="7.5" stroke-linecap="round">
+    <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
+    <path d="M43.18 15.42A20 20 0 0 1 48.58 43.18"/>
+    <path d="M43.18 48.58A20 20 0 0 1 26.49 51.23"/>
+  </g>
+  <circle cx="32" cy="32" r="6" fill="#e1e5e8"/>
+</svg>
