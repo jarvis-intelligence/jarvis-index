@@ -1,5 +1,7 @@
 # jarvis
 
+[![Index once. Nothing leaves the room. Your repository stays where it is, jarvis index turns it into a local index on your disk, and your agent queries that index directly — all on your machine.](.github/assets/jarvis-local-pipeline.png)](https://jarvis-intelligence.github.io/jarvis-index/)
+
 **Local-first code intelligence for coding agents.** Index your own repositories with SCIP and
 Zoekt, then let the agent ask structural questions — *who calls this?*, *where is this defined?* —
 instead of guessing from grep.
