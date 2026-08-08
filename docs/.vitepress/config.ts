@@ -8,6 +8,12 @@ export default defineConfig({
   base: '/docs/',
   cleanUrls: true,
   ignoreDeadLinks: true,
+  lastUpdated: true,
+
+  sitemap: {
+    hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs'
+  },
+
   srcExclude: [
     'brand-spec.md',
     'code-standards.md',
@@ -18,11 +24,6 @@ export default defineConfig({
     'system-architecture.md',
     'superpowers/**'
   ],
-  lastUpdated: true,
-
-  sitemap: {
-    hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs'
-  },
 
   head: [
     ['meta', { name: 'description', content: 'Local-first code intelligence for coding agents. SCIP navigation, Zoekt search, and semantic search over your own indexed repositories.' }]
