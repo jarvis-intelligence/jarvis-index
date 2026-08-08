@@ -1,0 +1,61 @@
+/**
+ * Brand token overrides — aligned with site/index.html (the landing page).
+ * Source of truth: jarvis-index/site/index.html :root and @media(prefers-color-scheme: dark)
+ * VitePress CSS variable reference: https://vitepress.dev/reference/site-config#themeconfig
+ */
+
+/* ---- Light theme (default) ---- */
+:root {
+  /* Brand */
+  --vp-c-brand-1: #1D4ED8;  /* accent-ink / CTA-bg — primary links, buttons */
+  --vp-c-brand-2: #3B82F6;  /* accent — hover/secondary */
+  --vp-c-brand-3: #3B82F6;  /* accent — used in some components */
+  --vp-c-brand-soft: rgba(59, 130, 246, 0.14);
+
+  /* Backgrounds — match landing page: bg #FCFCFD, bg-raised #FFFFFF */
+  --vp-c-bg: #FCFCFD;
+  --vp-c-bg-alt: #FFFFFF;
+  --vp-c-bg-elv: #FFFFFF;
+  --vp-c-bg-soft: #F8FAFC;
+
+  /* Text — match landing page: ink #0F172A, ink-muted #475569 */
+  --vp-c-text-1: #0F172A;
+  --vp-c-text-2: #475569;
+  --vp-c-text-3: #64748B;
+
+  /* Borders — match landing page: rule #E2E8F0 */
+  --vp-c-divider: #E2E8F0;
+  --vp-c-gutter: #E2E8F0;
+
+  /* Code block accents */
+  --vp-c-brand: var(--vp-c-brand-1);
+}
+
+/* ---- Dark theme ---- */
+.dark {
+  /* Brand — landing page dark: accent-ink #93C5FD, accent #3B82F6 */
+  --vp-c-brand-1: #93C5FD;
+  --vp-c-brand-2: #3B82F6;
+  --vp-c-brand-3: #60A5FA;
+  --vp-c-brand-soft: rgba(147, 197, 253, 0.16);
+
+  /* Backgrounds — match landing page dark: bg #0F172A, bg-raised #16213A */
+  --vp-c-bg: #0F172A;
+  --vp-c-bg-alt: #16213A;
+  --vp-c-bg-elv: #16213A;
+  --vp-c-bg-soft: #1E293B;
+
+  /* Text — match landing page dark: ink #E2E8F0, ink-muted #94A3B8 */
+  --vp-c-text-1: #E2E8F0;
+  --vp-c-text-2: #94A3B8;
+  --vp-c-text-3: #94A3B8;
+
+  /* Borders — match landing page dark: rule #1E293B */
+  --vp-c-divider: #1E293B;
+  --vp-c-gutter: #1E293B;
+
+  --vp-c-brand: var(--vp-c-brand-1);
+}
+
+/* Home hero / KButton use --vp-c-brand-*; the mappings above propagate automatically.
+   VitePress's built-in theme toggle (sun/moon in nav) handles light/dark switching. */

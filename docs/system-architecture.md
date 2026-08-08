@@ -67,17 +67,21 @@ directly.
    │                   │ plugin/skills/ → 3 skills loaded            │
    │                   └────────────────────────────────────────────┘
    │                        │
-   └─(D) Manual:       curl -fsSL .../setup.sh | sh ; uv tool install jarvis-mcp
+   └─(D) Manual:       curl -fsSL .../setup.sh | sh
                             │
                             ▼
-                    ┌──────────────────────────────────────────┐
-                    │ setup.sh installs into ~/.jarvis/bin:    │
-                    │   scip, zoekt-git-index, zoekt-webserver,│
-                    │   scip-typescript, scip-python,          │
-                    │   scip-swift (macOS arm64), scip-java,   │
-                    │   bash shim (macOS only)                 │
-                    │ + appends ~/.jarvis/bin to shell rc PATH │
-                    └──────────────────────────────────────────┘
+                    ┌────────────────────────────────────────────┐
+                    │ setup.sh installs into ~/.jarvis/bin:      │
+                    │   scip, zoekt-git-index, zoekt-webserver,  │
+                    │   scip-typescript, scip-python,            │
+                    │   scip-swift (macOS arm64), scip-java,     │
+                    │   bash shim (macOS only)                   │
+                    │ + appends ~/.jarvis/bin to shell rc PATH   │
+                    │ + `uv tool install jarvis-mcp` (soft-skips │
+                    │   with a warning if uv isn't on PATH) —    │
+                    │   pre-warms the cache (C)'s uvx launch     │
+                    │   reuses (jarvis-index#4)                  │
+                    └────────────────────────────────────────────┘
                             │
                             ▼
                     jarvis index /path/to/repo  →  jarvis status <slug>  →  MCP tool call
@@ -111,7 +115,7 @@ Cursor's official validator checks they resolve.
 
 ## `setup.sh` internal structure
 
-A single POSIX-sh file (~758 lines) organized in labelled sections:
+A single POSIX-sh file (~798 lines) organized in labelled sections:
 
 | Section | Responsibility |
 |---|---|
@@ -121,7 +125,7 @@ A single POSIX-sh file (~758 lines) organized in labelled sections:
 | **platform detection** | `detect_os`, `detect_arch` |
 | **install dir** | `bin_dir`, `ensure_bin_dir`, `shim_dir`, `shell_rc_path`, `ensure_on_path` |
 | **download** | `have_cmd`, `already_installed`, `download_to`, `install_tarball_binary`, `install_raw_binary` — SHA256 verification lives here |
-| **installers** | One `install_*` per dependency, plus `install_bash_shim` |
+| **installers** | One `install_*` per dependency, plus `install_bash_shim` and `install_jarvis_mcp` (`uv tool install jarvis-mcp`, soft-skipped if `uv` is missing) |
 | **orchestration** | `parse_args`, `record`, `print_summary`, `run_one`, `should_run` |
 | **main** | Detect platform → `ensure_bin_dir` → run each installer via `run_one` → `ensure_on_path` → summary → exit |
 
@@ -145,6 +149,7 @@ Where each binary actually comes from, and why:
 | `scip-java` | `scip-code/scip-java` releases (upstream) | Self-contained POSIX-sh launcher with an embedded JAR; runs on any JVM, so no os/arch gating. |
 | `scip-typescript`, `scip-python` | npm | Installed via the shared `install_npm_indexer` helper. |
 | `bash` shim | Symlink to an existing bash ≥ 4.4 | macOS ships bash 3.2; scip-java's generated `javac` wrapper uses `set -eu` + an unguarded `"${ARR[@]}"`, which dies on 3.2. Never runs `brew` — installing a shell is the user's call. |
+| `jarvis-mcp` (`jarvis`, `jarvis-server`) | PyPI, via `uv tool install jarvis-mcp` | Not a native binary — pre-warms uv's cache so the plugin's `uvx --from jarvis-mcp jarvis-server` launch doesn't pay a cold resolve-and-build cost inside the MCP client's 30s connect window ([jarvis-index#4](https://github.com/jarvis-intelligence/jarvis-index/issues/4)). Soft-skipped with a warning if `uv` isn't on `PATH`. |
 
 ## Indexing pipeline (downstream, for context)
 
