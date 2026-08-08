@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jarvis — local-first code intelligence</title>
+<meta name="description" content="SCIP navigation and Zoekt search over your own indexed repositories. Nine MCP tools for Claude Code, Codex CLI, and Cursor.">
+<style>
+:root {
+  --bg: #FCFCFD;
+  --bg-raised: #FFFFFF;
+  --ink: #0F172A;
+  --ink-muted: #475569;
+  --rule: #E2E8F0;
+  --accent: #3B82F6;
+  --accent-ink: #1D4ED8;
+  --cta-bg: #1D4ED8;
+  --cta-fg: #FFFFFF;
+  --cta-shadow: rgba(15, 23, 42, 0.25);
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --measure: 1080px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F172A;
+    --bg-raised: #16213A;
+    --ink: #E2E8F0;
+    --ink-muted: #94A3B8;
+    --rule: #1E293B;
+    --accent-ink: #93C5FD;
+    --cta-bg: #3B82F6;
+    --cta-fg: #0F172A;
+    --cta-shadow: rgba(0, 0, 0, 0.45);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F172A;
+  --bg-raised: #16213A;
+  --ink: #E2E8F0;
+  --ink-muted: #94A3B8;
+  --rule: #1E293B;
+  --accent-ink: #93C5FD;
+  --cta-bg: #3B82F6;
+  --cta-fg: #0F172A;
+  --cta-shadow: rgba(0, 0, 0, 0.45);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 24px; }
+.section { padding-top: 88px; padding-bottom: 88px; border-top: 1px solid var(--rule); }
+.section:first-of-type { border-top: 0; }
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 16px; }
+h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 680; }
+h2 { font-size: clamp(26px, 3.4vw, 34px); font-weight: 640; }
+h3 { font-size: 17px; font-weight: 620; }
+p { margin: 0 0 16px; color: var(--ink-muted); max-width: 62ch; }
+code, pre { font-family: var(--mono); font-size: 14px; }
+a { color: var(--accent-ink); }
+a:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-muted); margin: 0 0 12px;
+}
+.scroll-x { overflow-x: auto; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: var(--measure); margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; gap: 28px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 640; letter-spacing: -0.01em; }
+.brand svg { width: 26px; height: 26px; border-radius: 6px; display: block; }
+.nav a { color: var(--ink-muted); text-decoration: none; font-size: 15px; }
+.nav a:hover { color: var(--ink); }
+.nav-links { display: flex; gap: 22px; margin-left: auto; }
+.hero { padding-top: 104px; padding-bottom: 88px; }
+.hero p.lede { font-size: 20px; max-width: 58ch; color: var(--ink-muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 28px; }
+.cta {
+  display: inline-block; padding: 11px 20px; border-radius: 8px;
+  border: 1px solid var(--rule); color: var(--ink); text-decoration: none;
+  font-size: 15px; font-weight: 560; transition: border-color .15s ease;
+}
+.cta:hover { border-color: var(--accent); }
+.cta-primary { background: var(--cta-bg); border-color: var(--cta-bg); color: var(--cta-fg); }
+.cta-primary:hover { border-color: var(--cta-bg); box-shadow: 0 4px 14px var(--cta-shadow); }
+.cmd {
+  display: block; padding: 14px 16px; border-radius: 8px;
+  background: var(--bg-raised); border: 1px solid var(--rule);
+  color: var(--ink); white-space: pre; overflow-x: auto; max-width: 100%;
+}
+.fineprint { font-size: 14px; color: var(--ink-muted); margin-top: 14px; }
+@media (max-width: 767px) {
+  .nav-links { display: none; }
+  .hero { padding-top: 64px; padding-bottom: 56px; }
+}
+@media (max-width: 767px) {
+  .section { padding-top: 56px; padding-bottom: 56px; }
+}
+.diagram { margin-top: 28px; }
+.diagram svg { width: 100%; height: auto; min-width: 680px; color: var(--ink-muted); }
+.diagram .node { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.diagram .label { fill: var(--ink); font-family: var(--mono); font-size: 12px; }
+.diagram .sub { fill: var(--ink-muted); font-family: var(--mono); font-size: 10.5px; }
+.diagram .flow { stroke: var(--accent); stroke-width: 1.5; marker-end: url(#arrow); }
+.caption { font-size: 14px; color: var(--ink-muted); margin-top: 16px; }
+.group { margin-top: 36px; }
+.group > h3 { color: var(--ink); margin-bottom: 14px; }
+.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.tool { background: var(--bg); padding: 18px 18px 20px; border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); }
+.tool:nth-child(3n+1) { border-left: none; }
+.tool:nth-child(-n+3) { border-top: none; }
+.tool-name { font-family: var(--mono); font-size: 13.5px; color: var(--accent-ink); display: block; margin-bottom: 6px; }
+.tool p { font-size: 14.5px; margin: 0; }
+.note { font-size: 14px; color: var(--ink-muted); border-left: 2px solid var(--accent); padding-left: 14px; margin-top: 32px; max-width: 66ch; }
+@media (max-width: 900px) {
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  .tool:nth-child(3n+1) { border-left: 1px solid var(--rule); }
+  .tool:nth-child(2n+1) { border-left: none; }
+  .tool:nth-child(-n+3) { border-top: 1px solid var(--rule); }
+  .tool:nth-child(-n+2) { border-top: none; }
+}
+@media (max-width: 620px) {
+  .tool-grid { grid-template-columns: 1fr; }
+  .tool { border-left: none; border-top: 1px solid var(--rule); }
+  .tool:first-child { border-top: none; }
+}
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
+.col { border: 1px solid var(--rule); border-radius: 10px; padding: 20px; background: var(--bg-raised); min-width: 0; }
+.col h3 { margin-bottom: 12px; }
+.col .cmd { font-size: 12.5px; margin-bottom: 8px; background: var(--bg); white-space: pre-wrap; overflow-wrap: anywhere; }
+.col p { font-size: 14px; }
+.then { margin-top: 32px; }
+@media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+#roadmap .cols { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) {
+  #roadmap .cols { grid-template-columns: 1fr; }
+}
+.claims { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 15px; min-width: 560px; }
+.claims th, .claims td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.claims th { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; }
+.claims td:first-child { font-weight: 560; color: var(--ink); width: 38%; }
+.claims td:last-child { color: var(--ink-muted); }
+.badge {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: 4px 10px; color: var(--ink-muted); margin-left: 10px; vertical-align: middle;
+}
+.roadmap-list { margin: 0; padding-left: 20px; color: var(--ink-muted); font-size: 15px; }
+.roadmap-list li { margin-bottom: 8px; }
+.foot { border-top: 1px solid var(--rule); margin-top: 24px; padding: 40px 0 64px; }
+.foot-inner { max-width: var(--measure); margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; font-size: 14px; color: var(--ink-muted); }
+.foot a { color: var(--ink-muted); }
+.foot a:hover { color: var(--ink); }
+.foot .meta { margin-left: auto; font-family: var(--mono); font-size: 12.5px; }
+@media (max-width: 620px) { .foot .meta { margin-left: 0; } }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <span class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect width="64" height="64" rx="12" fill="#0F172A"/>
+        <circle cx="28" cy="28" r="12" fill="none" stroke="#3B82F6" stroke-width="4"/>
+        <line x1="37" y1="37" x2="48" y2="48" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      jarvis
+    </span>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#tools">Tools</a>
+      <a href="#install">Install</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <h1>Code intelligence that runs on your machine.</h1>
+    <p class="lede">SCIP navigation and Zoekt search over your own indexed repositories. Nine MCP tools for Claude Code, Codex CLI, and Cursor. No telemetry, no outbound calls during queries.</p>
+    <div class="cta-row">
+      <a class="cta cta-primary" href="#install">Install</a>
+      <a class="cta" href="#pipeline">How it works</a>
+    </div>
+    <code class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</code>
+    <p class="fineprint">macOS and Linux · MIT</p>
+  </section>
+
+  <section class="wrap section" id="pipeline">
+    <p class="eyebrow">Pipeline</p>
+    <h2>Index locally, query locally.</h2>
+    <p>A language indexer emits SCIP protobuf. <code>jarvis index</code> converts it to SQLite and builds the Zoekt index. <code>jarvis-server</code> answers over stdio. Every arrow runs on your machine.</p>
+    <div class="diagram scroll-x">
+      <svg viewBox="0 0 980 190" role="img" aria-labelledby="pipeline-title pipeline-desc">
+        <title id="pipeline-title">The jarvis indexing pipeline</title>
+        <desc id="pipeline-desc">A language indexer — scip-swift, scip-python, scip-typescript, or scip-java — emits SCIP protobuf. The jarvis index command converts that into SQLite plus a Zoekt index and an optional semantic index. The jarvis-server process then answers nine MCP tools over stdio.</desc>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#3B82F6"/>
+          </marker>
+        </defs>
+        <rect class="node" x="1" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="16" y="66">language indexer</text>
+        <text class="sub" x="16" y="86">scip-swift · scip-python</text>
+        <text class="sub" x="16" y="102">scip-typescript · scip-java</text>
+        <line class="flow" x1="205" y1="86" x2="253" y2="86"/>
+        <text class="sub" x="207" y="76">SCIP</text>
+        <rect class="node" x="261" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="276" y="66">jarvis index</text>
+        <text class="sub" x="276" y="86">converts protobuf</text>
+        <text class="sub" x="276" y="102">builds indexes</text>
+        <line class="flow" x1="465" y1="86" x2="513" y2="86"/>
+        <rect class="node" x="521" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="536" y="66">SQLite + Zoekt</text>
+        <text class="sub" x="536" y="86">+ optional semantic</text>
+        <text class="sub" x="536" y="102">read-only at query time</text>
+        <line class="flow" x1="725" y1="86" x2="773" y2="86"/>
+        <rect class="node" x="781" y="40" width="196" height="92" rx="8"/>
+        <text class="label" x="796" y="66">jarvis-server</text>
+        <text class="sub" x="796" y="86">nine MCP tools</text>
+        <text class="sub" x="796" y="102">over stdio</text>
+      </svg>
+    </div>
+    <p class="caption">No step in this pipeline contacts a network service.</p>
+  </section>
+
+  <section class="wrap section" id="tools">
+    <p class="eyebrow">Tools</p>
+    <h2>Nine MCP tools, grouped by what you are asking.</h2>
+    <p>Each takes <code>repo</code> — the slug produced by <code>jarvis index</code>.</p>
+
+    <div class="group">
+      <h3>Navigate</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">documentSymbols</span><p>Every top-level symbol in a file, each with its range.</p></div>
+        <div class="tool"><span class="tool-name">goToDefinition</span><p>Resolve a symbol's definition site or sites.</p></div>
+        <div class="tool"><span class="tool-name">findReferences</span><p>Every occurrence of a symbol.</p></div>
+        <div class="tool"><span class="tool-name">callHierarchy</span><p>Single-level incoming and outgoing calls.</p></div>
+        <div class="tool"><span class="tool-name">typeHierarchy</span><p>Supertypes and subtypes.</p></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Search</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">searchCode</span><p>Lexical search via Zoekt, on a lazy-started webserver.</p></div>
+        <div class="tool"><span class="tool-name">semanticSearch</span><p>Vector, Zoekt, and SCIP symbol-definition hybrid, fused by reciprocal rank.</p></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Cross-repo and status</h3>
+      <div class="tool-grid">
+        <div class="tool"><span class="tool-name">blastRadius</span><p>Two-hop package-dependency breadth-first search across indexed repos.</p></div>
+        <div class="tool"><span class="tool-name">getIndexStatus</span><p>Whether a repo has a published index, and how fresh it is.</p></div>
+      </div>
+    </div>
+
+    <p class="note"><strong>One caveat worth knowing up front.</strong> <code>semanticSearch</code> needs the <code>[semantic]</code> extra, and the plugin's default MCP registration deliberately omits it so cold start stays free of lancedb and torch. Using it means registering a second, differently-named server — <code>jarvis-semantic</code>.</p>
+  </section>
+
+  <section class="wrap section" id="install">
+    <p class="eyebrow">Install</p>
+    <h2>Three clients, one plugin directory.</h2>
+    <div class="cols">
+      <div class="col">
+        <h3>Claude Code</h3>
+        <code class="cmd">/plugin marketplace add jarvis-intelligence/jarvis-index</code>
+        <code class="cmd">/plugin install jarvis@jarvis</code>
+      </div>
+      <div class="col">
+        <h3>Codex CLI</h3>
+        <code class="cmd">codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main</code>
+        <code class="cmd">codex plugin add jarvis</code>
+      </div>
+      <div class="col">
+        <h3>Cursor</h3>
+        <p>Cursor exposes no CLI for adding a marketplace. On Teams or Enterprise: Dashboard → Plugins → Add Marketplace → Import from Repo. On any plan, symlink the plugin directory:</p>
+        <code class="cmd">ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis</code>
+      </div>
+    </div>
+    <div class="then">
+      <h3>Then, on every client</h3>
+      <p>Install the external binaries, then index a repo. <code>setup.sh</code> installs the external binaries, verifies each downloaded tarball's SHA256, and skips whatever is already present.</p>
+      <code class="cmd">jarvis index /path/to/repo</code>
+    </div>
+  </section>
+
+  <section class="wrap section" id="architecture">
+    <p class="eyebrow">Architecture</p>
+    <h2>Three repositories, one product.</h2>
+    <div class="scroll-x">
+      <table class="claims">
+        <thead><tr><th scope="col">Repository</th><th scope="col">Role</th><th scope="col">Visibility</th></tr></thead>
+        <tbody>
+          <tr><td><code>jarvis</code></td><td>Python MCP server, published to PyPI as <code>jarvis-mcp</code>.</td><td>Private</td></tr>
+          <tr><td><code>scip-swift</code></td><td>Swift SCIP indexer. Reads an Xcode IndexStoreDB and emits SCIP protobuf.</td><td>Public</td></tr>
+          <tr><td><code>jarvis-index</code></td><td>Installer, plugins, binary release assets, issue tracker.</td><td>Public</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:44px">Why jarvis ships a patched <code>scip</code></h3>
+    <p>Upstream <code>scip</code> through v0.9.0 never populates <code>global_symbols.relationships</code>, which makes <code>typeHierarchy</code> unanswerable. jarvis builds from a fork carrying the fix and hosts the binary itself.</p>
+    <p>The exit ramp is written down: when upstream merges the fix and cuts a release, jarvis repoints at it and deletes the build pipeline. A patched dependency is a liability to be retired, not a moat.</p>
+  </section>
+
+  <section class="wrap section" id="local-first">
+    <p class="eyebrow">Local-first</p>
+    <h2>Four claims, each with the mechanism that enforces it.</h2>
+    <p>These are checkable rather than promised.</p>
+    <div class="scroll-x">
+      <table class="claims">
+        <thead><tr><th scope="col">Claim</th><th scope="col">Enforcement</th></tr></thead>
+        <tbody>
+          <tr><td>No telemetry, no analytics</td><td>No analytics code, and no outbound calls during queries.</td></tr>
+          <tr><td>The only network egress at runtime is the wheel fetch</td><td><code>uvx</code> on first server start, plus a one-time embedding-model download if you install the <code>[semantic]</code> extra.</td></tr>
+          <tr><td>Indexes are read-only</td><td>Opened <code>mode=ro&amp;immutable=1</code>.</td></tr>
+          <tr><td>Dependencies are pinned and verified</td><td>Exact commit or tag pins, each with a written justification; every tarball SHA256-verified before install.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap section" id="roadmap">
+    <p class="eyebrow">Roadmap</p>
+    <h2>What is next <span class="badge">Not shipped</span></h2>
+    <p>Nothing below is available today, and none of it carries a date.</p>
+    <div class="cols">
+      <div class="col">
+        <h3>Near term, local</h3>
+        <ul class="roadmap-list">
+          <li>A public Cursor marketplace listing.</li>
+          <li>Swift indexing on Intel Macs, via an x86_64 <code>scip-swift</code> asset.</li>
+          <li><code>setup.sh --verify</code>, to self-diagnose PATH shadowing and pin mismatches.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>jarvis Cloud, opt-in</h3>
+        <ul class="roadmap-list">
+          <li>Hosted indexing.</li>
+          <li>Team index sharing — index once in CI, teammates pull instead of each re-indexing.</li>
+          <li>Enterprise self-hosted, as a deployment mode of the same thing.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Local stays the default. Cloud is opt-in and never required — the guarantees above describe how jarvis behaves on your machine, and that does not change.</p>
+  </section>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <a href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    <a href="https://pypi.org/project/jarvis-mcp/">PyPI</a>
+    <a href="https://github.com/jarvis-intelligence/jarvis-index/issues">Issues</a>
+    <a href="https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/README.md">Docs</a>
+    <span class="meta">MIT · plugin v0.7.0</span>
+  </div>
+</footer>
+</body>
+</html>
