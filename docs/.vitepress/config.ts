@@ -21,7 +21,7 @@ export default defineConfig({
   lastUpdated: true,
 
   sitemap: {
-    hostname: 'https://jarvis-intelligence.github.io/jarvis-index'
+    hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs'
   },
 
   head: [
