@@ -45,8 +45,70 @@ export default defineConfig({
     starlight({
       title: 'jarvis',
       description: 'Local-first code intelligence for coding agents',
+      // Mirrors the six VitePress sidebar groups (docs/.vitepress/config.ts:42-116,
+      // since deleted) with docs/-prefixed links; order preserved.
       sidebar: [
-        { label: 'Docs', items: [{ label: 'Docs Home', link: 'docs/' }] },
+        {
+          label: 'Guide',
+          items: [
+            { label: 'Quickstart', link: 'docs/quickstart' },
+            { label: 'Install', link: 'docs/guide/install' },
+          ],
+        },
+        {
+          label: 'Concepts',
+          items: [
+            { label: 'SCIP', link: 'docs/concepts/scip' },
+            { label: 'Zoekt Search', link: 'docs/concepts/zoekt' },
+            { label: 'Semantic Search', link: 'docs/concepts/semantic-search' },
+            { label: 'Blast Radius', link: 'docs/concepts/blast-radius' },
+            { label: 'Architecture', link: 'docs/concepts/architecture' },
+          ],
+        },
+        {
+          label: 'MCP Tools',
+          items: [
+            { label: 'Overview', link: 'docs/tools/' },
+            { label: 'documentSymbols', link: 'docs/tools/document-symbols' },
+            { label: 'goToDefinition', link: 'docs/tools/go-to-definition' },
+            { label: 'findReferences', link: 'docs/tools/find-references' },
+            { label: 'callHierarchy', link: 'docs/tools/call-hierarchy' },
+            { label: 'typeHierarchy', link: 'docs/tools/type-hierarchy' },
+            { label: 'getIndexStatus', link: 'docs/tools/get-index-status' },
+            { label: 'searchCode', link: 'docs/tools/search-code' },
+            { label: 'semanticSearch', link: 'docs/tools/semantic-search' },
+            { label: 'blastRadius', link: 'docs/tools/blast-radius' },
+          ],
+        },
+        {
+          label: 'CLI',
+          items: [
+            { label: 'Overview', link: 'docs/cli/' },
+            { label: 'jarvis index', link: 'docs/cli/index-cmd' },
+            { label: 'jarvis list', link: 'docs/cli/list' },
+            { label: 'jarvis status', link: 'docs/cli/status' },
+            { label: 'jarvis reindex', link: 'docs/cli/reindex' },
+            { label: 'jarvis forget', link: 'docs/cli/forget' },
+            { label: 'jarvis watch', link: 'docs/cli/watch' },
+          ],
+        },
+        {
+          label: 'Integrations',
+          items: [
+            { label: 'Overview', link: 'docs/integrations/' },
+            { label: 'Claude Code', link: 'docs/integrations/claude-code' },
+            { label: 'Cursor', link: 'docs/integrations/cursor' },
+            { label: 'Codex CLI', link: 'docs/integrations/codex-cli' },
+          ],
+        },
+        {
+          label: 'Troubleshooting',
+          items: [
+            { label: 'Decision Tree', link: 'docs/troubleshooting/' },
+            { label: 'Upstream Issues', link: 'docs/troubleshooting/upstream-issues' },
+            { label: 'Common Failures', link: 'docs/troubleshooting/common-failures' },
+          ],
+        },
       ],
     }),
   ],
