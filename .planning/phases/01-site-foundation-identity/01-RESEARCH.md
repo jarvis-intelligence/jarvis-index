@@ -456,31 +456,31 @@ sitemap: { hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs/' 
 1. **Astro 5 vs Astro 7 (user-facing decision, one line)**
    - What we know: mandate says "Astro 5"; npm reality is 7.2.4 current / 5.18.2 last-of-5; Starlight pairs are 0.37.7 / 0.41.7 respectively; both work on Node 22 (7 needs ≥22.12).
    - What's unclear: whether the user prefers mandate-verbatim (5.x, older major) or amending to current (7.x).
-   - Recommendation: default to the mandated {5.18.2 + 0.37.7}; surface the 7.x option in the plan's context header for a cheap yes/no. Everything in this research is version-agnostic across the two pairs.
+   - Resolution (RESOLVED): mandated pair locked — astro 5.18.2 + @astrojs/starlight 0.37.7 as exact pins, Astro 6/7 explicitly forbidden (0.40.0 typo'd peer dep). Implemented in plan 01-02 Task 1; the 7.x option is surfaced in 01-02's context header.
 
 2. **Custom domain (STATE.md blocker)**
    - What we know: undecided; affects `site`/`base`, sitemap, docs→landing absolute URLs.
    - What's unclear: user intent.
-   - Recommendation: decide "no custom domain for v1" (keep `/jarvis-index` prefix, single constant makes later migration one-line). The plan records it as a decision with the one-line migration path documented.
+   - Resolution (RESOLVED): no custom domain for v1 — the /jarvis-index prefix is carried by the single origin constant (site + base) in astro.config.mjs, plan 01-02; later migration is a two-line change, recorded as a flagged assumption in 01-02.
 
 3. **Landing scope in Phase 1 — how much re-tokening?**
    - What we know: SITE-03/04 require both surfaces consuming tokens.css + self-hosted fonts; PITFALLS #6 warns against Phase-1 landing redesign.
    - What's unclear: whether "re-tokened" means a mechanical variable-swap in the existing markup or a light re-skin.
-   - Recommendation: mechanical swap (same sections/structure, tokens + fonts + one theme key); visual identity refinement is Phase 3. tokens.css ships with provisional values clearly marked as infrastructure.
+   - Resolution (RESOLVED): mechanical swap — Phase 1 ships the current live values as provisional --jv-* tokens (01-03 Task 1 provenance header marks them provisional); palette/typography refinement is Phase 3 against the same variables. Flagged assumption in 01-03.
 
 4. **`build.format` / trailing slash**
    - What we know: `file` reproduces today's cleanUrls exactly (extensionless 200 verified live); `directory` is Astro's default and changes URL shape to trailing-slash (Pages redirect behavior MEDIUM, unverified).
-   - Recommendation: `format: 'file'`; verify-build asserts both forms resolve for 3 sample pages post-deploy.
+   - Resolution (RESOLVED): build.format 'file' set in astro.config.mjs by 01-02 Task 1; extensionless URL shape asserted live in 01-02 Task 3 spot curls and pinned permanently by verify-build V2/V9 (01-05).
 
 5. **Where the old `docs/` markdown lives after migration**
    - What we know: public pages must move under `src/content/docs/docs/**`; maintainer docs must NOT.
    - What's unclear: whether to `git mv` (history-preserving, large diff) or copy+delete.
-   - Recommendation: `git mv` in plan 01-02 so Phase 2's classification (DOCS-09) keeps blame; verify-build catches any URL drift.
+   - Resolution (RESOLVED): git mv of the 31 public pages into src/content/docs/docs/** in 01-02 Task 2 (rename detection asserted in its acceptance criteria); the eight maintainer documents stay in docs/ at repo root — structural exclusion.
 
 6. **Smoke probe placement (same job vs `workflow_run`)**
    - What we know: deploy-pages@v4 completes before the probe can run in-job (it's the last step) — probe runs after it in the same job (steps after the deploy action do execute) or as a follow-up workflow.
    - What's unclear: none technically; preference only.
-   - Recommendation: same job, after the deploy step; simplest, sees the just-deployed artifact.
+   - Resolution (RESOLVED): same job — the Smoke probe step is appended after the deploy-pages@v4 step with set -e semantics, plan 01-01 Task 2.
 
 ---
 

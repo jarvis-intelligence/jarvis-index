@@ -41,11 +41,20 @@ created: 2026-08-21
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 1-01-01 | 01-01 | 1 | SITE-01 | — | N/A | http-probe | smoke probe: `/` and `/docs/` → 200 + marker, one hashed asset → 200 | ❌ W0 (script created by plan) | ⬜ pending |
-| 1-02-01 | 01-02 | 1 | SITE-02, SITE-05 | — | N/A | build | `npm run build` green on Node 22; single `dist/` artifact | ❌ W0 | ⬜ pending |
-| 1-03-01 | 01-03 | 1 | SITE-03, SITE-04 | — | N/A | build-assert | verify-build: zero third-party font refs; woff2 under own origin | ❌ W0 | ⬜ pending |
-| 1-04-01 | 01-04 | 2 | SITE-08 | — | N/A | build-assert + manual | verify-build: `pagefind.{js,json}` under `dist/docs/` + search markup; manual query interaction | ❌ W0 | ⬜ pending |
-| 1-05-01 | 01-05 | 2 | SITE-06, SITE-07 | — | N/A | script | verify-build: built URL set ≡ 32-URL contract; check-manifests fails when broken (test-the-test) | ❌ W0 | ⬜ pending |
+| 1-01-01 | 01-01 | 1 | SITE-01 | T-01-02 | N/A | build-assert | `npm run docs:build` + asset-prefix grep + sitemap equality with ≥30 floor | — | ⬜ pending |
+| 1-01-02 | 01-01 | 1 | SITE-01 | T-01-02 | N/A | http-probe | dispatched run green; live `/` `/docs/` `/docs/cli/forget` → 200 + marker | ❌ W0 (probe step created by plan) | ⬜ pending |
+| 1-02-00 | 01-02 | 2 | SITE-02 | T-01-SC | N/A | checkpoint:human-verify | six-package legitimacy gate (manual npmjs.com publisher check) | — | ⬜ pending |
+| 1-02-01 | 01-02 | 2 | SITE-02, SITE-05 | T-01-01 | N/A | build | `npm ci && npm run build` green on Node 22; single `dist/`; atomic stack commit | — | ⬜ pending |
+| 1-02-02 | 01-02 | 2 | SITE-02 | T-01-04 | N/A | build-assert | exactly 32 dist docs pages; 8 maintainer files absent; renames detected | — | ⬜ pending |
+| 1-02-03 | 01-02 | 2 | SITE-05 | T-01-01 | N/A | http-probe | dispatched deploy green + 3 deep URLs + brand-logo + sitemap-0.xml grep | — | ⬜ pending |
+| 1-03-01 | 01-03 | 3 | SITE-03, SITE-04 | T-01-06 | N/A | build-assert | ≥3 woff2 same-origin; zero font-CDN refs; `--jv-accent` in built CSS (`grep -q`) | ❌ W0 (standing V4 lands with 01-05 verify-build) | ⬜ pending |
+| 1-03-02 | 01-03 | 3 | SITE-03 | — | N/A | build-assert | landing.css consumes `var(--jv-*)`; zero `:root` in page; preview hero intact | — | ⬜ pending |
+| 1-03-03 | 01-03 | 3 | SITE-03 | T-01-08 | N/A | file-assert | superseded-by header within first 5 lines of each of the 3 stale specs | — | ⬜ pending |
+| 1-04-01 | 01-04 | 4 | SITE-08 | T-01-10 | N/A | build-assert + manual | built landing: `starlight-theme` present, legacy key count 0, `data-theme` + `prefers-color-scheme`; manual V6 | — | ⬜ pending |
+| 1-04-02 | 01-04 | 4 | SITE-08 | T-01-09 | N/A | build-assert + manual | pagefind dir with ≥1 `.js` and ≥1 `.json` (`test -n "$(find …)"`), search markup, no `pagefind: false`; manual V5 | ❌ W0 (standing V5 lands with 01-05 verify-build) | ⬜ pending |
+| 1-05-01 | 01-05 (tdd) | 4 | SITE-07 | T-01-11 | N/A | script, fail-first | check-manifests green on repo + green on clean scratch copy (cwd-seam); 3 RED proofs in SUMMARY | ❌ W0 (script created by plan) | ⬜ pending |
+| 1-05-02 | 01-05 (tdd) | 4 | SITE-06 | T-01-12, T-01-14 | N/A | script, fail-first | verify-build green on real dist + V2-missing scratch proof exits 1; other scratch cases in SUMMARY | ❌ W0 (script created by plan) | ⬜ pending |
+| 1-05-03 | 01-05 (tdd) | 4 | SITE-06 | T-01-12 | N/A | build-assert | `dist/404.html` exists; `redirects` key present; verify-build green after scratch-entry removal | ❌ W0 (depends on 1-05-02 script) | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
