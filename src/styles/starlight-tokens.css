@@ -1,0 +1,17 @@
+/**
+ * Starlight remap layer — translates the jarvis --jv-* tokens
+ * (design/tokens.css) onto Starlight's --sl-* engine variables.
+ *
+ * This file NEVER defines a color: every value is a var() reference —
+ * hex values live only in design/tokens.css. Unlayered on purpose:
+ * Starlight's own variables sit inside `@layer starlight.base`, so this
+ * remap wins in both light and dark mode (the --jv-* values themselves
+ * flip via tokens.css's [data-theme='dark'] block).
+ */
+:root {
+  --sl-color-accent: var(--jv-accent);
+  --sl-color-bg: var(--jv-bg);
+  --sl-color-text: var(--jv-fg);
+  --sl-font: var(--jv-sans);
+  --sl-font-mono: var(--jv-mono);
+}

@@ -45,6 +45,10 @@ export default defineConfig({
     starlight({
       title: 'jarvis',
       description: 'Local-first code intelligence for coding agents',
+      // Identity layer (SITE-03): tokens first, then the --sl-* remap that
+      // maps them onto Starlight's engine variables. Paths resolve against
+      // the project root (Starlight virtual-user-config resolveId).
+      customCss: ['./design/tokens.css', './src/styles/starlight-tokens.css'],
       // Mirrors the six VitePress sidebar groups (docs/.vitepress/config.ts:42-116,
       // since deleted) with docs/-prefixed links; order preserved.
       sidebar: [

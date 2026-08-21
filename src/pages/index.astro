@@ -1,3 +1,8 @@
+---
+// Identity layer (SITE-03/SITE-04): the token sheet + self-hosted Fontsource
+// fonts replace the Google Fonts CDN links this head used to carry.
+import '../../design/tokens.css';
+---
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,9 +11,6 @@
 <title>JARVIS — the intelligence system for your agents</title>
 <meta name="description" content="Everything your agents need to know, remember, and do. JARVIS gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine. Codebase intelligence ships today for Claude Code, Codex CLI, and Cursor.">
 <link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style is:inline>
 :root {
   --bg: #f3f7fa;
