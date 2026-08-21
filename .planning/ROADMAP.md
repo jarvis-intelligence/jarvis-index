@@ -34,12 +34,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Both surfaces render the new jarvis identity from one `design/tokens.css`, and the site makes zero third-party font requests
   5. The URL contract exists (every existing public URL enumerated + old→new redirect map) and CI fails loudly on three-manifest version disagreement, `plugin/.mcp.json` ≠ `plugin/mcp.json`, or unparseable manifest JSON
 
-**Plans**: 5 plans
+**Plans**: 1/5 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Live base-path hotfix + post-deploy smoke probe (stack-independent; stop the bleeding today)
+- [x] 01-01-PLAN.md — Live base-path hotfix + post-deploy smoke probe (stack-independent; stop the bleeding today)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation & Identity | 0/5 | Not started | - |
+| 1. Site Foundation & Identity | 1/5 | In Progress|  |
 | 2. Docs Rebuild — Tutorial-First Content | 0/5 | Not started | - |
 | 3. Landing Page Rebuild | 0/4 | Not started | - |
 | 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |

@@ -1,19 +1,19 @@
 ---
 gsd_state_version: 1.0
-current_phase: 1
+current_phase: 01
 current_phase_name: Site Foundation & Identity
 status: executing
-stopped_at: Roadmap created (ROADMAP.md, STATE.md, REQUIREMENTS.md traceability) — Phase 1 ready to plan
-last_updated: "2026-08-21T07:08:47.747Z"
+stopped_at: Plan 01-01 executed (live VitePress hotfix + post-deploy smoke probe, run 32458172949 green) — ready for 01-02
+last_updated: "2026-08-21T07:23:01Z"
 last_activity: 2026-08-21
-last_activity_desc: "Roadmap created: 5 phases, 20 plans, 40/40 v1 requirements mapped"
-state_head: 560231e8b490edc3d7c8b2292bd07c174c3818a4
+last_activity_desc: "Plan 01-01 complete (SITE-01: live docs restyled, sitemap fixed, smoke probe live-proven)"
+state_head: b5f64044e60294f9b98654acdcc7a1af302e97a
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 20
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-21)
 
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
-**Current focus:** Phase 1 — Site Foundation & Identity
+**Current focus:** Phase 01 — Site Foundation & Identity
 
 ## Current Position
 
-Phase: 1 (Site Foundation & Identity) — READY TO EXECUTE
-Plan: 0 of 5 in current phase
-Status: Ready to execute
-Last activity: 2026-08-21 — Roadmap created: 5 phases, 20 plans, 40/40 v1 requirements mapped
+Phase: 01 (Site Foundation & Identity) — EXECUTING
+Plan: 1 of 5 (01-01 complete; next: 01-02 Astro/Starlight swap)
+Status: Executing Phase 01
+Last activity: 2026-08-21 — Plan 01-01 executed: two-line VitePress hotfix live-proven by dispatched deploy
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [████░░░░░░] 20%
 
 ## Performance Metrics
 
@@ -48,12 +48,11 @@ Progress: [░░░░░░░░░░] 0%
 |-------|-------|-------|----------|
 | - | - | - | - |
 
-**Recent Trend:**
+**Velocity:**
 
-- Last 5 plans: —
-- Trend: —
-
-*Updated after each plan completion*
+- Total plans completed: 1
+- Average duration: 9 min/plan
+- Total execution time: 9 min
 
 ## Accumulated Context
 
@@ -65,6 +64,9 @@ Recent decisions affecting current work:
 - Roadmap: engine decision closed — SITE-02 mandates unified Astro 5 + Starlight; Phase 1 builds it (npm pins + `/docs/` mount verification happen at Phase 1 planning)
 - Roadmap: COMM-01/02 placed in Phase 5 with launch verification — video walkthrough doubles as the recorded VRFY-01 cold-install run
 - Roadmap: URL contract decided in Phase 1 (SITE-06), executed in Phase 2 (DOCS-09), verified in Phase 5 (VRFY-03)
+- Plan 01-01: smoke probe resolves absolute asset URLs against the origin (not BASE — VitePress emits absolute `/jarvis-index/docs/assets/*` hrefs; prefixing BASE would double `/jarvis-index`)
+- Plan 01-01: probe asset regex matches both `assets/` (VitePress) and `_astro/` (Astro post-01-02) — step survives the stack swap unedited; asserts EVERY referenced hashed asset + live sitemap segment equality
+- Plan 01-01: github-pages environment allows deploys from `main` only — dispatched proof from a phase branch required a temporary deployment-branch-policy (added, used, deleted; restored to recorded original). Future dispatched deploys from non-main branches hit the same gate.
 
 ### Pending Todos
 
@@ -84,6 +86,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-21 12:50
-Stopped at: Roadmap created (ROADMAP.md, STATE.md, REQUIREMENTS.md traceability) — Phase 1 ready to plan
+Last session: 2026-08-21 14:23
+Stopped at: Plan 01-01 executed (live VitePress hotfix + post-deploy smoke probe, run 32458172949 green) — ready for 01-02
 Resume file: None
