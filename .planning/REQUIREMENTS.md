@@ -90,13 +90,52 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (pending roadmap creation) | — | — |
+| SITE-01 | Phase 1 | Planned |
+| SITE-02 | Phase 1 | Planned |
+| SITE-03 | Phase 1 | Planned |
+| SITE-04 | Phase 1 | Planned |
+| SITE-05 | Phase 1 | Planned |
+| SITE-06 | Phase 1 | Planned |
+| SITE-07 | Phase 1 | Planned |
+| SITE-08 | Phase 1 | Planned |
+| DOCS-01 | Phase 2 | Planned |
+| DOCS-02 | Phase 2 | Planned |
+| DOCS-03 | Phase 2 | Planned |
+| DOCS-04 | Phase 2 | Planned |
+| DOCS-05 | Phase 2 | Planned |
+| DOCS-06 | Phase 2 | Planned |
+| DOCS-07 | Phase 2 | Planned |
+| DOCS-08 | Phase 2 | Planned |
+| DOCS-09 | Phase 2 | Planned |
+| DOCS-10 | Phase 2 | Planned |
+| DOCS-11 | Phase 2 | Planned |
+| DOCS-12 | Phase 2 | Planned |
+| LNDG-01 | Phase 3 | Planned |
+| LNDG-02 | Phase 3 | Planned |
+| LNDG-03 | Phase 3 | Planned |
+| LNDG-04 | Phase 3 | Planned |
+| LNDG-05 | Phase 3 | Planned |
+| LNDG-06 | Phase 3 | Planned |
+| LNDG-07 | Phase 3 | Planned |
+| LNDG-08 | Phase 3 | Planned |
+| LNDG-09 | Phase 3 | Planned |
+| LNDG-10 | Phase 3 | Planned |
+| SKIL-01 | Phase 4 | Planned |
+| SKIL-02 | Phase 4 | Planned |
+| SKIL-03 | Phase 4 | Planned |
+| SKIL-04 | Phase 4 | Planned |
+| VRFY-01 | Phase 5 | Planned |
+| VRFY-02 | Phase 5 | Planned |
+| VRFY-03 | Phase 5 | Planned |
+| VRFY-04 | Phase 5 | Planned |
+| COMM-01 | Phase 5 | Planned |
+| COMM-02 | Phase 5 | Planned |
 
 **Coverage:**
 - v1 requirements: 40 total
-- Mapped to phases: 0
-- Unmapped: 40 ⚠️ (resolved when roadmap is created)
+- Mapped to phases: 40 ✓ (Phase 1: 8 · Phase 2: 12 · Phase 3: 10 · Phase 4: 4 · Phase 5: 6)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-08-21*
-*Last updated: 2026-08-21 after initial definition*
+*Last updated: 2026-08-21 — roadmap created; traceability filled (40/40 mapped)*
