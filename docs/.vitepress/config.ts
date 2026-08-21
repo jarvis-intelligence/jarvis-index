@@ -5,13 +5,13 @@ export default defineConfig({
   title: 'jarvis',
   description: 'Local-first code intelligence for coding agents',
   lang: 'en-US',
-  base: '/docs/',
+  base: '/jarvis-index/docs/',
   cleanUrls: true,
   ignoreDeadLinks: true,
   lastUpdated: true,
 
   sitemap: {
-    hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs'
+    hostname: 'https://jarvis-intelligence.github.io/jarvis-index/docs/'
   },
 
   srcExclude: [
