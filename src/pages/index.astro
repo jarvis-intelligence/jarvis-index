@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JARVIS — the intelligence system for your agents</title>
+<meta name="description" content="Everything your agents need to know, remember, and do. JARVIS gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine. Codebase intelligence ships today for Claude Code, Codex CLI, and Cursor.">
+<link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style is:inline>
+:root {
+  --bg: #f3f7fa;
+  --surface: #e9edf2;
+  --fg: #12181d;
+  --muted: #58626a;
+  --border: #c3cad0;
+  --accent: #29527d;
+  --accent-strong: #0a3966;
+  --accent-soft: #cfe0f3;
+  --accent-shadow: 33, 82, 148;
+  --header-bg: rgba(243, 247, 250, 0.92);
+  --header-shadow: 0 12px 30px rgba(18, 24, 38, 0.06);
+  --card-shadow: 0 18px 48px rgba(18, 24, 38, 0.08);
+  --chip-bg: #0a0e11;
+  --chip-fg: #e1e5e8;
+  --chip-accent: #7cafe4;
+  --chip-ring: rgba(124, 175, 228, 0.26);
+  --radius: 0.5rem;
+  --radius-lg: 0.9rem;
+  --frame: min(100% - 3rem, 72rem);
+  --frame-wide: min(100% - 3rem, 88rem);
+  --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --logo: "Rajdhani", "Geist", system-ui, sans-serif;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+[data-theme="dark"] {
+  --bg: #040506;
+  --surface: #0d0f12;
+  --fg: #dee2e5;
+  --muted: #8c9399;
+  --border: #282c30;
+  --accent: #5b86b7;
+  --accent-strong: #7cafe4;
+  --accent-soft: #112031;
+  --header-bg: rgba(2, 3, 4, 0.94);
+  --header-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+  --card-shadow: 0 18px 46px rgba(0, 0, 0, 0.2);
+  --chip-bg: #0a0e11;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
+h1, h2, h3 { margin: 0; letter-spacing: 0; text-wrap: balance; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+[data-theme="dark"] :focus-visible { outline-color: var(--chip-accent); }
+
+.frame { width: var(--frame); margin-inline: auto; }
+.frame-wide { width: var(--frame-wide); margin-inline: auto; }
+.section { padding-block: 5rem; border-top: 1px solid var(--border); }
+@media (min-width: 1024px) { .section { padding-block: 6.5rem; } }
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 740;
+  line-height: 1.02;
+  max-width: 48rem;
+}
+.section-lede {
+  margin-top: 1.25rem;
+  max-width: 44rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  color: var(--muted);
+}
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+@media (min-width: 900px) {
+  .section-head { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 2.5rem; }
+  .section-head .section-lede { margin-top: 0; max-width: 26rem; }
+}
+code { font-family: var(--mono); font-size: 0.92em; }
+p code, li code, td code { color: var(--accent); }
+
+/* ---------- interaction ---------- */
+.tap {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: var(--ease);
+}
+.tap:active { transform: scale(0.96); }
+
+.primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0 1.4rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent-strong) 30%, transparent),
+              0 14px 28px rgba(var(--accent-shadow), 0.16);
+}
+.primary-action:hover { background: var(--accent-strong); color: var(--bg); }
+
+.secondary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.secondary-action:hover { box-shadow: inset 0 0 0 1px var(--accent); }
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.text-link:hover { color: var(--accent-strong); }
+.text-link .arrow { transition: transform 0.2s var(--ease); }
+.text-link:hover .arrow { transform: translateX(3px); }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 82%, transparent);
+  box-shadow: var(--header-shadow);
+}
+.header-inner {
+  width: var(--frame-wide);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.85rem;
+}
+.brand { display: inline-flex; align-items: center; gap: 0.7rem; min-height: 2.5rem; }
+.brand:hover { opacity: 0.9; }
+.brand-mark { width: 1.75rem; height: 1.75rem; display: block; flex: none; }
+.brand-mark .blades { fill: none; stroke: var(--accent); stroke-width: 7.5; stroke-linecap: round; }
+.brand-mark .core { fill: var(--fg); }
+.wordmark {
+  font-family: var(--logo);
+  font-weight: 700;
+  font-size: 1.28rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  transform: scaleX(1.1);
+  transform-origin: left;
+  display: inline-flex;
+  align-items: baseline;
+}
+.wordmark .a, .wordmark .b { color: var(--fg); }
+.header-nav { display: none; align-items: center; gap: 1.4rem; margin-left: auto; }
+@media (min-width: 1060px) { .header-nav { display: flex; } }
+.header-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.header-nav a:hover { color: var(--fg); }
+.header-tools { display: flex; align-items: center; gap: 0.35rem; }
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  color: var(--fg);
+}
+.icon-btn:hover { background: var(--surface); color: var(--accent); }
+.icon-btn svg { width: 1.15rem; height: 1.15rem; display: block; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.5rem;
+  padding-inline: 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--fg); }
+.toggle-track { position: relative; width: 2.5rem; height: 1.25rem; border-radius: 999px; background: var(--bg); flex: none; }
+.toggle-knob {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--fg);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s var(--ease);
+}
+[data-theme="dark"] .toggle-knob { transform: translateX(1.25rem); }
+.toggle-label-dark { display: none; }
+[data-theme="dark"] .toggle-label-dark { display: inline; }
+[data-theme="dark"] .toggle-label-light { display: none; }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 82% 18%, color-mix(in oklch, var(--accent) 12%, transparent), transparent 31rem),
+    linear-gradient(180deg, color-mix(in oklch, var(--surface) 26%, transparent), transparent 74%),
+    var(--bg);
+}
+.hero-art {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  z-index: 0;
+  width: min(76rem, 66vw);
+  opacity: 0.42;
+  display: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 100%);
+}
+.hero-art svg { width: 100%; height: 100%; display: block; }
+.hero-art .stop-plane-a { stop-color: var(--accent); stop-opacity: 0.16; }
+.hero-art .stop-plane-b { stop-color: var(--accent); stop-opacity: 0.02; }
+.hero-art .stop-edge-a { stop-color: var(--accent); stop-opacity: 0.15; }
+.hero-art .stop-edge-b { stop-color: var(--accent); stop-opacity: 0.75; }
+.hero-art .stop-edge-c { stop-color: var(--accent); stop-opacity: 0.2; }
+.hero-art .planes { fill: url(#plane); stroke: var(--accent); stroke-width: 1; stroke-opacity: 0.45; }
+.hero-art .edges { fill: none; stroke: url(#edge); stroke-width: 1.2; }
+.hero-art .nodes { fill: var(--accent); }
+.hero-art .nodes-soft { fill: var(--accent); fill-opacity: 0.35; }
+@media (min-width: 1024px) { .hero-art { display: block; } }
+.hero-frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2.5rem;
+  padding-block: 3.5rem;
+}
+@media (min-width: 1024px) {
+  .hero-frame {
+    grid-template-columns: minmax(0, 0.8fr) minmax(30rem, 1fr);
+    align-items: center;
+    min-height: 42rem;
+    padding-block: 5rem 3rem;
+  }
+}
+.hero h1 {
+  max-width: 45rem;
+  font-size: clamp(2.75rem, 5.2vw, 4.4rem);
+  font-weight: 760;
+  line-height: 0.98;
+}
+.hero-tagline {
+  margin-top: 1.75rem;
+  max-width: 32rem;
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.hero-lede {
+  margin-top: 1.1rem;
+  max-width: 36rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.hero-ships {
+  margin-top: 1.25rem;
+  max-width: 36rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.hero-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+@media (min-width: 1024px) { .hero-side { padding-left: 2rem; } }
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.hero-meta .dot { width: 3px; height: 3px; border-radius: 999px; background: currentColor; opacity: 0.5; }
+.surfaces { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.75rem; }
+.surface-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2rem;
+  padding-inline: 0.8rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--surface) 45%, transparent);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.surface-chip[data-state="shipped"] {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 30%, transparent);
+  color: var(--accent-strong);
+}
+.surface-chip .state {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+/* ---------- terminal chips ---------- */
+.chip-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.mono-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  width: 100%;
+  min-height: 3.35rem;
+  min-width: 0;
+  padding: 0.75rem 0.9rem 0.75rem 1rem;
+  border: 1px solid var(--chip-ring);
+  border-radius: var(--radius-lg);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 40px rgba(18, 24, 38, 0.18);
+}
+.mono-box .cmd { overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.mono-box .cmd::-webkit-scrollbar { display: none; }
+.mono-box .cmd::before { content: "$ "; color: var(--chip-accent); }
+.mono-box .copy {
+  flex: none;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9aa4ac;
+  transition: color 0.2s var(--ease);
+}
+.mono-box:hover { border-color: var(--chip-accent); }
+.mono-box:hover .copy, .mono-box:focus-visible .copy { color: var(--chip-accent); }
+.mono-box[data-copied="true"] .copy { color: var(--chip-accent); }
+.mono-box.static { cursor: default; }
+.mono-box.static:hover { border-color: var(--chip-ring); }
+
+/* ---------- example exchange ---------- */
+.exchange {
+  margin-top: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  box-shadow: inset 0 0 0 1px var(--chip-ring), 0 18px 40px rgba(18, 24, 38, 0.18);
+  overflow: hidden;
+}
+.exchange-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa4ac;
+}
+.exchange-body { padding: 1.15rem 1.25rem; overflow-x: auto; }
+.exchange-body pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+}
+.exchange-body .ex-you { color: var(--chip-fg); }
+.exchange-body .ex-call { color: var(--chip-accent); margin-top: 0.85rem; }
+.exchange-body .ex-out { color: #9aa4ac; }
+
+/* ---------- cards ---------- */
+.card-grid { display: grid; gap: 1.25rem; }
+@media (min-width: 760px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--surface) 48%, transparent);
+  box-shadow: inset 0 0 0 1px var(--border), var(--card-shadow);
+}
+.card.accented {
+  background: color-mix(in oklch, var(--surface) 70%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 36%, transparent),
+              var(--card-shadow),
+              0 16px 34px -24px rgba(var(--accent-shadow), 0.38);
+}
+.card-kicker {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.card h3 { margin-top: 0.9rem; font-size: 1.25rem; font-weight: 700; }
+.card > p { margin-top: 1rem; font-size: 0.875rem; line-height: 1.625; color: var(--muted); }
+.card .flex-fill { flex: 1; }
+.card .surface-chip { align-self: flex-start; }
+
+.install-steps { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* ---------- diagram ---------- */
+.diagram-wrap { margin-top: 3rem; overflow-x: auto; }
+.diagram {
+  min-width: 720px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.diagram .box { fill: color-mix(in oklch, var(--surface) 60%, transparent); stroke: var(--border); stroke-width: 1; }
+.diagram .box-accent { fill: color-mix(in oklch, var(--accent) 8%, transparent); stroke: color-mix(in oklch, var(--accent) 40%, transparent); stroke-width: 1; }
+.diagram .t { fill: var(--fg); font-family: var(--mono); font-size: 13px; }
+.diagram .s { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.diagram .flow { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+.diagram .flow-cap { fill: var(--accent); }
+.diagram .machine {
+  fill: color-mix(in oklch, var(--accent) 4%, transparent);
+  stroke: color-mix(in oklch, var(--accent) 30%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+.diagram .m-label { fill: var(--accent); font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; }
+.caption { margin-top: 1.25rem; font-size: 0.8125rem; color: var(--muted); }
+
+/* ---------- table ---------- */
+.table-wrap { margin-top: 2.5rem; overflow-x: auto; border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--border); }
+table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.875rem; }
+th, td { padding: 1rem 1.25rem; text-align: left; vertical-align: top; border-top: 1px solid var(--border); }
+thead th {
+  border-top: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: color-mix(in oklch, var(--surface) 50%, transparent);
+}
+tbody td:first-child { font-weight: 600; color: var(--fg); width: 34%; }
+tbody td { color: var(--muted); line-height: 1.6; }
+.table-matrix tbody td:first-child { width: 52%; font-weight: 500; }
+
+/* ---------- misc ---------- */
+.note {
+  margin-top: 2.5rem;
+  max-width: 58rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--accent) 7%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 24%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: var(--muted);
+}
+.note strong { color: var(--fg); font-weight: 600; }
+.closing { display: grid; gap: 2rem; align-items: end; }
+@media (min-width: 900px) { .closing { grid-template-columns: minmax(0, 1fr) auto; } }
+
+/* ---------- footer ---------- */
+.site-footer { border-top: 1px solid var(--border); background: color-mix(in oklch, var(--surface) 40%, transparent); }
+.footer-inner {
+  width: var(--frame);
+  margin-inline: auto;
+  padding-block: 2.5rem 3.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.footer-inner a { display: inline-flex; align-items: center; min-height: 2.5rem; }
+.footer-inner a:hover { color: var(--fg); }
+.footer-meta { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; }
+@media (max-width: 700px) { .footer-meta { margin-left: 0; width: 100%; } }
+</style>
+</head>
+<body>
+
+<header class="site-header" data-od-id="site-header">
+  <div class="header-inner">
+    <a class="brand tap" href="#top" data-od-id="brand">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <g class="blades">
+          <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
+          <path d="M43.18 15.42A20 20 0 0 1 48.58 43.18"/>
+          <path d="M43.18 48.58A20 20 0 0 1 26.49 51.23"/>
+        </g>
+        <circle class="core" cx="32" cy="32" r="6"/>
+      </svg>
+      <span class="wordmark"><span class="a">jar</span><span class="b">vis</span></span>
+    </a>
+
+    <nav class="header-nav" aria-label="Main">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#usage">Usage</a>
+      <a href="#skills">Agent skills</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+
+    <div class="header-tools">
+      <a class="icon-btn tap" href="https://github.com/jarvis-intelligence/jarvis-index" aria-label="jarvis on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a class="icon-btn tap" href="https://pypi.org/project/jarvis-mcp/" aria-label="jarvis-mcp on PyPI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5Z"/><path d="M3.3 7.5 12 12.5l8.7-5"/><path d="M12 21.5V12.5"/></svg>
+      </a>
+      <button class="theme-toggle tap" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <span class="toggle-track"><span class="toggle-knob"></span></span>
+        <span class="toggle-label-light">Light</span>
+        <span class="toggle-label-dark">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" data-od-id="hero">
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 900 720" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+            <stop class="stop-plane-a" offset="0%"/>
+            <stop class="stop-plane-b" offset="100%"/>
+          </linearGradient>
+          <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+            <stop class="stop-edge-a" offset="0%"/>
+            <stop class="stop-edge-b" offset="55%"/>
+            <stop class="stop-edge-c" offset="100%"/>
+          </linearGradient>
+        </defs>
+        <g class="planes">
+          <path d="M150 470 L450 330 L750 470 L450 610 Z"/>
+          <path d="M150 360 L450 220 L750 360 L450 500 Z"/>
+          <path d="M150 250 L450 110 L750 250 L450 390 Z"/>
+        </g>
+        <g class="edges">
+          <path d="M300 295 L450 220 L600 295 M375 258 L375 478 M525 258 L525 478 M300 405 L450 480 L600 405 M450 165 L450 555"/>
+          <path d="M300 295 L300 515 M600 295 L600 515"/>
+        </g>
+        <g class="nodes">
+          <circle cx="450" cy="220" r="6"/><circle cx="450" cy="330" r="6"/><circle cx="450" cy="440" r="5"/>
+          <circle cx="300" cy="295" r="4.5"/><circle cx="600" cy="295" r="4.5"/>
+          <circle cx="375" cy="258" r="3.5"/><circle cx="525" cy="258" r="3.5"/>
+          <circle cx="300" cy="405" r="3.5"/><circle cx="600" cy="405" r="3.5"/>
+          <circle cx="450" cy="110" r="4"/><circle cx="450" cy="555" r="4"/>
+        </g>
+        <g class="nodes-soft">
+          <circle cx="375" cy="478" r="2.5"/><circle cx="525" cy="478" r="2.5"/>
+          <circle cx="300" cy="515" r="2.5"/><circle cx="600" cy="515" r="2.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="frame-wide hero-frame">
+      <div>
+        <h1 data-od-id="hero-headline">JARVIS — The intelligence system for your agents.</h1>
+        <p class="hero-tagline">Everything your agents need to know, remember, and do.</p>
+        <p class="hero-lede">JARVIS is an intelligent layer that gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine, with the ability to extend into the cloud.</p>
+        <ul class="surfaces" aria-label="What JARVIS gives an agent access to" data-od-id="hero-surfaces">
+          <li class="surface-chip" data-state="shipped">Code <span class="state">Shipped</span></li>
+          <li class="surface-chip">Knowledge <span class="state">Planned</span></li>
+          <li class="surface-chip">Context <span class="state">Planned</span></li>
+          <li class="surface-chip">Memory <span class="state">Planned</span></li>
+          <li class="surface-chip">Tools <span class="state">Planned</span></li>
+          <li class="surface-chip">Runtime <span class="state">Planned</span></li>
+        </ul>
+        <p class="hero-ships">Codebase intelligence ships today: indexing and search across your own repositories, available in Claude&nbsp;Code, Codex&nbsp;CLI, and Cursor.</p>
+      </div>
+
+      <div class="hero-side">
+        <div>
+          <span class="chip-label">Install the binaries</span>
+          <button class="mono-box tap" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh" data-od-id="cta-install-command">
+            <span class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</span>
+            <span class="copy">Copy</span>
+          </button>
+        </div>
+        <div>
+          <span class="chip-label">Index a repository</span>
+          <button class="mono-box tap" type="button" data-copy="jarvis index /path/to/repo" data-od-id="cta-index-command">
+            <span class="cmd">jarvis index /path/to/repo</span>
+            <span class="copy">Copy</span>
+          </button>
+        </div>
+        <a class="text-link tap" href="#pipeline" data-od-id="cta-how-it-works">How it works <span class="arrow" aria-hidden="true">→</span></a>
+        <div class="hero-meta">
+          <span>macOS and Linux</span><span class="dot" aria-hidden="true"></span>
+          <span>MIT licensed</span><span class="dot" aria-hidden="true"></span>
+          <span>plugin v0.7.0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section class="frame section" id="pipeline" data-od-id="section-pipeline">
+    <p class="eyebrow">Pipeline</p>
+    <h2 class="section-title">Index once. Nothing leaves the room.</h2>
+    <p class="section-lede">One command turns a repository into a local index. Your agent queries that index directly — same machine, same disk, no round trip.</p>
+
+    <div class="diagram-wrap" data-od-id="pipeline-diagram">
+      <svg class="diagram" viewBox="0 0 980 226" role="img" aria-labelledby="pipe-title pipe-desc">
+        <title id="pipe-title">The jarvis pipeline</title>
+        <desc id="pipe-desc">Four stages, all on your machine: your repository, the jarvis index command, the local index it produces, and your coding agent reading from that index.</desc>
+
+        <rect class="machine" x="1" y="26" width="978" height="180" rx="14"/>
+        <text class="m-label" x="26" y="52">YOUR MACHINE</text>
+
+        <rect class="box" x="26" y="76" width="201" height="96" rx="8"/>
+        <text class="t" x="46" y="118">Your repository</text>
+        <text class="s" x="46" y="141">stays where it is</text>
+
+        <path class="flow" d="M235 124 H253"/>
+        <path class="flow-cap" d="M253 120 L261 124 L253 128 Z"/>
+
+        <rect class="box" x="267" y="76" width="201" height="96" rx="8"/>
+        <text class="t" x="287" y="118">jarvis index</text>
+        <text class="s" x="287" y="141">one command</text>
+
+        <path class="flow" d="M476 124 H494"/>
+        <path class="flow-cap" d="M494 120 L502 124 L494 128 Z"/>
+
+        <rect class="box-accent" x="508" y="76" width="201" height="96" rx="8"/>
+        <text class="t" x="528" y="118">Local index</text>
+        <text class="s" x="528" y="141">on your disk</text>
+
+        <path class="flow" d="M717 124 H735"/>
+        <path class="flow-cap" d="M735 120 L743 124 L735 128 Z"/>
+
+        <rect class="box" x="749" y="76" width="201" height="96" rx="8"/>
+        <text class="t" x="769" y="118">Your agent</text>
+        <text class="s" x="769" y="141">asks, and gets answers</text>
+      </svg>
+    </div>
+    <p class="caption">No step in this pipeline contacts a network service.</p>
+  </section>
+
+  <!-- ============ USAGE ============ -->
+  <section class="frame section" id="usage" data-od-id="section-usage">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Using jarvis</p>
+        <h2 class="section-title">You ask a question. The skill picks the tool.</h2>
+      </div>
+      <p class="section-lede">The plugin ships three skills. Your client loads the right one on demand — you never call an MCP tool by hand.</p>
+    </div>
+
+    <div class="card-grid cols-3">
+      <article class="card" data-od-id="skill-card-setup">
+        <span class="card-kicker">Skill 01 · Onboard</span>
+        <h3>jarvis-setup</h3>
+        <p>Prerequisites, <code>setup.sh</code>, MCP registration, and your first index. Fires when you are setting up a machine or indexing a repository for the first time.</p>
+      </article>
+
+      <article class="card accented" data-od-id="skill-card-use">
+        <span class="card-kicker">Skill 02 · Every day</span>
+        <h3>jarvis-use</h3>
+        <p>The matrix below, plus one rule it applies before every call: check the index, reindex it if stale, and fall back to grep if the repository was never indexed.</p>
+      </article>
+
+      <article class="card" data-od-id="skill-card-issues">
+        <span class="card-kicker">Skill 03 · When it breaks</span>
+        <h3>jarvis-issues</h3>
+        <p>Collects the error payload, version, and OS, checks them against the known limitations, and drafts the report — then asks you before filing anything public.</p>
+      </article>
+    </div>
+
+    <div class="table-wrap" data-od-id="decision-matrix">
+      <table class="table-matrix">
+        <thead><tr><th scope="col">What you ask</th><th scope="col">What jarvis-use runs</th></tr></thead>
+        <tbody>
+          <tr><td>Where is <code>X</code> defined?</td><td><code>goToDefinition(repo, X)</code></td></tr>
+          <tr><td>Who calls <code>X</code>?</td><td><code>findReferences(repo, X)</code></td></tr>
+          <tr><td>What calls <code>X</code>, and what does <code>X</code> call?</td><td><code>callHierarchy(repo, X)</code></td></tr>
+          <tr><td>What are <code>X</code>'s supertypes and subtypes?</td><td><code>typeHierarchy(repo, X)</code></td></tr>
+          <tr><td>What lives in this file?</td><td><code>documentSymbols(repo, path)</code></td></tr>
+          <tr><td>Is this repository indexed, and is it current?</td><td><code>getIndexStatus(repo, repo_path)</code></td></tr>
+          <tr><td>What else breaks if I change this package?</td><td><code>blastRadius(repo, pkg)</code></td></tr>
+          <tr><td>Find this exact string.</td><td><code>searchCode(query, repo?)</code></td></tr>
+          <tr><td>Find this idea, however it is worded.</td><td><code>semanticSearch(repo, query)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="exchange" data-od-id="usage-example">
+      <div class="exchange-head">
+        <span>Example exchange</span>
+        <span>Illustrative</span>
+      </div>
+      <div class="exchange-body">
+<pre class="ex-you">you   Who calls search_zoekt?</pre>
+<pre class="ex-call">      → getIndexStatus(repo="jarvis", repo_path="~/src/jarvis")</pre>
+<pre class="ex-out">      ← indexed · fresh at HEAD</pre>
+<pre class="ex-call">      → findReferences(repo="jarvis", symbol="search_zoekt")</pre>
+<pre class="ex-out">      ← 3 references
+          src/search/zoekt.py:212
+          src/router.py:88
+          tests/test_search.py:41</pre>
+      </div>
+    </div>
+
+    <p class="caption">A bare symbol name is enough. When one is ambiguous, jarvis returns a list of candidates rather than guessing — you retry with the one you meant.</p>
+
+    <p class="note" data-od-id="semantic-caveat"><strong>One caveat worth knowing up front.</strong> <code>semanticSearch</code> needs the <code>[semantic]</code> extra, and the plugin's default MCP registration deliberately omits it so cold start stays free of lancedb and torch. Using it means registering a second, differently-named server — <code>jarvis-semantic</code>.</p>
+  </section>
+
+  <!-- ============ AGENT SKILLS ============ -->
+  <section class="frame section" id="skills" data-od-id="section-skills">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Agent skills</p>
+        <h2 class="section-title">Give your agent the skills.</h2>
+      </div>
+      <p class="section-lede">One plugin carries all three. Add the marketplace, install it, then run <code>setup.sh</code> once — it skips whatever is already present.</p>
+    </div>
+
+    <div class="card-grid cols-3">
+      <article class="card" data-od-id="install-card-claude-code">
+        <span class="card-kicker">Client 01</span>
+        <h3>Claude Code</h3>
+        <p>Two commands in the client. The marketplace and the plugin share a name.</p>
+        <div class="install-steps">
+          <button class="mono-box tap" type="button" data-copy="/plugin marketplace add jarvis-intelligence/jarvis-index">
+            <span class="cmd">/plugin marketplace add jarvis-intelligence/jarvis-index</span>
+            <span class="copy">Copy</span>
+          </button>
+          <button class="mono-box tap" type="button" data-copy="/plugin install jarvis@jarvis">
+            <span class="cmd">/plugin install jarvis@jarvis</span>
+            <span class="copy">Copy</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-od-id="install-card-codex-cli">
+        <span class="card-kicker">Client 02</span>
+        <h3>Codex CLI</h3>
+        <p>Same two steps from your shell, pinned to the <code>main</code> ref.</p>
+        <div class="install-steps">
+          <button class="mono-box tap" type="button" data-copy="codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main">
+            <span class="cmd">codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main</span>
+            <span class="copy">Copy</span>
+          </button>
+          <button class="mono-box tap" type="button" data-copy="codex plugin add jarvis">
+            <span class="cmd">codex plugin add jarvis</span>
+            <span class="copy">Copy</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-od-id="install-card-cursor">
+        <span class="card-kicker">Client 03</span>
+        <h3>Cursor</h3>
+        <p>Cursor exposes no CLI for adding a marketplace. On Teams or Enterprise: Dashboard → Plugins → Add Marketplace → Import from Repo. On any plan, symlink the plugin directory instead.</p>
+        <div class="flex-fill"></div>
+        <div class="install-steps">
+          <button class="mono-box tap" type="button" data-copy='ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis'>
+            <span class="cmd">ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis</span>
+            <span class="copy">Copy</span>
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div class="note" style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem" data-od-id="install-then">
+      <span><strong>Then, on every client.</strong> Install the external binaries with <code>setup.sh</code>, then index a repo.</span>
+      <button class="mono-box tap" type="button" style="width:auto;flex:1;min-width:16rem" data-copy="jarvis index /path/to/repo">
+        <span class="cmd">jarvis index /path/to/repo</span>
+        <span class="copy">Copy</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ LOCAL-FIRST ============ -->
+  <section class="frame section" id="local-first" data-od-id="section-local-first">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Local-first</p>
+        <h2 class="section-title">Four claims, each with the mechanism that enforces it.</h2>
+      </div>
+      <p class="section-lede">These are checkable rather than promised. Every row names the thing you can go read.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Claim</th><th scope="col">Enforcement</th></tr></thead>
+        <tbody>
+          <tr><td>No telemetry, no analytics</td><td>No analytics code, and no outbound calls during queries.</td></tr>
+          <tr><td>The only network egress at runtime is the wheel fetch</td><td><code>uvx</code> on first server start, plus a one-time embedding-model download if you install the <code>[semantic]</code> extra.</td></tr>
+          <tr><td>Indexes are read-only</td><td>Opened <code>mode=ro&amp;immutable=1</code>.</td></tr>
+          <tr><td>Dependencies are pinned and verified</td><td>Exact commit or tag pins, each with a written justification; every tarball SHA256-verified before install.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section class="frame section" id="roadmap" data-od-id="section-roadmap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Roadmap</p>
+        <h2 class="section-title">Know, remember, do.</h2>
+      </div>
+      <p class="section-lede">Three things an agent needs, and the axis jarvis is built along. Only the first has started shipping, and nothing here carries a date.</p>
+    </div>
+
+    <div class="card-grid cols-3">
+      <article class="card" data-od-id="roadmap-card-know">
+        <span class="surface-chip" data-state="shipped">Codebase shipped</span>
+        <h3>Know</h3>
+        <p>What an agent can look up. Your codebase is indexed and searchable today. Next is everything written around it — docs, wikis, and the decisions that never made it into a file.</p>
+      </article>
+
+      <article class="card" data-od-id="roadmap-card-remember">
+        <span class="surface-chip">Planned</span>
+        <h3>Remember</h3>
+        <p>What survives the end of a session. The context an agent built up, what it already tried, and what it should not try again — kept, rather than thrown away with the window.</p>
+      </article>
+
+      <article class="card" data-od-id="roadmap-card-do">
+        <span class="surface-chip">Planned</span>
+        <h3>Do</h3>
+        <p>Tools and a runtime, so an agent can act on what it knows and remembers instead of handing you a summary and waiting.</p>
+      </article>
+    </div>
+
+    <p class="note">It starts on your machine and stays useful there. The cloud is an extension for when you want one — a shared index, a team's memory — and never a requirement for any of the above.</p>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="frame section" data-od-id="section-closing">
+    <div class="closing">
+      <div>
+        <p class="eyebrow">Built in the open</p>
+        <h2 class="section-title">The installer, the indexer, and the issue tracker are public.</h2>
+        <p class="section-lede">Read the plugin documentation before you install, or open an issue if something on your machine disagrees with this page.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
+        <a class="primary-action tap" href="docs/" data-od-id="cta-read-docs">Read the docs <span aria-hidden="true">→</span></a>
+        <a class="secondary-action tap" href="https://github.com/jarvis-intelligence/jarvis-index/issues" data-od-id="cta-issues">Open an issue</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-od-id="site-footer">
+  <div class="footer-inner">
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    <a class="tap" href="https://pypi.org/project/jarvis-mcp/">PyPI</a>
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/issues">Issues</a>
+    <a class="tap" href="docs/">Docs</a>
+    <span class="footer-meta">MIT · plugin v0.7.0</span>
+  </div>
+</footer>
+
+<script is:inline>
+(function () {
+  var root = document.documentElement;
+  var STORAGE_KEY = "jarvis-theme";
+  var stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  root.setAttribute("data-theme", stored || (prefersDark ? "dark" : "light"));
+
+  var toggle = document.getElementById("theme-toggle");
+  toggle.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+
+  document.querySelectorAll(".mono-box[data-copy]").forEach(function (box) {
+    var label = box.querySelector(".copy");
+    var timer;
+    box.addEventListener("click", function () {
+      var text = box.getAttribute("data-copy");
+      var done = function () {
+        box.setAttribute("data-copied", "true");
+        label.textContent = "Copied";
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          box.removeAttribute("data-copied");
+          label.textContent = "Copy";
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { label.textContent = "Select manually"; });
+      } else {
+        label.textContent = "Select manually";
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

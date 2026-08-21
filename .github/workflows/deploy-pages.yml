@@ -1,13 +1,15 @@
-# Builds VitePress docs (docs/) and the landing page (site/) into a single Pages artifact.
-# Landing page serves at /, docs at /docs/.
+# Builds the unified Astro + Starlight site (landing at /, docs at /docs/) into a single Pages artifact.
+# dist/ IS the artifact — no assembly step.
 name: Deploy landing page and docs
 
 on:
   push:
     branches: [main]
     paths:
-      - 'site/**'
-      - 'docs/**'
+      - 'src/**'
+      - 'public/**'
+      - 'design/**'
+      - 'astro.config.*'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy-pages.yml'
@@ -35,24 +37,18 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build VitePress docs
-        run: npx vitepress build docs
-
-      - name: Assemble Pages artifact
-        run: |
-          mkdir -p _artifact/docs
-          cp -r site/* _artifact/
-          cp -r docs/.vitepress/dist/* _artifact/docs/
+      - name: Build site
+        run: npm run build
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _artifact
+          path: dist
 
       - id: deployment
         uses: actions/deploy-pages@v4
@@ -81,12 +77,14 @@ jobs:
             esac
             test "$(curl -s -o /dev/null -w "%{http_code}" "$url")" = "200"
           done
-          # sitemap rot regression: every loc carries the /docs segment, one deep loc is live-200
-          test "$(curl -s -o /tmp/sitemap.xml -w "%{http_code}" "$BASE/docs/sitemap.xml")" = "200"
-          loc_total=$(grep -o '<loc>' /tmp/sitemap.xml | wc -l)
-          loc_docs=$(grep -o '<loc>[^<]*jarvis-intelligence.github.io/jarvis-index/docs/' /tmp/sitemap.xml | wc -l)
-          test "$loc_total" -ge 30
-          test "$loc_docs" -eq "$loc_total"
-          deep=$(grep -o '<loc>[^<]*cli/forget[^<]*</loc>' /tmp/sitemap.xml | head -1 | sed -e 's/<loc>//' -e 's|</loc>||')
+          # sitemap rot regression: every docs loc carries the /docs segment, one deep loc is live-200
+          # (Astro/@astrojs/sitemap emits sitemap-index.xml + sitemap-0.xml at the artifact root;
+          # the page <loc> URLs live in the sitemap-0.xml chunk.)
+          test "$(curl -s -o /tmp/sitemap-0.xml -w "%{http_code}" "$BASE/sitemap-0.xml")" = "200"
+          loc_total=$(grep -o '<loc>' /tmp/sitemap-0.xml | wc -l)
+          loc_docs=$(grep -o '<loc>[^<]*jarvis-intelligence.github.io/jarvis-index/docs/' /tmp/sitemap-0.xml | wc -l)
+          test "$loc_docs" -ge 1
+          test "$loc_total" -eq $((loc_docs + 1))   # all docs locs + exactly one landing loc
+          deep=$(grep -o '<loc>[^<]*cli/forget[^<]*</loc>' /tmp/sitemap-0.xml | head -1 | sed -e 's/<loc>//' -e 's|</loc>||')
           test -n "$deep"
           test "$(curl -s -o /dev/null -w "%{http_code}" "$deep")" = "200"

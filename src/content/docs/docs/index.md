@@ -1,4 +1,5 @@
 ---
+title: jarvis docs
 description: "jarvis docs — local-first code intelligence for coding agents using Claude Code, Cursor, and Codex CLI."
 ---
 
