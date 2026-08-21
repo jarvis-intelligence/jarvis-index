@@ -12,6 +12,17 @@ import '../styles/landing.css';
 <title>JARVIS — the intelligence system for your agents</title>
 <meta name="description" content="Everything your agents need to know, remember, and do. JARVIS gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine. Codebase intelligence ships today for Claude Code, Codex CLI, and Cursor.">
 <link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
+<script is:inline>
+(function () {
+  var root = document.documentElement;
+  var STORAGE_KEY = "starlight-theme";
+  var stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var theme = (stored && stored !== "auto") ? stored : (prefersDark ? "dark" : "light");
+  root.setAttribute("data-theme", theme);
+})();
+</script>
 </head>
 <body>
 
@@ -397,11 +408,7 @@ import '../styles/landing.css';
 <script is:inline>
 (function () {
   var root = document.documentElement;
-  var STORAGE_KEY = "jarvis-theme";
-  var stored = null;
-  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  root.setAttribute("data-theme", stored || (prefersDark ? "dark" : "light"));
+  var STORAGE_KEY = "starlight-theme";
 
   var toggle = document.getElementById("theme-toggle");
   toggle.addEventListener("click", function () {
