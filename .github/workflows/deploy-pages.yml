@@ -56,3 +56,37 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Smoke probe
+        run: |
+          set -e
+          ORIGIN="https://jarvis-intelligence.github.io"
+          BASE="$ORIGIN/jarvis-index"
+          for path in "/" "/docs/"; do
+            code=$(curl -s -o /tmp/page.html -w "%{http_code}" "$BASE$path")
+            grep -q "jarvis" /tmp/page.html   # marker: stable string present on both surfaces
+            test "$code" = "200"
+          done
+          # exact failure mode observed 2026-08-21: hashed asset hrefs 404 at the wrong prefix
+          curl -s -o /tmp/docs.html "$BASE/docs/"
+          grep -E -o 'href="[^"]*(assets|_astro)/[^"]*"' /tmp/docs.html | cut -d'"' -f2 > /tmp/assets.txt
+          grep -E -o 'src="[^"]*(assets|_astro)/[^"]*"' /tmp/docs.html | cut -d'"' -f2 >> /tmp/assets.txt
+          assets=$(sort -u /tmp/assets.txt)
+          test -n "$assets"
+          for asset in $assets; do
+            case "$asset" in
+              http*) url="$asset" ;;
+              /*)    url="$ORIGIN$asset" ;;
+              *)     url="$BASE/docs/$asset" ;;
+            esac
+            test "$(curl -s -o /dev/null -w "%{http_code}" "$url")" = "200"
+          done
+          # sitemap rot regression: every loc carries the /docs segment, one deep loc is live-200
+          test "$(curl -s -o /tmp/sitemap.xml -w "%{http_code}" "$BASE/docs/sitemap.xml")" = "200"
+          loc_total=$(grep -o '<loc>' /tmp/sitemap.xml | wc -l)
+          loc_docs=$(grep -o '<loc>[^<]*jarvis-intelligence.github.io/jarvis-index/docs/' /tmp/sitemap.xml | wc -l)
+          test "$loc_total" -ge 30
+          test "$loc_docs" -eq "$loc_total"
+          deep=$(grep -o '<loc>[^<]*cli/forget[^<]*</loc>' /tmp/sitemap.xml | head -1 | sed -e 's/<loc>//' -e 's|</loc>||')
+          test -n "$deep"
+          test "$(curl -s -o /dev/null -w "%{http_code}" "$deep")" = "200"
