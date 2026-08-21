@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check:manifests": "node scripts/check-manifests.mjs",
+    "verify": "node scripts/verify-build.mjs"
   },
   "devDependencies": {
     "@astrojs/mdx": "4.3.14",
