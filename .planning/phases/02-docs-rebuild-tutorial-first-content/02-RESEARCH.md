@@ -486,15 +486,15 @@ redirects: {
 | A4 | `semanticSearch` top-level keys are `query`/`results`/`total` (entries verified; top-level cited from tool-roster.md only) | Product Truth §1 | Executor should capture one real semanticSearch transcript (or read `semantic.py:360-376` fully) before finalizing that page |
 | A5 | Cursor's web-hosted install-link generator variant (`cursor.com/install-mcp?...`) exists alongside the `cursor://` scheme | Product Truth §6 | Use only the `cursor://` form, which is doc-cited |
 
-## Open Questions
+## Open Questions (all RESOLVED in planning)
 
-1. **What exactly counts as the "7 commands" (DOCS-05)?**
+1. **(RESOLVED → 02-03: dedicated `/docs/cli/jarvis-server/` page)** **What exactly counts as the "7 commands" (DOCS-05)?**
    - What we know: `jarvis` has exactly 6 subcommands [VERIFIED: index_cli.py:1118-1177]; the package installs exactly 2 console scripts, `jarvis` + `jarvis-server` [VERIFIED: pyproject.toml:86-88]. 6 + 1 = 7.
    - What's unclear: whether `jarvis-server` gets its own reference page or a section on the CLI overview.
    - Recommendation: dedicated `/docs/cli/jarvis-server/` page (one-click nav per DOCS-09, and it's the command every MCP config names); planner confirms slug.
-2. **Where do the two new guide pages sit in the sidebar?** (Claude's discretion per CONTEXT.) Recommendation: both in the existing "Guide" group — Quickstart, Requirements & Limits, Install, Install Channels (matrix) — keeping the pre-install reading order top-to-bottom.
-3. **Does 02-01's audit flag any merge/retire?** D-03 says none are pre-known; the classification table itself is an execution artifact. Research found no redundant page (all 32 pages map 1:1 to distinct product surfaces), so expect "keep ×32 + brand-logo font fix" with an empty redirects map — but the pass must still run and the user must confirm any retire.
-4. **Should `llms-full.txt` also ship?** Spec makes it optional; DOCS-11 names only `llms.txt`. Recommendation: `llms.txt` only; note `llms-full.txt` as a possible follow-up, not scope.
+2. **(RESOLVED → 02-04/02-06: Guide group, pre-install reading order)** **Where do the two new guide pages sit in the sidebar?** (Claude's discretion per CONTEXT.) Recommendation: both in the existing "Guide" group — Quickstart, Requirements & Limits, Install, Install Channels (matrix) — keeping the pre-install reading order top-to-bottom.
+3. **(RESOLVED → 02-01: audit still runs; expected keep ×32 + font fix, retires need user confirmation)** **Does 02-01's audit flag any merge/retire?** D-03 says none are pre-known; the classification table itself is an execution artifact. Research found no redundant page (all 32 pages map 1:1 to distinct product surfaces), so expect "keep ×32 + brand-logo font fix" with an empty redirects map — but the pass must still run and the user must confirm any retire.
+4. **(RESOLVED → 02-07: llms.txt only; llms-full.txt out of scope)** **Should `llms-full.txt` also ship?** Spec makes it optional; DOCS-11 names only `llms.txt`. Recommendation: `llms.txt` only; note `llms-full.txt` as a possible follow-up, not scope.
 
 ## Environment Availability
 
