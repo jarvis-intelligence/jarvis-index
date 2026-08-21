@@ -56,7 +56,7 @@ Hypotheses until shipped and validated:
 - **Product truth**: `../jarvis/README.md` (canonical user-facing doc), `../jarvis/docs/project-overview-pdr.md` (positioning + scope), `../jarvis/docs/system-architecture.md` (deep architecture), `../jarvis/CHANGELOG.md` (0.6.2).
 - **Org migration done**: everything lives under `jarvis-intelligence`; PyPI URLs and MCP registry entry (`io.github.jarvis-intelligence/jarvis`) already re-anchored — old `phuongddx` references in copy are stale.
 - **Reusable assets**: `../jarvis/docs/assets/` carries canonical diagrams (jarvis-layers, index-pipeline, semantic-fusion in SVG/PNG/DOT).
-- **Known drift**: current landing borrows opengsd.net's design wholesale (`docs/brand-spec.md` documents the extraction); docs pages are thin stubs (~1KB per tool); landing claims ("Know, remember, do") diverge from product reality (code intelligence).
+- **Known drift**: Phase 1 replaced the opengsd.net-derived token system with `design/tokens.css` (single `--jv-*` identity, self-hosted fonts, zero third-party font requests) — the visual-identity layer is no longer borrowed, but the landing's actual copy and layout are unchanged pending Phase 3; `docs/brand-spec.md` and the superseded landing spec are marked stale (see 01-03-SUMMARY.md). Docs pages are thin stubs (~1KB per tool) — unchanged, Phase 2 scope. Landing claims ("Know, remember, do") still diverge from product reality (code intelligence) — unchanged, Phase 3 scope.
 - **Four distribution channels** exist today (PyPI, Claude plugin, Codex plugin, MCP Registry) — docs should cover install via all of them.
 
 ## Constraints
@@ -73,10 +73,10 @@ Hypotheses until shipped and validated:
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| New landing identity (drop opengsd-derived tokens) | Borrowed design can't carry jarvis positioning; reads as another tool's site | — Pending |
-| Tutorial-first docs IA | Audience is both new users (conversion) and installed users (depth); narrative path serves the cold-install core value, reference stays secondary | — Pending |
-| Stack open to change | Rebuild is design-led; forcing current stack could constrain the identity — decided in phase planning | — Pending |
-| Plugin skills included in scope | One voice across landing, docs, and in-agent skills; positioning drift compounds otherwise | — Pending |
+| New landing identity (drop opengsd-derived tokens) | Borrowed design can't carry jarvis positioning; reads as another tool's site | Token infrastructure shipped Phase 1 (`design/tokens.css`, self-hosted fonts) — content/copy redesign is Phase 3 |
+| Tutorial-first docs IA | Audience is both new users (conversion) and installed users (depth); narrative path serves the cold-install core value, reference stays secondary | Infrastructure shipped Phase 1 (unified Astro 5 + Starlight, one Pages artifact) — IA restructure is Phase 2 |
+| Stack open to change | Rebuild is design-led; forcing current stack could constrain the identity — decided in phase planning | Decided and shipped Phase 1: Astro 5 + Starlight on Node 22, replacing VitePress + hand-rolled static HTML |
+| Plugin skills included in scope | One voice across landing, docs, and in-agent skills; positioning drift compounds otherwise | — Pending (Phase 4) |
 | One-time rebuild, no sync checklist | Manual upkeep accepted for now | — Pending |
 
 ## Evolution
@@ -97,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-21 after initialization*
+*Last updated: 2026-08-21 after Phase 1*

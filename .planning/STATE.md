@@ -23,7 +23,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-21)
 
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
-**Current focus:** Phase 01 — Site Foundation & Identity
+**Current focus:** Phase 2 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
 Plan: Not started
@@ -79,11 +79,13 @@ Recent decisions affecting current work:
 - [Phase 01]: Plan 01-05: url-contract.json enumerates the real build.format:'directory' trailing-slash URL form (not RESEARCH Pattern 7's stale extensionless enumeration) — same class of correction as 01-04's Pagefind-path fix
 - [Phase 01]: Plan 01-05: Astro redirects destinations must be written as ${BASE}/... — Astro does not prepend base to a bare redirect destination automatically (verified on a scratch entry; a bare destination 404'd, missing /jarvis-index)
 - [Phase 01]: Plan 01-05: verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — legacy public/ passthrough page still on Google Fonts CDN, deferred to Phase 2 DOCS-09 classification (tracked in WINDOWS.md id 4)
+- [Phase 01]: Verification: V5 (interactive Pagefind search) and V6 (cross-surface theme persistence) closed by re-running verification with a live Chromium (CDP) browser session against `npm run preview` — both proven interactively, not just structurally; WINDOWS.md ids 1/2 marked fixed, phase VERIFICATION.md upgraded human_needed → passed (9/9)
 
 ### Blockers/Concerns
 
-- Dispatch-before-push runs the workflow against a stale remote ref (observed in 01-02: run 32462513702 built the old tree, green but meaningless). Always `git push` before `gh workflow run --ref <branch>`.
-- `gh` needs the phuongddx account (admin) for workflow dispatch + Pages branch-policy APIs on jarvis-intelligence/jarvis-index; phuongdoanduy is read-only there.
+- [Phase 01] Dispatch-before-push runs the workflow against a stale remote ref (observed in 01-02: run 32462513702 built the old tree, green but meaningless). Always `git push` before `gh workflow run --ref <branch>`.
+- [Phase 01] `gh` needs the phuongddx account (admin) for workflow dispatch + Pages branch-policy APIs on jarvis-intelligence/jarvis-index; phuongdoanduy is read-only there.
+- [Phase 01] `.planning/REQUIREMENTS.md` traceability rows for SITE-01..05 still read `Planned`/unchecked despite verified implementation — `gsd-tools requirements mark-complete` only recognizes `Pending`/`Gaps Found` as pre-complete states, so it silently no-ops on the `Planned` wording. Non-blocking (tracking-only); a maintainer should either reword REQUIREMENTS.md or file the gsd-tools compatibility fix.
 
 ## Deferred Items
 
@@ -94,6 +96,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-21T11:44:19.621Z
-Stopped at: Phase 01 complete, ready to plan Phase 2
+Last session: 2026-08-21T12:15:00Z
+Stopped at: Phase 01 complete (VERIFICATION.md passed 9/9, live-browser-verified), ready to plan Phase 2
 Resume file: None
