@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Site Foundation & Identity
 status: executing
-stopped_at: Plan 01-02 executed (unified Astro 5 + Starlight stack live; run 32462775441 green) — ready for 01-03
-last_updated: "2026-08-21T08:26:00Z"
+stopped_at: Plan 01-03 executed (identity layer live: --jv-* tokens feed both surfaces, fonts self-hosted, zero CDN requests) — ready for 01-04
+last_updated: "2026-08-21T08:48:00Z"
 last_activity: 2026-08-21
-last_activity_desc: "Plan 01-02 complete (SITE-02 + SITE-05: unified Astro build deployed as one Pages artifact on Node 22)"
-state_head: a2a2318245c0e55a558d8d763dd47e05a3f60f47
+last_activity_desc: "Plan 01-03 complete (SITE-03 + SITE-04: design/tokens.css single identity source + Fontsource zero-CDN fonts)"
+state_head: 524bcf6
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 2
-  percent: 40
+  completed_plans: 3
+  percent: 60
 ---
 
 # Project State
@@ -25,28 +25,27 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
 **Current focus:** Phase 01 — Site Foundation & Identity
 
-## Current Position
-
 Phase: 01 (Site Foundation & Identity) — EXECUTING
-Plan: 2 of 5 (01-02 complete; next: 01-03 identity layer — tokens.css + Fontsource)
+Plan: 3 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
 Status: Executing Phase 01
-Last activity: 2026-08-21 — Plan 01-02 executed: stack swapped to pinned Astro 5.18.2 + Starlight 0.37.7, all 32 docs pages migrated, unified artifact deployed live
+Last activity: 2026-08-21 — Plan 01-03 executed: design/tokens.css --jv-* identity layer consumed by landing + Starlight (customCss + --sl-* remap), Google Fonts CDN replaced by 17 deterministic same-origin woff2, stale specs marked superseded
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 60%
+
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 2
-- Average duration: 17 min/plan
-- Total execution time: 34 min
+- Total plans completed: 3
+- Average duration: 16 min/plan
+- Total execution time: 48 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01 | 2 | 34 min | 17 min |
+| 01 | 3 | 48 min | 16 min |
 
 ## Accumulated Context
 
@@ -66,10 +65,10 @@ Recent decisions affecting current work:
 - Plan 01-02: root-relative markdown links are rebased by a zero-dep rehype plugin inside astro.config.mjs (Astro, unlike VitePress, does not apply base to content links); Phase 2 content rewrite can retire it
 - Plan 01-02: title frontmatter is mandatory on every Starlight page (derived from first h1 during migration); VitePress containers mechanically converted (warning→caution; code-groups unwrapped to bold labels — Tabs are Phase 2)
 - Plan 01-02: deploy-pages.yml paths are src/**, public/**, design/**, astro.config.*, package*.json, self — public/ added (first-class artifact source), site/** and docs/** dropped
-- Plan 01-02: custom domain stays OFF for v1 — /jarvis-index prefix carried by the one origin constant in astro.config.mjs
-
-### Pending Todos
-
+- Plan 01-03: Starlight customCss paths resolve against the Astro project root — entries are './design/tokens.css' + './src/styles/starlight-tokens.css' (the research's '../' form escapes the repo and breaks the build; verified in @astrojs/starlight virtual-user-config.ts)
+- Plan 01-03: Fontsource variable families register as 'Geist Variable' / 'Geist Mono Variable' — token font stacks must use those names or the woff2 ships but never applies; Rajdhani (static 600/700) keeps its name. All three verified loading via document.fonts.check
+- Plan 01-03: token values are PROVISIONAL (live palette transplanted under --jv-*); Phase 3 refines the same variables, never forks them; three non-token literals in landing.css (#9aa4ac, #000 mask) await Phase 3 tokenization
+- Plan 01-03: harness shell grep (pi-uu-grep) treats parens as regex groups — use grep -F for parenthesized verify patterns on this machine
 None yet.
 
 ### Blockers/Concerns
@@ -81,13 +80,10 @@ None yet.
 
 Items acknowledged and deferred at milestone close, most recent first:
 
-| Category | Item | Status | Deferred At | Milestone |
-|----------|------|--------|-------------|-----------|
 | docs-content | Pre-existing broken link `/tools/findReferences` (camelCase) — broken live under VitePress too; fix with Phase 2 content pass | acknowledged | 2026-08-21 | M1 |
-| fonts | Landing still references Google Fonts CDN (verbatim transplant per Pitfall 6) — SITE-04 zero-third-party-font lands with 01-03 Fontsource wiring | planned | 2026-08-21 | M1 |
+| fonts | ~~Landing still references Google Fonts CDN~~ RESOLVED by 01-03: CDN links deleted, Fontsource self-hosted (17 woff2), zero third-party font requests | resolved | 2026-08-21 | M1 |
 
 ## Session Continuity
-
-Last session: 2026-08-21 15:26
-Stopped at: Plan 01-02 executed (unified Astro 5 + Starlight stack live; run 32462775441 green) — ready for 01-03
+Last session: 2026-08-21 15:48
+Stopped at: Plan 01-03 executed (identity layer live: --jv-* tokens feed both surfaces, fonts self-hosted, zero CDN requests) — ready for 01-04
 Resume file: None
