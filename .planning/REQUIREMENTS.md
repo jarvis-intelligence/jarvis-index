@@ -14,8 +14,8 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [ ] **SITE-03**: `design/tokens.css` — single design-token layer carrying the new jarvis identity, consumed by landing and docs
 - [ ] **SITE-04**: Self-hosted fonts (Fontsource variable fonts) — no third-party font CDN requests
 - [ ] **SITE-05**: Node 20→22 bump with `engines` field; `deploy-pages.yml` diff ships in the same commit as any stack change
-- [ ] **SITE-06**: URL contract — existing public URLs enumerated, old→new redirect map built, meta-refresh stubs + lookup-table `404.html` shipped with the restructure
-- [ ] **SITE-07**: Three CI checks — 3-manifest version agreement, `plugin/.mcp.json` ≡ `plugin/mcp.json`, manifest JSON parse
+- [x] **SITE-06**: URL contract — existing public URLs enumerated, old→new redirect map built, meta-refresh stubs + lookup-table `404.html` shipped with the restructure
+- [x] **SITE-07**: Three CI checks — 3-manifest version agreement, `plugin/.mcp.json` ≡ `plugin/mcp.json`, manifest JSON parse
 - [x] **SITE-08**: Dark mode (toggle, persists) + local search (Pagefind) across docs
 
 ### DOCS — Docs Rebuild
@@ -95,8 +95,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SITE-03 | Phase 1 | Planned |
 | SITE-04 | Phase 1 | Planned |
 | SITE-05 | Phase 1 | Planned |
-| SITE-06 | Phase 1 | Planned |
-| SITE-07 | Phase 1 | Planned |
+| SITE-06 | Phase 1 | Complete |
+| SITE-07 | Phase 1 | Complete |
 | SITE-08 | Phase 1 | Complete |
 | DOCS-01 | Phase 2 | Planned |
 | DOCS-02 | Phase 2 | Planned |

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Site Foundation & Identity
 status: executing
-stopped_at: Completed 01-04-PLAN.md (theme unification + Pagefind verification)
-last_updated: "2026-08-21T11:22:48.439Z"
+stopped_at: Completed 01-05-PLAN.md (URL contract, manifest CI checks, redirect mechanism)
+last_updated: "2026-08-21T11:44:19.631Z"
 last_activity: 2026-08-21
-state_head: b0639335d8715db575dddb55c43cbffbd8533d0c
+state_head: 3df5cb0a5003b82af18f6d7a3c5ef199bf3a9aeb
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 01 — Site Foundation & Identity
 
 Phase: 01 (Site Foundation & Identity) — EXECUTING
-Plan: 4 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
+Plan: 5 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
 Status: Ready to execute
 Last activity: 2026-08-21
 
@@ -49,6 +49,7 @@ Progress: [░░░░░░░░░░] 0%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 01 P04 | 10min | 2 tasks | 1 files |
+| Phase 01 P05 | 55min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,9 @@ Recent decisions affecting current work:
 - Plan 01-03: harness shell grep (pi-uu-grep) treats parens as regex groups — use grep -F for parenthesized verify patterns on this machine
 - [Phase 01]: Plan 01-04: landing theme re-keyed onto Starlight's starlight-theme/data-theme contract, anti-FOUC script moved to head is:inline; legacy jarvis-theme key fully removed
 - [Phase 01]: Plan 01-04: Pagefind index lands at the build root pagefind directory (base-relative), not nested under the docs subpath as RESEARCH assumed - 01-05 verify-build.mjs must check the correct location
+- [Phase 01]: Plan 01-05: url-contract.json enumerates the real build.format:'directory' trailing-slash URL form (not RESEARCH Pattern 7's stale extensionless enumeration) — same class of correction as 01-04's Pagefind-path fix
+- [Phase 01]: Plan 01-05: Astro redirects destinations must be written as ${BASE}/... — Astro does not prepend base to a bare redirect destination automatically (verified on a scratch entry; a bare destination 404'd, missing /jarvis-index)
+- [Phase 01]: Plan 01-05: verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — legacy public/ passthrough page still on Google Fonts CDN, deferred to Phase 2 DOCS-09 classification (tracked in WINDOWS.md id 4)
 
 ### Blockers/Concerns
 
@@ -89,6 +93,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-21T11:22:48.423Z
-Stopped at: Completed 01-04-PLAN.md (theme unification + Pagefind verification)
+Last session: 2026-08-21T11:44:19.621Z
+Stopped at: Completed 01-05-PLAN.md (URL contract, manifest CI checks, redirect mechanism)
 Resume file: None
