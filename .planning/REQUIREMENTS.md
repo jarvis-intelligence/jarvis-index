@@ -16,7 +16,7 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [ ] **SITE-05**: Node 20→22 bump with `engines` field; `deploy-pages.yml` diff ships in the same commit as any stack change
 - [ ] **SITE-06**: URL contract — existing public URLs enumerated, old→new redirect map built, meta-refresh stubs + lookup-table `404.html` shipped with the restructure
 - [ ] **SITE-07**: Three CI checks — 3-manifest version agreement, `plugin/.mcp.json` ≡ `plugin/mcp.json`, manifest JSON parse
-- [ ] **SITE-08**: Dark mode (toggle, persists) + local search (Pagefind) across docs
+- [x] **SITE-08**: Dark mode (toggle, persists) + local search (Pagefind) across docs
 
 ### DOCS — Docs Rebuild
 
@@ -97,7 +97,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SITE-05 | Phase 1 | Planned |
 | SITE-06 | Phase 1 | Planned |
 | SITE-07 | Phase 1 | Planned |
-| SITE-08 | Phase 1 | Planned |
+| SITE-08 | Phase 1 | Complete |
 | DOCS-01 | Phase 2 | Planned |
 | DOCS-02 | Phase 2 | Planned |
 | DOCS-03 | Phase 2 | Planned |

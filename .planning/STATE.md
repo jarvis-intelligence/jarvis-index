@@ -3,17 +3,16 @@ gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Site Foundation & Identity
 status: executing
-stopped_at: Plan 01-03 executed (identity layer live: --jv-* tokens feed both surfaces, fonts self-hosted, zero CDN requests) — ready for 01-04
-last_updated: "2026-08-21T08:48:00Z"
+stopped_at: Completed 01-04-PLAN.md (theme unification + Pagefind verification)
+last_updated: "2026-08-21T11:22:48.439Z"
 last_activity: 2026-08-21
-last_activity_desc: "Plan 01-03 complete (SITE-03 + SITE-04: design/tokens.css single identity source + Fontsource zero-CDN fonts)"
-state_head: 524bcf6
+state_head: b0639335d8715db575dddb55c43cbffbd8533d0c
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 3
-  percent: 60
+  completed_plans: 4
+  percent: 0
 ---
 
 # Project State
@@ -26,12 +25,11 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 01 — Site Foundation & Identity
 
 Phase: 01 (Site Foundation & Identity) — EXECUTING
-Plan: 3 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
-Status: Executing Phase 01
-Last activity: 2026-08-21 — Plan 01-03 executed: design/tokens.css --jv-* identity layer consumed by landing + Starlight (customCss + --sl-* remap), Google Fonts CDN replaced by 17 deterministic same-origin woff2, stale specs marked superseded
+Plan: 4 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
+Status: Ready to execute
+Last activity: 2026-08-21
 
-Progress: [██████░░░░] 60%
-
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -46,6 +44,11 @@ Progress: [██████░░░░] 60%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 48 min | 16 min |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P04 | 10min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -69,7 +72,8 @@ Recent decisions affecting current work:
 - Plan 01-03: Fontsource variable families register as 'Geist Variable' / 'Geist Mono Variable' — token font stacks must use those names or the woff2 ships but never applies; Rajdhani (static 600/700) keeps its name. All three verified loading via document.fonts.check
 - Plan 01-03: token values are PROVISIONAL (live palette transplanted under --jv-*); Phase 3 refines the same variables, never forks them; three non-token literals in landing.css (#9aa4ac, #000 mask) await Phase 3 tokenization
 - Plan 01-03: harness shell grep (pi-uu-grep) treats parens as regex groups — use grep -F for parenthesized verify patterns on this machine
-None yet.
+- [Phase 01]: Plan 01-04: landing theme re-keyed onto Starlight's starlight-theme/data-theme contract, anti-FOUC script moved to head is:inline; legacy jarvis-theme key fully removed
+- [Phase 01]: Plan 01-04: Pagefind index lands at the build root pagefind directory (base-relative), not nested under the docs subpath as RESEARCH assumed - 01-05 verify-build.mjs must check the correct location
 
 ### Blockers/Concerns
 
@@ -84,6 +88,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 | fonts | ~~Landing still references Google Fonts CDN~~ RESOLVED by 01-03: CDN links deleted, Fontsource self-hosted (17 woff2), zero third-party font requests | resolved | 2026-08-21 | M1 |
 
 ## Session Continuity
-Last session: 2026-08-21 15:48
-Stopped at: Plan 01-03 executed (identity layer live: --jv-* tokens feed both surfaces, fonts self-hosted, zero CDN requests) — ready for 01-04
+
+Last session: 2026-08-21T11:22:48.423Z
+Stopped at: Completed 01-04-PLAN.md (theme unification + Pagefind verification)
 Resume file: None
