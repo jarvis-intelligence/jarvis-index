@@ -116,8 +116,28 @@ export default defineConfig({
       ],
     }),
   ],
-  redirects: {
-    // SITE-06 mechanism; entries arrive with Phase 2's restructure.
-    // Static output emits <meta http-equiv="refresh"> stubs (verified in astro dist).
-  },
+  // SITE-06 redirect mechanism (proven in plan 01-05; entries arrive with
+  // Phase 2's DOCS-09 restructure). Astro's static build emits each entry as
+  // a meta-refresh stub HTML file (verified in astro/dist/core/routing) —
+  // GitHub Pages serves static files only, so a true HTTP 301 is impossible
+  // here; this is a documented limitation, not an oversight.
+  //
+  // Contract discipline (mechanized by scripts/verify-build.mjs's V2
+  // set-equality check against design/url-contract.json):
+  //   - Adding a page: add its URL to url-contract.json in the SAME commit.
+  //   - Retiring a URL: add a redirects entry (old path → new path) in the
+  //     SAME commit as the url-contract.json edit that drops the old URL —
+  //     otherwise V2 fails the build (missing page) until the redirect and
+  //     the contract edit ship together.
+  //
+  // Destination values MUST be written as `${BASE}/...`, not a bare
+  // '/...' path — verified by a scratch entry (01-05): Astro does NOT
+  // prepend `base` to a redirect destination automatically. A bare
+  // '/docs/quickstart' destination emitted a stub that refreshed to
+  // 'https://jarvis-intelligence.github.io/docs/quickstart' (missing
+  // `/jarvis-index`, a 404) — the exact origin-prefix bug family Pattern 1
+  // exists to prevent. `${BASE}/docs/quickstart` emitted the correct
+  // '/jarvis-index/docs/quickstart' stub. Phase 1 ships no real entries;
+  // this map is empty.
+  redirects: {},
 })
