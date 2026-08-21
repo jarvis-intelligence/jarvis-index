@@ -46,6 +46,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Verify build
+        run: node scripts/verify-build.mjs
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
