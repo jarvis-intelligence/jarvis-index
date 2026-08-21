@@ -1,3 +1,5 @@
+> **SUPERSEDED — HISTORICAL (2026-08-21).** The jarvis identity source of truth is now [`design/tokens.css`](../../design/tokens.css) (`--jv-*` tokens). Do not implement from this artifact; it is retained as history only.
+
 # brand-spec — jarvis landing
 
 Direction extracted from `https://opengsd.net/` (Tailwind v4 theme tokens read
