@@ -1,7 +1,8 @@
 ---
 phase: 2
 slug: docs-rebuild-tutorial-first-content
-status: draft
+status: approved
+reviewed_at: 2026-08-21
 shadcn_initialized: false
 preset: none
 created: 2026-08-21
@@ -193,16 +194,25 @@ Each of the five steps (why → setup.sh → `jarvis index` → register per cli
 
 ## UI Considerations
 
-Applicable state considerations resolved: 5 covered, 1 backstop, 0 unresolved
+Probe run 2026-08-21 (--auto) over 7 surfaces (install-matrix, requirements, 404, generic-stdio, changelog, quickstart, tool pages): 45 applicable candidates consolidated below. Structural fact that resolves most of them: every Phase 2 page is fully static HTML with authored content — no client-side data fetching, no forms, no submits.
+
+Applicable state considerations resolved: 9 covered, 1 backstop, 0 unresolved
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
 | empty | 404 lookup table (zero retires expected per D-03/Open Q3) | ✅ covered | Zero-retire case renders the documented placeholder copy (see Copywriting Contract "Empty state") + the six nav-group links — page is useful even with an empty table |
+| empty | Decision tables (install matrix, registry deep links, language matrix, params tables) | ✅ covered | Statically authored with their full row sets in the same commit as the page — no data-driven empty state can exist |
+| loading | All Phase 2 pages | ✅ covered | Fully static HTML — no client-side data fetching in docs content, so no loading states exist (Pagefind search UI is Phase 1 scope, unchanged) |
 | error | Quickstart steps, tool pages, troubleshooting | ✅ covered | Every error rendering is a real transcript: "you'll know it broke when…" blocks (quickstart), `{"error": ...}` contract (tool pages), Symptom→Diagnosis→Fix (troubleshooting) |
+| error | Page-load failure surface | ✅ covered | The 404 lookup page (D-04) is the site's error surface; no submit/load failures exist on a static site |
+| populated | All five new pages | ✅ covered | The Page Layout Contracts above ARE the populated-state definitions — leading element, section order, and table shapes locked per page |
 | long-text | Changelog page (400 lines verbatim) | ✅ covered | Starlight on-page TOC + mandatory frontmatter title; verbatim-diff validation command in 02-RESEARCH keeps it honest |
+| long-text | Long commands/URLs in table cells; generic-stdio verbatim JSON block | ✅ covered | Backticked cells ride Starlight's built-in horizontal table scroll (Tables convention); JSON block renders in a titled code frame — no truncation authored |
 | overflow | Wide tables (install matrix, registry deep links, language matrix) on mobile | 🧪 backstop | Starlight tables scroll horizontally by default; verify at phase gate in the interactive preview pass (already in 02-RESEARCH sampling plan) — no manual truncation authored |
 | zero-one-many | Ambiguous-symbol `candidates` list example | ✅ covered | The 2-candidate verbatim transcript (test_server_tools.py:123-127) is the canonical many-case; unambiguous case shown by `resolvedSymbol` presence rule |
 | partial | `getIndexStatus` search-only / partial states | ✅ covered | Real `status` values (`indexed`/`failed`/`partial`) + the verbatim search-only explanation string documented on its tool page |
+
+Probe note: the generic-stdio page classified `unclassified` (code-block page, no state cues) — manually reviewed: its only stateful dimensions are long-text (covered above) and the verification step's expected output (covered by the quickstart step pattern's works/broke contract).
 
 <!-- Status vocabulary (locked by probe-core projectTruths):
      ✅ covered   → a plain truth string lifted into must_haves.truths
@@ -241,11 +251,11 @@ Applicable state considerations resolved: 5 covered, 1 backstop, 0 unresolved
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-08-21 (gsd-ui-checker, 6/6 dimensions, no recommendations)
