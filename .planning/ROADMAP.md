@@ -13,7 +13,7 @@ Horizontal layers, assembled at the end. Phase 1 lays the complete infrastructur
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks
+- [x] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks (completed 2026-08-21)
 - [ ] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last
 - [ ] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget
 - [ ] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation & Identity | 5/5 | In Progress|  |
+| 1. Site Foundation & Identity | 5/5 | Complete    | 2026-08-21 |
 | 2. Docs Rebuild — Tutorial-First Content | 0/5 | Not started | - |
 | 3. Landing Page Rebuild | 0/4 | Not started | - |
 | 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |

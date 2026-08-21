@@ -1,18 +1,19 @@
 ---
 gsd_state_version: 1.0
-current_phase: 01
-current_phase_name: Site Foundation & Identity
-status: executing
-stopped_at: Completed 01-05-PLAN.md (URL contract, manifest CI checks, redirect mechanism)
-last_updated: "2026-08-21T11:44:19.631Z"
+current_phase: 2
+current_phase_name: Docs Rebuild — Tutorial-First Content
+status: planning
+stopped_at: Phase 01 complete, ready to plan Phase 2
+last_updated: "2026-08-21T12:11:09.911Z"
 last_activity: 2026-08-21
-state_head: 3df5cb0a5003b82af18f6d7a3c5ef199bf3a9aeb
+last_activity_desc: Phase 01 complete, transitioned to Phase 2
+state_head: c541854e994e96bf4357eea875a64acd9b7d66ef
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
   completed_plans: 5
-  percent: 0
+  percent: 20
 ---
 
 # Project State
@@ -24,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
 **Current focus:** Phase 01 — Site Foundation & Identity
 
-Phase: 01 (Site Foundation & Identity) — EXECUTING
-Plan: 5 of 5 (01-03 complete; next: 01-04 theme storage-key unification)
-Status: Ready to execute
-Last activity: 2026-08-21
+Phase: 2 — Docs Rebuild — Tutorial-First Content
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-08-21 — Phase 01 complete, transitioned to Phase 2
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -35,7 +36,7 @@ Progress: [░░░░░░░░░░] 0%
 
 **Velocity:**
 
-- Total plans completed: 3
+- Total plans completed: 5
 - Average duration: 16 min/plan
 - Total execution time: 48 min
 
@@ -43,7 +44,7 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01 | 3 | 48 min | 16 min |
+| 01 | 5 | - | - |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -94,5 +95,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-08-21T11:44:19.621Z
-Stopped at: Completed 01-05-PLAN.md (URL contract, manifest CI checks, redirect mechanism)
+Stopped at: Phase 01 complete, ready to plan Phase 2
 Resume file: None
