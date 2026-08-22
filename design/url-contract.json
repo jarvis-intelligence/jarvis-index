@@ -1,6 +1,6 @@
 {
   "origin": "https://jarvis-intelligence.github.io/jarvis-index",
-  "generated_from": "Live build enumeration 2026-08-21 (npm run build with astro.config.mjs build.format: 'directory', decided in plan 01-02 — supersedes the extensionless-URL enumeration in 01-RESEARCH.md Pattern 7, which was verified against the pre-migration VitePress live sitemap). Verified directly against the dist/ tree: 32 docs pages under /docs/** (trailing-slash canonical form), the landing at /, and /brand-logo.html preserved verbatim from the old site/ copy as a public/ passthrough file (keeps its .html extension — no Astro route, no clean-url rewriting applies). Phase 2's DOCS-09 classification decides /brand-logo.html's keep/retire fate and updates this contract in the same commit.",
+  "generated_from": "Live build enumeration 2026-08-21 (npm run build with astro.config.mjs build.format: 'directory', decided in plan 01-02 — supersedes the extensionless-URL enumeration in 01-RESEARCH.md Pattern 7, which was verified against the pre-migration VitePress live sitemap). Verified directly against the dist/ tree: 32 docs pages under /docs/** (trailing-slash canonical form), the landing at /, and /brand-logo.html preserved verbatim from the old site/ copy as a public/ passthrough file (keeps its .html extension — no Astro route, no clean-url rewriting applies). Phase 2 classification (plan 02-01, D-01): /brand-logo.html is KEEP — fonts self-hosted from public/fonts/, no longer excluded from verify-build V4.",
   "urls": [
     "/",
     "/brand-logo.html",

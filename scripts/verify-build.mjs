@@ -11,10 +11,7 @@
 //        pre-deploy twin of the 01-01 live asset-404 bug.
 //   V4 — zero fonts.googleapis/fonts.gstatic references in built HTML/CSS,
 //        at least one woff2 present under dist (self-hosted fonts, SITE-04).
-//        dist/brand-logo.html is excluded: it is a public/ passthrough file
-//        preserved verbatim from the pre-rebuild site (still using the old
-//        Google Fonts links) pending Phase 2's DOCS-09 keep/retire
-//        classification — not part of this phase's identity-token rebuild.
+//        Scans every built HTML/CSS file, including dist/brand-logo.html.
 //   V5 — the Pagefind search index is present under dist/pagefind/ (verified
 //        directly against this project's build: base-relative, NOT nested
 //        under dist/docs/ as 01-RESEARCH.md assumed — see 01-04-SUMMARY.md).
@@ -153,13 +150,8 @@ checkAssetResolution(join(distDir, 'docs', 'index.html'))
 // V4 — font origin
 // ─────────────────────────────────────────────────────────────────────────
 const FONT_CDN_PATTERN = /fonts\.googleapis\.com|fonts\.gstatic\.com/
-// public/brand-logo.html is a preserved legacy passthrough page (see header
-// comment) — excluded from this dimension pending Phase 2 classification.
-const V4_EXCLUDED = new Set([join(distDir, 'brand-logo.html')])
 
-const scannableForFonts = allFiles.filter(
-  (f) => (f.endsWith('.html') || f.endsWith('.css')) && !V4_EXCLUDED.has(f)
-)
+const scannableForFonts = allFiles.filter((f) => f.endsWith('.html') || f.endsWith('.css'))
 for (const f of scannableForFonts) {
   const content = readFileSync(f, 'utf8')
   if (FONT_CDN_PATTERN.test(content)) {

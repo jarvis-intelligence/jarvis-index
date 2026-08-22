@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 1
+open_count: 0
 waived_count: 0
-fixed_count: 3
+fixed_count: 4
 total_count: 4
-last_updated: 2026-08-21T12:09:35.915Z
+last_updated: 2026-08-22T02:58:17.383Z
 ---
 
 # Broken Windows Ledger
@@ -18,7 +18,7 @@ last_updated: 2026-08-21T12:09:35.915Z
 | 1 | 01 | unrun-verify | src/pages/index.astro |  | V6 theme persistence check (toggle on /, reload, navigate to /docs/, toggle, navigate back, reload both) not performed - no browser tool available in execution session | fixed |  | 2026-08-21T11:22:17.653Z | 2026-08-21T12:09:35.804Z |
 | 2 | 01 | unrun-verify | src/content/docs/docs/index.md |  | V5 interactive half (type a live search query, confirm multi-page hits, click through) not performed - no browser tool available in execution session | fixed |  | 2026-08-21T11:22:17.760Z | 2026-08-21T12:09:35.915Z |
 | 3 | 01 | deviation | scripts/verify-build.mjs |  | 01-05 permanent pagefind-presence assertion must check the build root pagefind output directory (base-relative), not a docs-subpath-nested location - this project's Starlight mount nests docs under a subpath but Pagefind output emits at the Astro base root | fixed |  | 2026-08-21T11:22:17.863Z | 2026-08-21T11:42:21.597Z |
-| 4 | 01 | deviation | public/brand-logo.html |  | scripts/verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — the legacy public/ passthrough page still uses the Google Fonts CDN (SITE-04 zero-third-party-fonts violation), preserved verbatim pending Phase 2 DOCS-09 keep/retire classification | open |  | 2026-08-21T11:42:28.363Z |  |
+| 4 | 01 | deviation | public/brand-logo.html |  | scripts/verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — the legacy public/ passthrough page still uses the Google Fonts CDN (SITE-04 zero-third-party-fonts violation), preserved verbatim pending Phase 2 DOCS-09 keep/retire classification | fixed |  | 2026-08-21T11:42:28.363Z | 2026-08-22T02:58:17.383Z |
 
 ````json
 [
@@ -65,10 +65,10 @@ last_updated: 2026-08-21T12:09:35.915Z
     "file": "public/brand-logo.html",
     "line": null,
     "description": "scripts/verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — the legacy public/ passthrough page still uses the Google Fonts CDN (SITE-04 zero-third-party-fonts violation), preserved verbatim pending Phase 2 DOCS-09 keep/retire classification",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-08-21T11:42:28.363Z",
-    "resolved_at": null
+    "resolved_at": "2026-08-22T02:58:17.383Z"
   }
 ]
 ````
