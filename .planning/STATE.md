@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
 status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-08-22T03:25:58.001Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-08-22T03:34:00.196Z"
 last_activity: 2026-08-22
-state_head: e0b281515371253c0b849922f7ebb3eea0383a03
+state_head: 1a379a97e54bd8ae04ddbf2e4fa7567d04178573
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 8
+  completed_plans: 9
   percent: 20
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: 02-03 complete (02-04 next)
+Plan: 02-04 complete (02-05 next)
 Status: Executing Phase 02
 Last activity: 2026-08-22
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02 P02 | 15min | 3 tasks | 10 files |
 | Phase 02 P03 | 4min | 3 tasks | 9 files |
 | Phase 02 P03 | 4min | 3 tasks | 9 files |
+| Phase 02 P04 | 12min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 2]: [Phase 02]: Plan 02-02: getIndexStatus's real shape now carries last_index_run and capabilities fields added to ../jarvis since 02-RESEARCH was written (2026-08-21) — documented the full current shape rather than the plan's now-stale contract subset (source wins per A4)
 - [Phase 2]: [Phase 02]: Plan 02-02: all 9 tool reference pages deepened with real transcripts traced through ../jarvis source + test fixtures (TypeScript toy-repo); semanticSearch's D-08 caution is the sole aside across all 9 pages, typeHierarchy's prior danger aside removed
 - [Phase 2]: [Phase 02]: Plan 02-03: index_cli.py's argparse block moved from the 02-RESEARCH-cited 1118-1177 to build_parser() at 1256-1318 in the now-1328-line file — all flags/entry-points re-verified against current source, matched byte-for-byte
+- [Phase 2]: [Phase 02]: Plan 02-04: requirements.md matrix rows follow the plan's own family naming (TypeScript/TSX, Java/Kotlin as combined rows, not per-extension); caveat cells link forward to ### anchors; :::caution used exactly twice (Android/Gradle, Kotlin auto-degrades only)
+- [Phase 2]: [Phase 02]: Plan 02-04: the locked anchor contract for common-failures.md was verified against the built dist HTML id= attributes (not just source markdown) before being handed to plan 02-06
+- [Phase 2]: [Phase 02]: Plan 02-04: changelog.md body constructed via shell redirect (frontmatter + tail -n +2 of ../jarvis/CHANGELOG.md) rather than manual transcription, diff-proven byte-identical
 
 ### Blockers/Concerns
 
@@ -106,6 +110,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:25:57.937Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-08-22T03:33:44.900Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
