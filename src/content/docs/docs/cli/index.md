@@ -1,27 +1,17 @@
 ---
 title: CLI
-description: "The jarvis CLI: index, list, status, reindex, forget, watch."
+description: "The jarvis CLI: index, list, status, reindex, forget, watch, jarvis-server."
 ---
 
-# CLI
+Two commands ship with the `jarvis-mcp` package: `jarvis` is the indexer CLI you run yourself;
+`jarvis-server` is the MCP stdio server your client launches on your behalf.
 
-The `jarvis` command is the indexer CLI. It manages repo indexing, the registry, and the
-dependency graph.
-
-## Entry points
-
-| Command | Purpose |
-|---------|---------|
-| `jarvis` | The indexer CLI (this section) |
-| `jarvis-server` | The MCP stdio server your client connects to |
-
-## Subcommands
-
-| Command | Purpose | Prerequisites |
-|---------|---------|---------------|
-| [`jarvis index`](/cli/index-cmd) | Index a repo | External binaries via `setup.sh` |
-| [`jarvis list`](/cli/list) | List indexed repos | — |
-| [`jarvis status`](/cli/status) | Show a repo's index status | — |
-| [`jarvis reindex`](/cli/reindex) | Re-run indexing for a registered repo | — |
-| [`jarvis forget`](/cli/forget) | Remove a repo's registration and index | — |
-| [`jarvis watch`](/cli/watch) | Watch a repo and auto-reindex on change | `[watch]` extra |
+| Command | What it does | Reference |
+|---------|---------------|-----------|
+| `jarvis index` | Index a repo for SCIP navigation and Zoekt search | [/cli/index-cmd/](/cli/index-cmd/) |
+| `jarvis list` | List registered repos with their slugs and statuses | [/cli/list/](/cli/list/) |
+| `jarvis status` | Show a single repo's index status and freshness | [/cli/status/](/cli/status/) |
+| `jarvis reindex` | Rebuild an already-registered repo's index | [/cli/reindex/](/cli/reindex/) |
+| `jarvis forget` | Remove a repo's registration and published index | [/cli/forget/](/cli/forget/) |
+| `jarvis watch` | Auto-reindex on filesystem changes (`[watch]` extra) | [/cli/watch/](/cli/watch/) |
+| `jarvis-server` | The MCP stdio server your client connects to | [/cli/jarvis-server/](/cli/jarvis-server/) |
