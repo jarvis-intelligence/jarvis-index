@@ -84,3 +84,40 @@
 5. Structural verification in executors (build + verify-build V1-V10 + grep assertions incl. label-sync); real-Chrome smoke left to orchestrator verification.
 
 ## RESEARCH COMPLETE
+
+## Validation Architecture
+
+### Test Framework
+| Property | Value |
+|----------|-------|
+| Framework | Zero-dep node assertion scripts (no test runner in this repo) |
+| Config file | none — `scripts/verify-build.mjs` (V1–V10), `scripts/check-manifests.mjs` |
+| Quick run command | `npm run build && npm run verify` |
+| Full suite command | `npm run build && npm run verify && npm run check:manifests` |
+
+### Phase Requirements → Test Map
+| Req ID | Behavior | Test Type | Automated Command | File Exists? |
+|--------|----------|-----------|-------------------|-------------|
+| LNDG-01 | Hero one-line value prop + copyable primary install | build + grep | `npm run verify`; `grep -c 'data-copy\|mono-box' src/pages/index.astro` ≥ hero chip present; curl command string exact | ✅ (verify-build) |
+| LNDG-02 | Tier chips on semanticSearch/typeHierarchy cards with exact gating text | grep | `grep -q 'requires \`[semantic]\` extra + reindex' src/components/landing/ToolShowcase.astro` and `grep -q 'requires fork-built scip + reindex' …`; anchor hrefs resolve in built dist | ✅ (grep) |
+| LNDG-03 | Language matrix mirrors requirements.md rows | grep + manual diff | row-count grep vs requirements.md table; `npm run verify` (V2 page set unchanged) | ✅ (grep) |
+| LNDG-04 | Privacy section present, zero-network claim | grep | `grep -q 'Nothing leaves your machine' src/pages/index.astro` | ✅ (grep) |
+| LNDG-05 | 4 inline SVG badges, zero external img/src | grep | `! grep -q 'img src="http\|shields.io' src/pages/index.astro` + badge count grep | ✅ (grep) |
+| LNDG-06 | Mobile: no page-level horizontal scroll at 390px | CSS grep + orchestrator browser smoke | `grep -q 'overflow-x: auto' src/styles/landing.css` (containment); real-Chrome 390px check deferred to orchestrator verification | ✅ (grep) |
+| LNDG-07 | Demo stepper: 3 scenarios with recorded JSON | grep | `test -f src/data/demo-scenarios.json` + scenario count; JSON keys match quickstart fixtures | ❌ Wave: 03-02 |
+| LNDG-08 | Copy-to-clipboard on every command chip | grep | every `.mono-box`/command chip carries `data-copy`; script delegation present | ✅ (grep) |
+| LNDG-09 | Diagrams inline, token-driven, dark-safe | grep | `! grep -q 'fill="#' src/components/landing/Diagrams.astro` (no hardcoded hex); `grep -q 'var(--jv-' …` | ❌ Wave: 03-03 |
+| LNDG-10 | Channel widget on hero + quickstart, synced | grep + orchestrator browser smoke | label-string equality between index.astro widget and quickstart.mdx Tabs (`grep -o 'Installer + uv' both files`); `starlight-synced-tabs__channel` key present in widget JS; browser sync test deferred to orchestrator | ✅ (grep) |
+| D-04 tokens | 3 literals tokenized | grep | `! grep -q '#9aa4ac' src/styles/landing.css`; `grep -q -- '--jv-muted-soft' design/tokens.css` | ✅ (grep) |
+
+### Sampling Rate
+- **Per task commit:** `npm run build && npm run verify`
+- **Per wave merge:** `npm run build && npm run verify && npm run check:manifests` + targeted greps above
+- **Phase gate:** full build green + real-Chrome smoke (hero copy works, tabs sync hero↔quickstart, 390px no-overflow, dark-mode diagram contrast) — browser pass owned by the orchestrator (executors are browser-less)
+
+### Wave 0 Gaps
+- None blocking — verify-build V1–V10 harness exists from Phases 1–2. Two per-plan additions ride with their content: demo-scenarios.json existence/format check (03-02) and the diagram no-hex grep (03-03).
+
+## Security Domain
+
+Static landing page — no auth, sessions, or dynamic input. Relevant surface: clipboard API (write-only, user-initiated), zero third-party requests (verify-build V4 font-origin check generalizes), no user-derived content rendered (no XSS surface).

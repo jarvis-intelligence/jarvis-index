@@ -109,14 +109,13 @@ Plans (planned 2026-08-21 — the 5-plan sketch split to 7 to respect task-size 
   4. A pre-install visitor sees the payoff and the proof: a simulated query→result demo with real recorded JSON shapes (deliberately not live), architecture diagrams reused from `../jarvis/docs/assets/` rendered dark-mode-safe, the local-first privacy section, and GitHub / PyPI / MIT / MCP Registry badges
   5. Channel choice happens in-page: the tabbed install widget (installer+uv / plugin marketplace / manual uvx) appears on the hero and on the docs quickstart
 
-**Plans**: 4 plans
+**Plans**: 3 plans
 
 Plans:
 
-- [ ] 03-01: Landing scaffold on `tokens.css` — hero with one-line value prop + copyable install, badges, copy-to-clipboard behavior
-- [ ] 03-02: Tiered 9-tool showcase with honest gating, compact language-support matrix, local-first privacy section
-- [ ] 03-03: Simulated demo panel (real recorded JSON shapes) + architecture diagrams section, dark-mode-safe
-- [ ] 03-04: Tabbed install widget on hero and quickstart; mobile-responsiveness pass across all sections
+- [ ] 03-01: Tracer — tokens refined (`--jv-muted-soft`, `--jv-mask-opaque`), hero with one-line value prop + copyable install, tabbed install widget (hero + quickstart sync), badges, footer, copy-to-clipboard behavior
+- [ ] 03-02: Tiered 9-tool showcase with honest gating chips, compact language-support matrix, local-first privacy section, simulated demo panel (real recorded JSON shapes)
+- [ ] 03-03: Architecture diagrams (token-driven inline SVG, dark-mode-safe), mobile-responsiveness pass across all sections, structural verification
 
 ### Phase 4: Plugin Skills Realignment & Release
 
