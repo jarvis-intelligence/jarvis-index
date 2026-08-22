@@ -30,7 +30,7 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [x] **DOCS-08**: Changelog page imported from `../jarvis/CHANGELOG.md`
 - [ ] **DOCS-09**: Additive rebuild — every existing docs page classified keep / merge-with-redirect / retire; nav reaches every tool/CLI/troubleshooting page in one click
 - [x] **DOCS-10**: "You'll know it works when…" success/failure shapes inline — first tool call self-verifiable without leaving the page
-- [ ] **DOCS-11**: `llms.txt` agent-consumable docs index — generated; ships only after docs content stabilizes (sequencing constraint, enforced by roadmap ordering)
+- [x] **DOCS-11**: `llms.txt` agent-consumable docs index — generated; ships only after docs content stabilizes (sequencing constraint, enforced by roadmap ordering)
 - [x] **DOCS-12**: MCP Registry deep-link table — registry entry location plus per-client deep links
 
 ### LNDG — Landing Page
@@ -108,7 +108,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOCS-08 | Phase 2 | Complete |
 | DOCS-09 | Phase 2 | Planned |
 | DOCS-10 | Phase 2 | Complete |
-| DOCS-11 | Phase 2 | Planned |
+| DOCS-11 | Phase 2 | Complete |
 | DOCS-12 | Phase 2 | Complete |
 | LNDG-01 | Phase 3 | Planned |
 | LNDG-02 | Phase 3 | Planned |
