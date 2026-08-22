@@ -94,6 +94,7 @@ export default defineConfig({
             { label: 'jarvis reindex', link: 'docs/cli/reindex' },
             { label: 'jarvis forget', link: 'docs/cli/forget' },
             { label: 'jarvis watch', link: 'docs/cli/watch' },
+            { label: 'jarvis-server', link: 'docs/cli/jarvis-server' },
           ],
         },
         {
