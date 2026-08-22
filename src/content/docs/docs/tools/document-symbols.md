@@ -78,7 +78,7 @@ the file, not declaration order in the index.
     {
       "symbol": "scip-typescript npm @toy/pkg 0.0.1 src/`greeter.ts`/Greeter#sayHi().",
       "displayName": "sayHi",
-      "kind": "Method",
+      "kind": "METHOD",
       "range": { "start": { "line": 8, "character": 2 }, "end": { "line": 9, "character": 3 } }
     }
   ],
