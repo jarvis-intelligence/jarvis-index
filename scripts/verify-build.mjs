@@ -134,8 +134,13 @@ function checkAssetResolution(htmlPath) {
       fromDistRoot = ref.slice(BASE.length)
     } else if (ref.startsWith('/')) {
       // Absolute but missing the base prefix — the exact origin-prefix bug
-      // class this dimension exists to catch (RESEARCH Pattern 1).
-      fromDistRoot = ref
+      // class this dimension exists to catch (RESEARCH Pattern 1). The
+      // physical dist/ layout has no /jarvis-index subtree, so resolving
+      // this ref against distDir directly would silently succeed for any
+      // file that also exists at the correctly-prefixed URL — fail outright
+      // instead of attempting resolution.
+      fail('V3', `absolute reference missing "${BASE}" prefix: "${rawRef}" in ${relative(distDir, htmlPath)}`)
+      continue
     } else {
       // Relative to the directory containing this HTML file.
       fromDistRoot = pageDir === '.' ? ref : `${pageDir}/${ref}`
