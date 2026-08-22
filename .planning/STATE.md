@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
 status: executing
-stopped_at: Phase 2 planned (7 plans, 6 waves, checker-verified)
-last_updated: "2026-08-22T03:06:17.997Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-08-22T03:17:32.636Z"
 last_activity: 2026-08-22
-state_head: 9b4ac7656b50361dc4dee9806995be58f593a590
+state_head: fb6a206f75dc6cee3e2abb3875b47e47b9d2f297
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 6
+  completed_plans: 7
   percent: 20
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: 02-01 complete (02-02 next)
+Plan: 02-02 complete (02-03 next)
 Status: Executing Phase 02
 Last activity: 2026-08-22
 
@@ -51,6 +51,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 01 P04 | 10min | 2 tasks | 1 files |
 | Phase 01 P05 | 55min | 3 tasks | 8 files |
 | Phase 02 P01 | 8min | 3 tasks | 15 files |
+| Phase 02 P02 | 15min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,8 @@ Recent decisions affecting current work:
 - [Phase 02]: Plan 02-01: 34-URL classification audit found zero redundant pages — keep x34, zero retires, confirming 02-RESEARCH's pre-planning prediction; no redirects map entry was needed
 - [Phase 02]: Plan 02-01: brand-logo.html fonts self-hosted from public/fonts/ (stable names copied from dist/_astro/'s hashed Fontsource output); verify-build V4 exclusion removed, WINDOWS.md id 4 closed
 - [Phase 02]: Plan 02-01: WR-01 fixed — tools/index.md's findReferences link now targets /tools/find-references/ (kebab-case, trailing slash)
+- [Phase 2]: [Phase 02]: Plan 02-02: getIndexStatus's real shape now carries last_index_run and capabilities fields added to ../jarvis since 02-RESEARCH was written (2026-08-21) — documented the full current shape rather than the plan's now-stale contract subset (source wins per A4)
+- [Phase 2]: [Phase 02]: Plan 02-02: all 9 tool reference pages deepened with real transcripts traced through ../jarvis source + test fixtures (TypeScript toy-repo); semanticSearch's D-08 caution is the sole aside across all 9 pages, typeHierarchy's prior danger aside removed
 
 ### Blockers/Concerns
 
@@ -99,6 +102,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:06:17.914Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-08-22T03:17:32.550Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
