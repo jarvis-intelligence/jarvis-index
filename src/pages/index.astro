@@ -5,6 +5,7 @@ import '../../design/tokens.css';
 import '../styles/landing.css';
 import InstallWidget from '../components/landing/InstallWidget.astro';
 import Badges from '../components/landing/Badges.astro';
+import DemoPanel from '../components/landing/DemoPanel.astro';
 ---
 <!doctype html>
 <html lang="en">
@@ -116,15 +117,16 @@ import Badges from '../components/landing/Badges.astro';
     </div>
   </section>
 
-  <!-- ============ DEMO (placeholder — 03-02) ============ -->
+  <!-- ============ DEMO ============ -->
   <section class="frame section" id="demo">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Demo</p>
-        <h2 class="section-title">See jarvis in action</h2>
+        <p class="eyebrow">See it in action</p>
+        <h2 class="section-title">Try before you install</h2>
       </div>
-      <p class="section-lede">Three real scenarios — pick a question, see the MCP call and recorded result.</p>
+      <p class="section-lede">Three real scenarios — pick a question, see the MCP call and the recorded result.</p>
     </div>
+    <DemoPanel />
   </section>
 
   <!-- ============ TOOLS (placeholder — 03-02) ============ -->

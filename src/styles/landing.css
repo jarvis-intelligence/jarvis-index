@@ -440,7 +440,7 @@ p code, li code, td code { color: var(--jv-accent); }
 .exchange-body .ex-call { color: var(--jv-chip-accent); margin-top: 0.85rem; }
 .exchange-body .ex-out { color: var(--jv-muted-soft); }
 
-/* ---------- demo panel (stub — populated 03-02) ---------- */
+/* ---------- demo panel ---------- */
 .demo-panel { margin-top: 2rem; }
 .demo-step { display: none; }
 .demo-step[aria-hidden="false"] { display: block; }
@@ -449,6 +449,7 @@ p code, li code, td code { color: var(--jv-accent); }
   gap: 0.75rem;
   margin-top: 1.5rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 .demo-nav button {
   padding: 0.5rem 1rem;
@@ -461,6 +462,27 @@ p code, li code, td code { color: var(--jv-accent); }
   cursor: pointer;
 }
 .demo-nav button:hover { border-color: var(--jv-accent); }
+.demo-nav button:disabled { opacity: 0.4; cursor: default; }
+.demo-nav button:disabled:hover { border-color: var(--jv-border); }
+.demo-step-btn {
+  border: 1px solid var(--jv-border);
+  border-radius: 999px;
+  background: var(--jv-surface);
+  color: var(--jv-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s var(--jv-ease), color 0.2s var(--jv-ease), background 0.2s var(--jv-ease);
+}
+.demo-step-btn:hover { border-color: var(--jv-accent); color: var(--jv-fg); }
+.demo-step-btn[aria-selected="true"] {
+  border-color: var(--jv-accent);
+  background: color-mix(in oklch, var(--jv-accent) 10%, transparent);
+  color: var(--jv-accent-strong);
+}
+.demo-nav-arrows { justify-content: center; margin-top: 1.25rem; }
+.demo-counter { font-size: 0.8125rem; color: var(--jv-muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- gate chip ---------- */
 .gate-chip {
