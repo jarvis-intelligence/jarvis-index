@@ -9,6 +9,7 @@ import scenarios from '../../data/demo-scenarios.json';
         class="demo-step-btn tap"
         role="tab"
         aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? '0' : '-1'}
         aria-controls={`demo-step-${s.id}`}
         id={`demo-btn-${s.id}`}
         data-step={String(i)}
@@ -66,6 +67,7 @@ import scenarios from '../../data/demo-scenarios.json';
     });
     btns.forEach(function (b, i) {
       b.setAttribute('aria-selected', i === n ? 'true' : 'false');
+      b.tabIndex = i === n ? 0 : -1;
     });
     current = n;
     if (counter) counter.textContent = (n + 1) + ' / ' + total;

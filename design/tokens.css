@@ -46,6 +46,9 @@
   --jv-chip-fg: #e1e5e8;
   --jv-chip-accent: #7cafe4;
   --jv-muted-soft: #9aa4ac;
+  --jv-chip-ring: rgba(124, 175, 228, 0.26);
+  --jv-gate-amber: #92610a;
+  --jv-gate-amber-strong: #b8860b;
   --jv-mask-opaque: #000;
   --jv-radius: 0.5rem;
   --jv-radius-lg: 0.9rem;
@@ -73,6 +76,9 @@
   --jv-header-bg: rgba(2, 3, 4, 0.94);
   --jv-header-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
   --jv-muted-soft: #626a71;
+  --jv-chip-ring: rgba(124, 175, 228, 0.18);
+  --jv-card-shadow: 0 18px 46px rgba(0, 0, 0, 0.2);
+  --jv-gate-amber: #d4a853;
   --jv-diagram-green: #4ade80;
   --jv-diagram-red: #f87171;
   --jv-diagram-amber: #fbbf24;
