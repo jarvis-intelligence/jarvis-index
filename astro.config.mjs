@@ -20,7 +20,7 @@ function rebaseDocsLinks() {
   const walk = (node) => {
     if (node.tagName === 'a' && typeof node.properties?.href === 'string') {
       const href = node.properties.href
-      if (href.startsWith('/') && !href.startsWith('//')) {
+      if (href.startsWith('/') && !href.startsWith('//') && href !== '/' && !href.startsWith(BASE)) {
         node.properties.href = rebased + href
       }
     }
