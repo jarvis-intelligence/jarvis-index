@@ -32,7 +32,7 @@ A jarvis tool returned empty or an error. Start here.
 
 3. Is it `typeHierarchy` specifically?
    - **Yes** → upstream `scip` v0.9.0 doesn't populate `relationships`. Ensure the fork build is
-     installed. See [Upstream Issues: typeHierarchy](/troubleshooting/upstream-issues/#typehierarchy-empty-on-upstream-scip).
+     installed. See [Upstream Issues: typeHierarchy](/troubleshooting/upstream-issues/#typehierarchy-empty-on-upstream-scip-v090).
    - **No** → check the symbol name. Bare names that collide across packages return
      `candidates`. Try a qualified name.
 
