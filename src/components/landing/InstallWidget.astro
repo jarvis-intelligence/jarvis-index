@@ -83,15 +83,18 @@
 
   // Arrow key roving tabindex
   widget.querySelector('[role="tablist"]').addEventListener('keydown', function (e) {
-    var visible = Array.prototype.filter.call(tabs, function (t) { return t.tabIndex >= 0; });
-    if (!visible.length) return;
-    var idx = visible.indexOf(document.activeElement);
+    // Roving tabindex over ALL tabs. Do not filter by tabIndex >= 0: in the roving
+    // pattern only the active tab carries 0, so that filter reduces to a single
+    // element and the arrow keys cycle onto the same tab forever.
+    var idx = Array.prototype.indexOf.call(tabs, document.activeElement);
     if (idx < 0) return;
+    var next;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      e.preventDefault(); visible[(idx + 1) % visible.length].focus(); visible[(idx + 1) % visible.length].click();
+      e.preventDefault(); next = tabs[(idx + 1) % tabs.length];
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault(); visible[(idx - 1 + visible.length) % visible.length].focus(); visible[(idx - 1 + visible.length) % visible.length].click();
+      e.preventDefault(); next = tabs[(idx - 1 + tabs.length) % tabs.length];
     }
+    if (next) { next.focus(); next.click(); }
   });
 
   // Cross-widget sync: listen for storage events (other tab/window)
