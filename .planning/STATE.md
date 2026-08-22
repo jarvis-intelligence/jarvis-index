@@ -1,19 +1,19 @@
 ---
 gsd_state_version: 1.0
-current_phase: 3
-current_phase_name: Landing Page Rebuild
+current_phase: 4
+current_phase_name: Plugin Skills Realignment & Release
 status: planning
-stopped_at: Phase 2 complete, ready to plan Phase 3
-last_updated: "2026-08-22T16:39:39.373Z"
-last_activity: 2026-08-22
-last_activity_desc: Phase 2 complete, transitioned to Phase 3
-state_head: f021fb903793948f768317f7addf14e7196b5e9b
+stopped_at: Phase 3 complete, ready to plan Phase 4
+last_updated: "2026-08-22T19:22:30.391Z"
+last_activity: 2026-08-23
+last_activity_desc: Phase 3 complete, transitioned to Phase 4
+state_head: e3764b181b8fa907aa628f3fd94a48bcc198ea56
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 12
-  completed_plans: 12
-  percent: 40
+  completed_phases: 3
+  total_plans: 15
+  completed_plans: 15
+  percent: 60
 ---
 
 # Project State
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
-Phase: 3 — Landing Page Rebuild
+Phase: 4 — Plugin Skills Realignment & Release
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-08-22 — Phase 2 complete, transitioned to Phase 3
+Last activity: 2026-08-23 — Phase 3 complete, transitioned to Phase 4
 
 Progress: [██░░░░░░░░] 20%
 
@@ -36,7 +36,7 @@ Progress: [██░░░░░░░░] 20%
 
 **Velocity:**
 
-- Total plans completed: 12
+- Total plans completed: 15
 - Average duration: 16 min/plan
 - Total execution time: 48 min
 
@@ -46,6 +46,7 @@ Progress: [██░░░░░░░░] 20%
 |-------|-------|-------|----------|
 | 01 | 5 | - | - |
 | 2 | 7 | - | - |
+| 3 | 3 | - | - |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -105,6 +106,8 @@ Recent decisions affecting current work:
 - [Phase 2]: [Phase 2]: [Phase 02] Plan 02-06: dropped quickstart's standalone What-you'll-get/Prerequisites sections and duplicate body H1 in favor of the five-step structure + D-14 requirements link, matching the no-duplicate-H1 convention already applied across Phase 2
 - [Phase 2]: [Phase 02] Plan 02-07: V10 build-assertion dimension placed after V9 in verify-build.mjs, derives origin exclusively from contract.origin (never hardcoded) — the same single-source-of-truth pattern V2 uses for the page-set check, closing DOCS-11's link-poisoning threat (T-02-13)
 - [Phase 2]: [Phase 02] Plan 02-07: llms.txt sections mirror the Starlight sidebar groups verbatim and every link description is copied from that page's own frontmatter description — zero re-authored prose, keeping the agent index and human nav in lockstep with no second source of truth
+- [Phase 3]: Phase-02 human verification closed via real system Chrome against npm run preview: the harness's embedded headless Chromium blob-wraps Web Workers, breaking Pagefind worker-mode relative fetches while the site is fine — all Phase 5 browser verification must use real Chrome via app.path
+- [Phase 4]: [Phase 03]: Landing rebuilt as single-scroll conversion surface — real-Chrome verification found+fixed 2 runtime defects (hero grid minmax(0,1fr) 8c0ffc6; widget roving tabindex 6ff3335); code review fixed 5/6 (WR-01 anchor claim rejected — built id IS bash--44); UI review 23/24 advisory, accent-shadow dark override + inline-style extraction applied
 
 ### Blockers/Concerns
 
@@ -126,6 +129,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:59:04.948Z
-Stopped at: Phase 2 complete, ready to plan Phase 3
-Resume file: None
+Last session: 2026-08-22T17:11:15.002Z
+Stopped at: Phase 3 complete, ready to plan Phase 4
+Resume file: .planning/phases/03-landing-page-rebuild/03-UI-SPEC.md

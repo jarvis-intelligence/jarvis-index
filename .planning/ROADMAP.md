@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks (completed 2026-08-21)
 - [x] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last (completed 2026-08-22)
-- [ ] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget
+- [x] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget (completed 2026-08-23)
 - [ ] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release
 - [ ] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled
 
@@ -113,9 +113,9 @@ Plans (planned 2026-08-21 — the 5-plan sketch split to 7 to respect task-size 
 
 Plans:
 
-- [ ] 03-01: Tracer — tokens refined (`--jv-muted-soft`, `--jv-mask-opaque`), hero with one-line value prop + copyable install, tabbed install widget (hero + quickstart sync), badges, footer, copy-to-clipboard behavior
-- [ ] 03-02: Tiered 9-tool showcase with honest gating chips, compact language-support matrix, local-first privacy section, simulated demo panel (real recorded JSON shapes)
-- [ ] 03-03: Architecture diagrams (token-driven inline SVG, dark-mode-safe), mobile-responsiveness pass across all sections, structural verification
+- [x] 03-01: Tracer — tokens refined (`--jv-muted-soft`, `--jv-mask-opaque`), hero with one-line value prop + copyable install, tabbed install widget (hero + quickstart sync), badges, footer, copy-to-clipboard behavior
+- [x] 03-02: Tiered 9-tool showcase with honest gating chips, compact language-support matrix, local-first privacy section, simulated demo panel (real recorded JSON shapes)
+- [x] 03-03: Architecture diagrams (token-driven inline SVG, dark-mode-safe), mobile-responsiveness pass across all sections, structural verification
 
 ### Phase 4: Plugin Skills Realignment & Release
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Site Foundation & Identity | 5/5 | Complete    | 2026-08-21 |
 | 2. Docs Rebuild — Tutorial-First Content | 7/7 | Complete    | 2026-08-22 |
-| 3. Landing Page Rebuild | 0/4 | Not started | - |
+| 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |
 | 5. Launch Verification & Community | 0/3 | Not started | - |
 
