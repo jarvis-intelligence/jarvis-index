@@ -17,6 +17,10 @@
 //        under dist/docs/ as 01-RESEARCH.md assumed — see 01-04-SUMMARY.md).
 //   V9 — every <loc> in every dist/sitemap*.xml resolves to a real dist file
 //        (regression guard for the pre-01-01 sitemap-rot bug).
+//   V10 — dist/llms.txt exists, opens with an H1 then an early blockquote
+//        summary (llmstxt.org shape), and every markdown link target is on
+//        the contract origin AND its origin-stripped path is a member of
+//        the contract's urls (DOCS-11 link-poisoning guard).
 //
 // Usage: node scripts/verify-build.mjs [distDir] [contractPath]
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
@@ -197,8 +201,36 @@ for (const sitemapFile of sitemapFiles) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// V10 — llms.txt shape and link-origin/path guard (DOCS-11)
+// ─────────────────────────────────────────────────────────────────────────
+const llmsTxtPath = join(distDir, 'llms.txt')
+if (!existsSync(llmsTxtPath)) {
+  fail('V10', 'dist/llms.txt not found')
+} else {
+  const llmsTxt = readFileSync(llmsTxtPath, 'utf8')
+  const lines = llmsTxt.split('\n')
+  if (!lines[0]?.startsWith('# ')) fail('V10', 'first line is not an H1')
+  if (!lines.slice(0, 4).some((l) => l.startsWith('> '))) {
+    fail('V10', 'no blockquote summary in the first 4 lines')
+  }
+  const linkRe = /\[([^\]]*)\]\(([^)]+)\)/g
+  let m
+  while ((m = linkRe.exec(llmsTxt))) {
+    const url = m[2]
+    if (!url.startsWith(contract.origin)) {
+      fail('V10', `link off-origin: ${url}`)
+      continue
+    }
+    const path = url.slice(contract.origin.length)
+    if (!contractUrls.has(path)) fail('V10', `link path not in contract: ${path}`)
+  }
+}
+
 if (failed) {
   process.exit(1)
 }
 
-console.log(`ok: V2 (${builtUrls.size} pages = contract), V3 (landing+docs-home assets), V4 (fonts), V5 (pagefind), V9 (sitemap) all green`)
+console.log(
+  `ok: V2 (${builtUrls.size} pages = contract), V3 (landing+docs-home assets), V4 (fonts), V5 (pagefind), V9 (sitemap), V10 (llms.txt) all green`
+)
