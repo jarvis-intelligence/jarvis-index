@@ -115,6 +115,7 @@ export default defineConfig({
             { label: 'Common Failures', link: 'docs/troubleshooting/common-failures' },
           ],
         },
+        { label: 'Changelog', link: 'docs/changelog' },
       ],
     }),
   ],
