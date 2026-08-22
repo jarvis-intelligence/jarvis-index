@@ -42,3 +42,13 @@ limitations or bugs in the SCIP indexers or the `scip` CLI.
 - **Root cause:** clang USRs (which scip-swift emits as symbol names) may change between Swift
   toolchain versions.
 - **Workaround:** pin `.swift-version` (currently 6.2.4); reindex after toolchain upgrades.
+
+## `--semantic-include` has no effect on prose-only repos
+
+- **Symptom:** passing `--semantic-include` on a markdown-only or otherwise prose-only repo
+  doesn't change `semanticSearch` results.
+- **Root cause:** semantic chunking is code-symbol-scoped — it chunks around SCIP symbols, so
+  a repo with no code symbols has nothing for `--semantic-include` to add
+  ([jarvis-index#9](https://github.com/jarvis-intelligence/jarvis-index/issues/9), open).
+- **This is by design.** It is a settled limitation, not a bug: a prose-only repo needs its
+  own chunking strategy, which `semanticSearch` doesn't implement.
