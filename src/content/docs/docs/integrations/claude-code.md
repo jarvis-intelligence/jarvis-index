@@ -3,43 +3,33 @@ title: Claude Code
 description: "Register jarvis with Claude Code via plugin or manual MCP config."
 ---
 
-# Claude Code
+Looking for [Cursor](/integrations/cursor/), [Codex CLI](/integrations/codex-cli/), or
+[any other stdio client](/integrations/generic-stdio/)? See their guides — this page covers
+Claude Code.
 
-Two paths: install the plugin (preferred — registers the server and bundles skills) or register
-the MCP server manually.
+Two paths get jarvis running: the plugin (recommended) or a manual command.
 
-## Option A: Install the plugin (recommended)
+### Plugin (recommended)
 
-The Claude Code plugin lives at [`plugin/.claude-plugin/plugin.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/.claude-plugin/plugin.json). Installing it:
+Installing the plugin registers the `jarvis` MCP server for you and bundles the `jarvis-setup`,
+`jarvis-use`, and `jarvis-issues` skills:
 
-- Registers the `jarvis` MCP server automatically
-- Bundles three skills: `jarvis-setup`, `jarvis-use`, `jarvis-issues`
-
-See the plugin's [README](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/README.md)
-for the install command.
-
-## Option B: Manual MCP registration
-
-Add the `jarvis` server to your Claude Code MCP config using the block from
-[`plugin/.mcp.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/.mcp.json):
-
-```json
-{
-  "mcpServers": {
-    "jarvis": {
-      "command": "uvx",
-      "args": ["--from", "jarvis-mcp>=0.6.0", "jarvis-server"]
-    }
-  }
-}
+```sh
+/plugin marketplace add jarvis-intelligence/jarvis-index
+/plugin install jarvis@jarvis
 ```
 
-The `>=0.6.0` floor ensures the `index` subcommand is available.
+### Manual
+
+```sh
+claude mcp add jarvis --scope user -- jarvis-server
+```
+
+This requires `jarvis-server` on `PATH`. For GUI-launched sessions where `PATH` isn't inherited,
+use the absolute path from `which jarvis-server` instead — see
+[PATH troubleshooting](/troubleshooting/common-failures/#jarvis-or-jarvis-server-not-found-path).
 
 ## Verify
 
-After registering, ask Claude Code to call a jarvis tool:
-
-> Use the jarvis `getIndexStatus` tool with repo "my-slug".
-
-Expect a response with `{"repo": "my-slug", "indexed": true, ...}`.
+After registering, ask Claude Code to call the jarvis `getIndexStatus` tool with your repo slug.
+Expect a JSON response naming your repo's index status.

@@ -1,32 +1,21 @@
 ---
 title: Integrations
-description: "Register jarvis with Claude Code, Cursor, or Codex CLI."
+description: "Register jarvis with Claude Code, Cursor, Codex CLI, or any other stdio client."
 ---
 
-# Integrations
+jarvis is an MCP stdio server. Any MCP-compatible client can connect to it — pick your client
+below for the fastest path.
 
-jarvis is an MCP stdio server. Any MCP-compatible client can connect to it. The MCP registration
-is identical across clients — the `mcpServers` block from `plugin/.mcp.json`:
+| Client | Path | Guide |
+|--------|------|-------|
+| Claude Code | Plugin (auto-registers) or manual `claude mcp add` | [Claude Code](/integrations/claude-code/) |
+| Cursor | One-click install link, plugin marketplace, or manual | [Cursor](/integrations/cursor/) |
+| Codex CLI | Plugin marketplace or manual config | [Codex CLI](/integrations/codex-cli/) |
+| Any stdio client | Manual JSON block | [Any stdio client](/integrations/generic-stdio/) |
 
-```json
-{
-  "mcpServers": {
-    "jarvis": {
-      "command": "uvx",
-      "args": ["--from", "jarvis-mcp>=0.6.0", "jarvis-server"]
-    }
-  }
-}
-```
+Installing a plugin auto-registers the server and, for Claude Code and Codex CLI, bundles three
+skills: `jarvis-setup` (onboarding), `jarvis-use` (steers the agent toward structural queries
+over grep), and `jarvis-issues` (files well-formed bug reports).
 
-## Guides
-
-| Client | Plugin available | Guide |
-|--------|-----------------|-------|
-| Claude Code | Yes | [Claude Code setup](/integrations/claude-code) |
-| Cursor | Yes | [Cursor setup](/integrations/cursor) |
-| Codex CLI | Yes | [Codex CLI setup](/integrations/codex-cli) |
-
-Installing the plugin auto-registers the server and bundles three skills:
-`jarvis-setup` (onboarding), `jarvis-use` (steers the agent toward structural queries over grep),
-and `jarvis-issues` (files well-formed bug reports).
+For a broader comparison of install channels — PyPI, plugins, and the MCP Registry — see the
+[install channels matrix](/guide/install-matrix/).

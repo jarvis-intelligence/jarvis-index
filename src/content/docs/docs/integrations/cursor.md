@@ -1,25 +1,38 @@
 ---
 title: Cursor
-description: "Register jarvis with Cursor via plugin or manual MCP config."
+description: "Register jarvis with Cursor via a one-click install link, the plugin, or manual MCP config."
 ---
 
-# Cursor
+Looking for [Claude Code](/integrations/claude-code/), [Codex CLI](/integrations/codex-cli/), or
+[any other stdio client](/integrations/generic-stdio/)? See their guides — this page covers
+Cursor.
 
-Two paths: install the plugin or register the MCP server manually. Cursor reads
-`plugin/.cursor-plugin/plugin.json` and `plugin/mcp.json` for the plugin path.
+The fastest path is the one-click install link below. A plugin marketplace path and a manual
+config path are also available.
 
-## Option A: Install the plugin
+### One-click install link
 
-The Cursor plugin lives at [`plugin/.cursor-plugin/plugin.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/.cursor-plugin/plugin.json).
-See the plugin's [README](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/README.md)
-for install instructions.
+[Add jarvis to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=jarvis&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyItLWZyb20iLCJqYXJ2aXMtbWNwPj0wLjYuMCIsImphcnZpcy1zZXJ2ZXIiXX0=)
 
-## Option B: Manual MCP registration
+The `config` parameter is the base64-encoded
+`{"command":"uvx","args":["--from","jarvis-mcp>=0.6.0","jarvis-server"]}` block — decode it
+yourself before trusting any install link.
 
-Add the `jarvis` server to Cursor's MCP settings using the block from
-[`plugin/.mcp.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/.mcp.json):
+### Plugin marketplace
 
-```json
+Cursor's plugin marketplace needs a Teams/Enterprise account, or a local symlink:
+
+```sh
+# Teams/Enterprise: Dashboard → Plugins → Add Marketplace → Import from Repo
+# Otherwise, clone this repo and:
+ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis
+```
+
+### Manual
+
+Add the block below to Cursor's MCP settings:
+
+```json title="mcp.json"
 {
   "mcpServers": {
     "jarvis": {
@@ -32,5 +45,5 @@ Add the `jarvis` server to Cursor's MCP settings using the block from
 
 ## Verify
 
-After registering, use Cursor's MCP tool browser or ask the agent to call `getIndexStatus` with
-your repo slug.
+After registering, ask the agent to call the jarvis `getIndexStatus` tool with your repo slug.
+Expect a JSON response naming your repo's index status.

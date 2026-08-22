@@ -3,24 +3,28 @@ title: Codex CLI
 description: "Register jarvis with Codex CLI via plugin or manual MCP config."
 ---
 
-# Codex CLI
+Looking for [Claude Code](/integrations/claude-code/), [Cursor](/integrations/cursor/), or
+[any other stdio client](/integrations/generic-stdio/)? See their guides — this page covers
+Codex CLI.
 
-Two paths: install the plugin or register the MCP server manually. Codex CLI reads
-[`.codex-plugin/plugin.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/.codex-plugin/plugin.json)
-for the plugin path.
+Codex CLI has no MCP install URL scheme, so the command and config below ARE the install path.
+Two options: the plugin marketplace or a manual config edit.
 
-## Option A: Install the plugin
+### Plugin marketplace
 
-The Codex plugin manifest lives at `.codex-plugin/plugin.json` (version 0.7.1). See the plugin's
-[README](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/README.md) for
-install instructions.
+```sh
+codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main
+codex plugin add jarvis
+```
 
-## Option B: Manual MCP registration
+The repo-root [`.codex-plugin/plugin.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/.codex-plugin/plugin.json)
+manifest points into `plugin/`, registering the server and bundling all three skills.
 
-Add the `jarvis` server using the block from
-[`plugin/.mcp.json`](https://github.com/jarvis-intelligence/jarvis-index/blob/main/plugin/.mcp.json):
+### Manual
 
-```json
+Add the block below to your Codex MCP configuration under `~/.codex`:
+
+```json title="mcp.json"
 {
   "mcpServers": {
     "jarvis": {
@@ -33,8 +37,5 @@ Add the `jarvis` server using the block from
 
 ## Verify
 
-After registering, ask Codex CLI to call a jarvis tool:
-
-> Use the jarvis `getIndexStatus` tool with repo "my-slug".
-
-Expect a response with `{"repo": "my-slug", "indexed": true, ...}`.
+After registering, ask Codex CLI to call the jarvis `getIndexStatus` tool with your repo slug.
+Expect a JSON response naming your repo's index status.

@@ -3,8 +3,6 @@ title: Install guide
 description: "Detailed install reference for jarvis: uv, uvx, pip, extras, and what setup.sh provisions."
 ---
 
-# Install guide
-
 `jarvis` is distributed as the `jarvis-mcp` Python package on PyPI, plus external binaries
 installed by `setup.sh`. This page covers every install method and what each component provides.
 
@@ -14,24 +12,31 @@ installed by `setup.sh`. This page covers every install method and what each com
 - **`uv`:** install from https://docs.astral.sh/uv/
 - **PATH:** after `setup.sh`, `~/.jarvis/bin` must be on `PATH`.
 
-## Install the CLI + MCP server
+Before installing, [check your language is supported](/guide/requirements/).
 
+## Install the CLI + MCP server
 
 **uv tool (recommended):**
 ```sh
 uv tool install jarvis-mcp
 ```
+Puts `jarvis` and `jarvis-server` on `PATH` via uv's tool shims (`uv tool dir`'s `bin/`). This is
+also the fix for the [uvx cold-start timeout](/troubleshooting/common-failures/#first-mcp-connect-times-out-uvx-cold-start) —
+the wheel builds and caches once, so later `uvx` calls start in seconds.
 
 **uvx (ad-hoc, no install):**
 ```sh
 uvx --from jarvis-mcp jarvis-server
 ```
+Nothing is added to `PATH` — `uvx` runs the server ephemerally each time, rebuilding from a cold
+`uv` cache the first time it's invoked.
 
 **pip:**
 ```sh
 pip install jarvis-mcp
 ```
-
+Puts `jarvis` and `jarvis-server` in the active Python environment's `bin`/`Scripts` directory —
+only on `PATH` if that environment (a venv, or `pip install --user`'s target) is.
 
 Two entry points are installed:
 
