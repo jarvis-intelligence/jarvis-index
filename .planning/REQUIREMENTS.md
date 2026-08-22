@@ -21,7 +21,7 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 ### DOCS — Docs Rebuild
 
 - [ ] **DOCS-01**: Tutorial-first quickstart — why → install → `jarvis index` → register per client → first tool call, with expected output shown
-- [ ] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
+- [x] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
 - [ ] **DOCS-03**: Four-channel install matrix — PyPI, Claude plugin, Codex plugin, MCP Registry
 - [ ] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
 - [x] **DOCS-05**: CLI reference — 7 commands with flags and examples
@@ -99,7 +99,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SITE-07 | Phase 1 | Complete |
 | SITE-08 | Phase 1 | Complete |
 | DOCS-01 | Phase 2 | Planned |
-| DOCS-02 | Phase 2 | Planned |
+| DOCS-02 | Phase 2 | Complete |
 | DOCS-03 | Phase 2 | Planned |
 | DOCS-04 | Phase 2 | Planned |
 | DOCS-05 | Phase 2 | Complete |

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
 status: executing
-stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-08-22T03:34:00.196Z"
+stopped_at: Completed 02-05-PLAN.md
+last_updated: "2026-08-22T03:42:58.681Z"
 last_activity: 2026-08-22
-state_head: 1a379a97e54bd8ae04ddbf2e4fa7567d04178573
+state_head: daba3cbf21ba9dd951a214d0a6706c276588fd35
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 9
+  completed_plans: 10
   percent: 20
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: 02-04 complete (02-05 next)
+Plan: 02-05 complete (02-06 next)
 Status: Executing Phase 02
 Last activity: 2026-08-22
 
@@ -55,6 +55,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02 P03 | 4min | 3 tasks | 9 files |
 | Phase 02 P03 | 4min | 3 tasks | 9 files |
 | Phase 02 P04 | 12min | 3 tasks | 8 files |
+| Phase 02 P05 | 6min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -93,13 +94,16 @@ Recent decisions affecting current work:
 - [Phase 2]: [Phase 02]: Plan 02-04: requirements.md matrix rows follow the plan's own family naming (TypeScript/TSX, Java/Kotlin as combined rows, not per-extension); caveat cells link forward to ### anchors; :::caution used exactly twice (Android/Gradle, Kotlin auto-degrades only)
 - [Phase 2]: [Phase 02]: Plan 02-04: the locked anchor contract for common-failures.md was verified against the built dist HTML id= attributes (not just source markdown) before being handed to plan 02-06
 - [Phase 2]: [Phase 02]: Plan 02-04: changelog.md body constructed via shell redirect (frontmatter + tail -n +2 of ../jarvis/CHANGELOG.md) rather than manual transcription, diff-proven byte-identical
+- [Phase 2]: [Phase 02] Plan 02-05: Codex/Cursor plugin-marketplace commands sourced from this repo's own README.md (source of truth here), not the private jarvis repo which doesn't document per-client plugin commands
+- [Phase 2]: [Phase 02] Plan 02-05: cursor:// deeplink base64 payload computed and decode-verified in the acceptance grep pipeline, not hand-typed — matches the changelog verbatim-diff pattern from 02-04
 
 ### Blockers/Concerns
 
 - [Phase 01] Dispatch-before-push runs the workflow against a stale remote ref (observed in 01-02: run 32462513702 built the old tree, green but meaningless). Always `git push` before `gh workflow run --ref <branch>`.
 - [Phase 01] `gh` needs the phuongddx account (admin) for workflow dispatch + Pages branch-policy APIs on jarvis-intelligence/jarvis-index; phuongdoanduy is read-only there.
 - [Phase 01] `.planning/REQUIREMENTS.md` traceability rows for SITE-01..05 still read `Planned`/unchecked despite verified implementation — `gsd-tools requirements mark-complete` only recognizes `Pending`/`Gaps Found` as pre-complete states, so it silently no-ops on the `Planned` wording. Non-blocking (tracking-only); a maintainer should either reword REQUIREMENTS.md or file the gsd-tools compatibility fix.
-- [Phase 02] `gsd-tools query state.advance-plan` cannot parse this STATE.md's `Plan: 02-02 complete (02-03 next)` prose format (expects legacy `Current Plan`/`Total Plans in Phase` fields or a `Plan: X of Y` compound) — errored with "Cannot parse Current Plan or Total Plans in Phase from STATE.md" during 02-03's close-out. Worked around by hand-editing the `Plan:` line directly; `state.update-progress`/`state.record-metric`/`state.add-decision`/`state.record-session` all worked fine (they don't depend on that field). Non-blocking; same class of format-compatibility gap as the REQUIREMENTS.md row above.
+- [Phase 02] `gsd-tools query state.advance-plan` cannot parse this STATE.md's `Plan: 02-02 complete (02-03 next)` prose format (expects legacy `Current Plan`/`Total Plans in Phase` fields or a `Plan: X of Y` compound) — errored with "Cannot parse Current Plan or Total Plans in Phase from STATE.md" during 02-03's close-out. Worked around by hand-editing the `Plan:` line directly; `state.update-progress`/`state.record-metric`/`state.add-decision`/`state.record-session` all worked fine (they don't depend on that field). Non-blocking; same class of format-compatibility gap as the REQUIREMENTS.md row above. Recurred identically at 02-05's close-out (still non-blocking, same workaround).
+- [Phase 02] Plan 02-05: `requirements mark-complete DOCS-02` returned `not_found` for the same reason as the SITE-01..05 row above — DOCS-02's traceability row read `Planned` (not `Pending`/`Gaps Found`), so the CLI silently no-op'd. Hand-edited both the checkbox and the traceability Status cell to reflect verified completion. DOCS-01/03/04/09/10 rows carry the identical stale `Planned` wording and will hit the same gap when their owning plans complete.
 
 ## Deferred Items
 
@@ -110,6 +114,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:33:44.900Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-08-22T03:42:58.612Z
+Stopped at: Completed 02-05-PLAN.md
 Resume file: None
