@@ -3,15 +3,14 @@ title: SCIP
 description: "SCIP (Source Code Intelligence Protocol) is the open format jarvis uses to index and navigate code."
 ---
 
-# SCIP
-
 SCIP (Source Code Intelligence Protocol) is an open format for code intelligence data. jarvis
 consumes SCIP indexes produced by language indexers and exposes them via 9 MCP tools.
 
 ## How jarvis indexes code
 
 1. **Language detection** — jarvis detects the primary language by file-extension plurality among
-   git-tracked files.
+   git-tracked files (ties broken by a fixed priority order: `.ts`, `.tsx`, `.py`, `.java`, `.kt`,
+   `.swift`). Override the detected language with `jarvis index --language <name>`.
 2. **Language indexer** — the matching `scip-*` CLI (`scip-python`, `scip-typescript`,
    `scip-swift`, `scip-java`, ...) emits a `.scip` protobuf file.
 3. **SCIP → SQLite** — `scip expt-convert` (a fork with the
@@ -19,6 +18,18 @@ consumes SCIP indexes produced by language indexers and exposes them via 9 MCP t
    `index-<sha>.db` SQLite database.
 4. **Atomic publish** — jarvis flips the `current` pointer via `os.replace()` so queries never
    see a partially-built index.
+
+## The scip version gate
+
+`jarvis index` refuses to run against a `scip` binary older than `v0.9.0`. This is not an
+arbitrary floor: below that version, `scip expt-convert` cannot read the `.scip` protobuf's
+`typed_range` oneof, so it silently writes a schema-valid SQLite database with zero `chunks`
+and zero `mentions` rows — every navigation query then returns empty results with no error.
+The same `.scip` file measurably yields `chunks=0`/`mentions=0` under `scip` v0.7.0 and
+`chunks=1`/`mentions=14` under v0.9.0. `setup.sh` installs a build that satisfies the floor;
+if you see the version-gate error, re-run `setup.sh` and remove any older `scip` earlier on
+`PATH`. This is a settled decision, not a bug report to file: a silently-empty index is worse
+than a loud refusal to index at all.
 
 ## The SQLite schema
 
@@ -48,4 +59,4 @@ This means safe concurrent reads and no accidental mutations.
 When a language indexer produces zero SCIP shards (e.g. Android/AGP projects, Kotlin version
 mismatches), jarvis automatically falls back to `--search-only` — Zoekt search is built but SCIP
 is skipped. Search works; navigation tools won't. See
-[Troubleshooting: Upstream Issues](/troubleshooting/upstream-issues).
+[Troubleshooting: Upstream Issues](/troubleshooting/upstream-issues/).

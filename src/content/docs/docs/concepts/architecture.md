@@ -3,10 +3,18 @@ title: Architecture
 description: "jarvis is local-first: SQLite on disk, no cloud, no auth, no network calls at runtime."
 ---
 
-# Architecture
-
 jarvis is **local-first**: everything runs on your machine. No code leaves it, no telemetry, no
 account, no network calls at runtime.
+
+## Components
+
+| Component | Role |
+|-----------|------|
+| Language indexers | `scip-python`, `scip-typescript`, `scip-java`, `scip-swift` — one external process per index run, each emitting a `.scip` protobuf file for its language |
+| SCIP → SQLite converter | `scip expt-convert` (fork with the `typeHierarchy` fix) flattens the `.scip` file into `index-<sha>.db`'s query-friendly tables |
+| SQLite index store | `index-<sha>.db`, opened `mode=ro&immutable=1` at query time — read-only, immutable, safe for concurrent reads |
+| Zoekt | embedded `zoekt-webserver` subprocess; trigram-indexed lexical/regex search over git-tracked files |
+| jarvis-server (MCP) | `FastMCP` stdio server exposing the 9 tools; each MCP client spawns and owns its own `jarvis-server` process over stdio — there is no shared server process across clients |
 
 ## The three components
 
@@ -43,6 +51,22 @@ account, no network calls at runtime.
 │   └── <slug>_v*.lance          # per-repo vector tables
 └── registry.db                  # repos table + dependency-graph edges
 ```
+
+## Data flow: index to tool response
+
+**Indexing (`jarvis index <path>`):** detect the primary language → run its `scip-*` indexer →
+`scip expt-convert` the `.scip` output into a new `index-<sha>.db` → rebuild the repo's
+dependency-graph edges in `registry.db` → run `zoekt-git-index` to build `.zoekt` shards → only
+once every stage succeeds, `os.replace()` flips the `current` pointer to the new SQLite file.
+A query already reading the old file keeps working throughout; a failure at any stage leaves
+the previously published index live.
+
+**Querying (e.g. `goToDefinition`):** the client sends a stdio JSON-RPC request → `server.py`'s
+`FastMCP` dispatcher routes it to the Query Engine (`query.py`) → the engine opens the
+published `index-<sha>.db` read-only → resolves the symbol against `global_symbols` and
+`mentions` → returns `{"symbol", "definitions": [Location, ...]}` plus the five flat freshness
+fields (`commit`, `generated_at`, `stale`, `freshness`, `checked_at`) spread at the top level of
+the response — never nested under a `"freshness"` key.
 
 ## Architectural guarantees
 

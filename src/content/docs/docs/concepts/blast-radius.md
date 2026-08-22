@@ -3,8 +3,6 @@ title: Blast radius
 description: "Blast radius is a 2-hop dependency graph showing which indexed repos depend on a package."
 ---
 
-# Blast radius
-
 `blastRadius` answers: *which other indexed repos depend on this package?* It walks the package
 dependency graph stored in `registry.db`.
 
@@ -14,6 +12,9 @@ dependency graph stored in `registry.db`.
 2. **2-hop BFS** over the `edges` table (`source_package`, `target_package`, `distance`).
 3. For each dependent found, fetch repo info from the `repos` table.
 4. Return the list with hop distances (1 = direct, 2 = transitive through one intermediary).
+
+Each dependent in the returned list carries `{"repo", "name", "hops"}` — `hops` is the same
+1-or-2 distance from step 4, not a deeper transitive chain (the walk is capped at 2 hops).
 
 ## Rebuild-not-accumulate
 
