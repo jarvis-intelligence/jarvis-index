@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
 status: executing
-stopped_at: Completed 02-05-PLAN.md
-last_updated: "2026-08-22T03:42:58.681Z"
+stopped_at: Completed 02-06-PLAN.md
+last_updated: "2026-08-22T03:53:01.819Z"
 last_activity: 2026-08-22
-state_head: daba3cbf21ba9dd951a214d0a6706c276588fd35
+state_head: bfc1412604ce423f763eddf5c7f9a262d5b1ee08
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 10
+  completed_plans: 11
   percent: 20
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: 02-05 complete (02-06 next)
+Plan: 02-06 complete (02-07 next)
 Status: Executing Phase 02
 Last activity: 2026-08-22
 
@@ -56,6 +56,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02 P03 | 4min | 3 tasks | 9 files |
 | Phase 02 P04 | 12min | 3 tasks | 8 files |
 | Phase 02 P05 | 6min | 2 tasks | 8 files |
+| Phase 02 P06 | 12min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - [Phase 2]: [Phase 02]: Plan 02-04: changelog.md body constructed via shell redirect (frontmatter + tail -n +2 of ../jarvis/CHANGELOG.md) rather than manual transcription, diff-proven byte-identical
 - [Phase 2]: [Phase 02] Plan 02-05: Codex/Cursor plugin-marketplace commands sourced from this repo's own README.md (source of truth here), not the private jarvis repo which doesn't document per-client plugin commands
 - [Phase 2]: [Phase 02] Plan 02-05: cursor:// deeplink base64 payload computed and decode-verified in the acceptance grep pipeline, not hand-typed — matches the changelog verbatim-diff pattern from 02-04
+- [Phase 2]: [Phase 2]: [Phase 02] Plan 02-06: MDX+Tabs machinery proven via a tracer task (install-matrix.mdx) before the quickstart reused the same syncKey=client Tabs group — same canonical four-label order across both pages
+- [Phase 2]: [Phase 2]: [Phase 02] Plan 02-06: quickstart's getIndexStatus/goToDefinition transcripts reused verbatim from the already-verified 02-02 tool reference pages (toy-repo/Greeter) rather than re-derived, keeping one source of truth
+- [Phase 2]: [Phase 2]: [Phase 02] Plan 02-06: dropped quickstart's standalone What-you'll-get/Prerequisites sections and duplicate body H1 in favor of the five-step structure + D-14 requirements link, matching the no-duplicate-H1 convention already applied across Phase 2
 
 ### Blockers/Concerns
 
@@ -104,6 +108,7 @@ Recent decisions affecting current work:
 - [Phase 01] `.planning/REQUIREMENTS.md` traceability rows for SITE-01..05 still read `Planned`/unchecked despite verified implementation — `gsd-tools requirements mark-complete` only recognizes `Pending`/`Gaps Found` as pre-complete states, so it silently no-ops on the `Planned` wording. Non-blocking (tracking-only); a maintainer should either reword REQUIREMENTS.md or file the gsd-tools compatibility fix.
 - [Phase 02] `gsd-tools query state.advance-plan` cannot parse this STATE.md's `Plan: 02-02 complete (02-03 next)` prose format (expects legacy `Current Plan`/`Total Plans in Phase` fields or a `Plan: X of Y` compound) — errored with "Cannot parse Current Plan or Total Plans in Phase from STATE.md" during 02-03's close-out. Worked around by hand-editing the `Plan:` line directly; `state.update-progress`/`state.record-metric`/`state.add-decision`/`state.record-session` all worked fine (they don't depend on that field). Non-blocking; same class of format-compatibility gap as the REQUIREMENTS.md row above. Recurred identically at 02-05's close-out (still non-blocking, same workaround).
 - [Phase 02] Plan 02-05: `requirements mark-complete DOCS-02` returned `not_found` for the same reason as the SITE-01..05 row above — DOCS-02's traceability row read `Planned` (not `Pending`/`Gaps Found`), so the CLI silently no-op'd. Hand-edited both the checkbox and the traceability Status cell to reflect verified completion. DOCS-01/03/04/09/10 rows carry the identical stale `Planned` wording and will hit the same gap when their owning plans complete.
+- [Phase 02] Plan 02-06: `state.advance-plan` and `requirements mark-complete DOCS-01 DOCS-03 DOCS-10 DOCS-12` recurred identically (same two gaps documented above). Hand-edited the `Plan:` prose line and all four requirements' checkboxes + traceability Status cells. DOCS-04 and DOCS-09 rows still carry stale `Planned` wording (DOCS-04 belongs to already-complete plan 02-02 and was left as a pre-existing gap out of this plan's scope; DOCS-09 remains genuinely open).
 
 ## Deferred Items
 
@@ -114,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:42:58.612Z
-Stopped at: Completed 02-05-PLAN.md
+Last session: 2026-08-22T03:52:45.729Z
+Stopped at: Completed 02-06-PLAN.md
 Resume file: None
