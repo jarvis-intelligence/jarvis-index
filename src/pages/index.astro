@@ -6,6 +6,8 @@ import '../styles/landing.css';
 import InstallWidget from '../components/landing/InstallWidget.astro';
 import Badges from '../components/landing/Badges.astro';
 import DemoPanel from '../components/landing/DemoPanel.astro';
+import ToolShowcase from '../components/landing/ToolShowcase.astro';
+import LanguageMatrix from '../components/landing/LanguageMatrix.astro';
 ---
 <!doctype html>
 <html lang="en">
@@ -129,7 +131,7 @@ import DemoPanel from '../components/landing/DemoPanel.astro';
     <DemoPanel />
   </section>
 
-  <!-- ============ TOOLS (placeholder — 03-02) ============ -->
+  <!-- ============ TOOLS ============ -->
   <section class="frame section" id="tools">
     <div class="section-head">
       <div>
@@ -138,9 +140,10 @@ import DemoPanel from '../components/landing/DemoPanel.astro';
       </div>
       <p class="section-lede">7 core tools work out of the box. Two advanced tools require extra setup.</p>
     </div>
+    <ToolShowcase />
   </section>
 
-  <!-- ============ LANGUAGES (placeholder — 03-02) ============ -->
+  <!-- ============ LANGUAGES ============ -->
   <section class="frame section" id="languages">
     <div class="section-head">
       <div>
@@ -149,9 +152,10 @@ import DemoPanel from '../components/landing/DemoPanel.astro';
       </div>
       <p class="section-lede">TypeScript, Python, Java/Kotlin, and Swift. Everything else gets search only.</p>
     </div>
+    <LanguageMatrix />
   </section>
 
-  <!-- ============ PRIVACY (placeholder — 03-02) ============ -->
+  <!-- ============ PRIVACY ============ -->
   <section class="frame section" id="privacy">
     <div class="section-head">
       <div>
@@ -159,6 +163,15 @@ import DemoPanel from '../components/landing/DemoPanel.astro';
         <h2 class="section-title">Local-first. Nothing leaves your machine.</h2>
       </div>
       <p class="section-lede">All computation is local. No telemetry, no network, no cloud.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero telemetry.</strong> jarvis phones home to exactly zero endpoints. No usage data, no error reports, no analytics. The server process connects to nothing outside your filesystem.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero cloud.</strong> Every index, every search, every hierarchy walk is computed on your machine from your own git-tracked source. There is no jarvis API, no jarvis account, and no jarvis server that sees your code.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero network at runtime.</strong> After the one-time install, jarvis needs no network. The MCP server listens on a local stdio pipe. Your code never leaves your machine.</p>
     </div>
   </section>
 

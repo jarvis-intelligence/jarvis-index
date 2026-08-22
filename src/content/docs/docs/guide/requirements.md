@@ -85,6 +85,9 @@ the indexer. If no bash >= 4.4 is available, indexing fails with the remedy
 (`brew install bash`) instead of silently falling back — unlike the two cases above, a
 persisted `--search-only` cannot be un-set, so this one stops short rather than choosing for
 you.
+### semanticSearch: requires the semantic extra
+
+`semanticSearch` is not installed by default. It requires `uv tool install "jarvis-mcp[semantic]"` and a re-index of each repo (`jarvis reindex <slug>`). Without the extra the tool returns its `unavailable-reason` payload.
 
 ### Language detection: one language per repo
 

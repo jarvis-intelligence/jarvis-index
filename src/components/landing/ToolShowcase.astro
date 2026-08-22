@@ -1,0 +1,59 @@
+---
+---
+<div class="card-grid cols-3">
+  <article class="card">
+    <span class="card-kicker">getIndexStatus</span>
+    <h3>Index status</h3>
+    <p>Check whether a repo is indexed, how fresh it is, and which capabilities are available.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">goToDefinition</span>
+    <h3>Go to definition</h3>
+    <p>Jump to where a symbol is defined — resolved via SCIP's precise AST.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">findReferences</span>
+    <h3>Find references</h3>
+    <p>List every occurrence of a symbol across the codebase, definition included.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">callHierarchy</span>
+    <h3>Call hierarchy</h3>
+    <p>Walk callers and callees of a function — single-level, bidirectional.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">documentSymbols</span>
+    <h3>Document symbols</h3>
+    <p>List every top-level symbol defined in a file with its range.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">searchCode</span>
+    <h3>Search code</h3>
+    <p>Lexical search via an embedded Zoekt index — fast, precise, always available.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">blastRadius</span>
+    <h3>Blast radius</h3>
+    <p>2-hop bounded BFS over the package dependency graph to scope change impact.</p>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">semanticSearch</span>
+    <h3>Semantic search</h3>
+    <p>Natural-language code search powered by embeddings.</p>
+    <a class="gate-chip" href="/jarvis-index/docs/guide/requirements/#semanticsearch-requires-the-semantic-extra">requires <code>[semantic]</code> extra + reindex</a>
+  </article>
+
+  <article class="card">
+    <span class="card-kicker">typeHierarchy</span>
+    <h3>Type hierarchy</h3>
+    <p>Single-level super/subtypes for a symbol within a repo.</p>
+    <a class="gate-chip" href="/jarvis-index/docs/guide/requirements/#swift-version-floor-and-code-signed-targets">requires fork-built scip + reindex</a>
+  </article>
+</div>
