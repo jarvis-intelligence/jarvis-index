@@ -67,13 +67,13 @@ Plans:
   4. Requirements and limits, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats), appear before any install step; the troubleshooting decision tree takes a stuck user symptom → diagnosis → fix, led by uvx cold-start, PATH, and the scip version-gate
   5. Nothing rots and nothing goes stale: every existing docs page is classified keep / merge-with-redirect / retire with stubs or the 404 lookup page served at every retired URL, the changelog page mirrors `../jarvis/CHANGELOG.md`, and `llms.txt` indexes the stabilized content
 
-**Plans**: 7 plans
+**Plans**: 1/7 plans executed
 
 Plans (planned 2026-08-21 — the 5-plan sketch split to 7 to respect task-size caps once D-02's deepen-all-32-pages scope landed; journey content moved late so its links target real anchors; `llms.txt` stays strictly last):
 
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Additive restructure mechanics: keep/merge/retire classification of all 34 URLs, lookup-table 404, brand-logo self-hosted fonts + V4 exclusion removal, WR-01 fix, concepts deepen (DOCS-09)
+- [x] 02-01-PLAN.md — Additive restructure mechanics: keep/merge/retire classification of all 34 URLs, lookup-table 404, brand-logo self-hosted fonts + V4 exclusion removal, WR-01 fix, concepts deepen (DOCS-09)
 
 **Wave 2**
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Site Foundation & Identity | 5/5 | Complete    | 2026-08-21 |
-| 2. Docs Rebuild — Tutorial-First Content | 0/7 | Not started | - |
+| 2. Docs Rebuild — Tutorial-First Content | 1/7 | In Progress|  |
 | 3. Landing Page Rebuild | 0/4 | Not started | - |
 | 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |
 | 5. Launch Verification & Community | 0/3 | Not started | - |

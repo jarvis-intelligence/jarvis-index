@@ -2,17 +2,16 @@
 gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
-status: planning
+status: executing
 stopped_at: Phase 2 planned (7 plans, 6 waves, checker-verified)
-last_updated: "2026-08-21T16:25:41.429Z"
-last_activity: 2026-08-21
-last_activity_desc: Phase 01 complete, transitioned to Phase 2
-state_head: e0ace180e3698cdfc5bcf4ef3112b66b1a8a7d79
+last_updated: "2026-08-22T03:06:17.997Z"
+last_activity: 2026-08-22
+state_head: 9b4ac7656b50361dc4dee9806995be58f593a590
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 5
+  completed_plans: 6
   percent: 20
 ---
 
@@ -23,14 +22,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-21)
 
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
-**Current focus:** Phase 2 — Docs Rebuild — Tutorial-First Content
+**Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-08-21 — Phase 01 complete, transitioned to Phase 2
+Plan: 02-01 complete (02-02 next)
+Status: Executing Phase 02
+Last activity: 2026-08-22
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
@@ -51,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P04 | 10min | 2 tasks | 1 files |
 | Phase 01 P05 | 55min | 3 tasks | 8 files |
+| Phase 02 P01 | 8min | 3 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -80,6 +80,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Plan 01-05: Astro redirects destinations must be written as ${BASE}/... — Astro does not prepend base to a bare redirect destination automatically (verified on a scratch entry; a bare destination 404'd, missing /jarvis-index)
 - [Phase 01]: Plan 01-05: verify-build.mjs V4 (font-origin) excludes dist/brand-logo.html — legacy public/ passthrough page still on Google Fonts CDN, deferred to Phase 2 DOCS-09 classification (tracked in WINDOWS.md id 4)
 - [Phase 01]: Verification: V5 (interactive Pagefind search) and V6 (cross-surface theme persistence) closed by re-running verification with a live Chromium (CDP) browser session against `npm run preview` — both proven interactively, not just structurally; WINDOWS.md ids 1/2 marked fixed, phase VERIFICATION.md upgraded human_needed → passed (9/9)
+- [Phase 02]: Plan 02-01: 34-URL classification audit found zero redundant pages — keep x34, zero retires, confirming 02-RESEARCH's pre-planning prediction; no redirects map entry was needed
+- [Phase 02]: Plan 02-01: brand-logo.html fonts self-hosted from public/fonts/ (stable names copied from dist/_astro/'s hashed Fontsource output); verify-build V4 exclusion removed, WINDOWS.md id 4 closed
+- [Phase 02]: Plan 02-01: WR-01 fixed — tools/index.md's findReferences link now targets /tools/find-references/ (kebab-case, trailing slash)
 
 ### Blockers/Concerns
 
@@ -91,11 +94,11 @@ Recent decisions affecting current work:
 
 Items acknowledged and deferred at milestone close, most recent first:
 
-| docs-content | Pre-existing broken link `/tools/findReferences` (camelCase) — broken live under VitePress too; fix with Phase 2 content pass | acknowledged | 2026-08-21 | M1 |
+| docs-content | ~~Pre-existing broken link `/tools/findReferences` (camelCase)~~ RESOLVED by 02-01 (WR-01): link now targets `/tools/find-references/` | resolved | 2026-08-22 | M1 |
 | fonts | ~~Landing still references Google Fonts CDN~~ RESOLVED by 01-03: CDN links deleted, Fontsource self-hosted (17 woff2), zero third-party font requests | resolved | 2026-08-21 | M1 |
 
 ## Session Continuity
 
-Last session: 2026-08-21T16:25:40.982Z
-Stopped at: Phase 2 planned (7 plans, 6 waves, checker-verified)
-Resume file: .planning/phases/02-docs-rebuild-tutorial-first-content/02-01-PLAN.md
+Last session: 2026-08-22T03:06:17.914Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
