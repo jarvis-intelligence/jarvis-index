@@ -253,6 +253,11 @@ p code, li code, td code { color: var(--jv-accent); }
   position: relative;
   z-index: 1;
   display: grid;
+  /* Mobile-first single column. The explicit minmax(0, 1fr) track is load-bearing:
+     an implicit auto track sizes to the widest min-content child (the unbreakable
+     `pre` command chip), which blew the column out to ~564px inside a 390px
+     viewport and relied on .hero's overflow-x: hidden to clip it. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 2.5rem;
   padding-block: 3.5rem;
 }
