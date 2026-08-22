@@ -414,6 +414,8 @@ p code, li code, td code { color: var(--jv-accent); }
 .mono-box[data-copied="true"] .copy { color: var(--jv-chip-accent); }
 .mono-box.static { cursor: default; }
 .mono-box.static:hover { border-color: var(--jv-chip-ring); }
+.mono-box .cmd--wrap { white-space: normal; }
+.mono-box .copy--hidden { visibility: hidden; }
 
 /* ---------- example exchange ---------- */
 .exchange {
