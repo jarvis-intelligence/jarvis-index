@@ -22,7 +22,7 @@ connected client.
 Clients normally launch it via `uvx`, not by calling `jarvis-server` directly:
 
 ```sh
-uvx --from jarvis-mcp>=0.6.0 jarvis-server
+uvx --from "jarvis-mcp>=0.6.0" jarvis-server
 ```
 
 This is the exact command string registered in every MCP client config (see
