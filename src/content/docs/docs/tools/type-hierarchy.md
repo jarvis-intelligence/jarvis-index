@@ -58,7 +58,7 @@ Both arrays are single-level. `resolvedSymbol` appears only when resolution chan
       "symbol": {
         "symbol": "scip-typescript npm @toy/pkg 0.0.1 src/`animal.ts`/Animal#",
         "displayName": "Animal",
-        "kind": "Interface"
+        "kind": "INTERFACE"
       },
       "location": {
         "path": "toy/animal.ts",
