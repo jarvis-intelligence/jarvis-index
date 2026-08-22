@@ -13,6 +13,49 @@ your machine (macOS or Linux); nothing is uploaded.
 Before you install, [check your language is supported](/guide/requirements/) — navigation tools
 cover four language families, and every other language gets search only.
 
+Choose your install path:
+
+<Tabs syncKey="channel">
+  <TabItem label="Installer + uv">
+
+`setup.sh` installs the SCIP fork, Zoekt, and the language indexers into `~/.jarvis/bin`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
+```
+
+`setup.sh` is idempotent — re-running it skips whatever is already installed. Use `--force` to
+reinstall everything, or `--only <name>` to retry one dependency.
+
+  </TabItem>
+  <TabItem label="Plugin marketplace">
+
+Install directly from your agent's plugin marketplace:
+
+```sh
+# Claude Code
+/plugin marketplace add jarvis-intelligence/jarvis-index
+/plugin install jarvis@jarvis
+
+# Codex CLI
+codex plugin marketplace add jarvis-intelligence/jarvis-index
+```
+
+For Cursor: open Settings → Plugins → search "jarvis" → Install.
+
+  </TabItem>
+  <TabItem label="Manual uvx">
+
+```sh
+uv tool install jarvis-mcp
+```
+
+Requires `uv` on PATH. This is also the fix for the uvx cold-start timeout you'd otherwise hit
+in Step 4 — `uv tool install` builds and caches the wheel once.
+
+  </TabItem>
+</Tabs>
+
 ## Step 1: Install the external binaries
 
 `setup.sh` installs the SCIP fork, Zoekt, and the language indexers into `~/.jarvis/bin`:
@@ -62,10 +105,10 @@ This puts `jarvis` and `jarvis-server` on `PATH`, and it's also the fix for the 
 timeout you'd otherwise hit in Step 4 — `uv tool install` builds and caches the wheel once, so
 later `uvx` calls start in seconds.
 
-:::tip[Optional extras]
+::::tip[Optional extras]
 - `uv tool install "jarvis-mcp[semantic]"` — enables `semanticSearch` (vector + lexical fusion)
 - `uv tool install "jarvis-mcp[watch]"` — enables `jarvis watch` (auto-reindex on file changes)
-:::
+::::
 
 See the [Install guide](/guide/install/) for alternatives (pip, uvx ad-hoc).
 
@@ -85,7 +128,7 @@ $ jarvis --help
 zsh: command not found: jarvis
 ```
 
-`~/.jarvis/bin` or uv's tool bin directory isn't on `PATH` yet — see
+~/.jarvis/bin` or uv's tool bin directory isn't on `PATH` yet — see
 [PATH troubleshooting](/troubleshooting/common-failures/#jarvis-or-jarvis-server-not-found-path).
 
 ## Step 3: Index a repo
@@ -101,7 +144,7 @@ against the same repo always re-indexes and republishes atomically — safe to r
 
 ```sh
 $ jarvis status <slug>
-indexed
+:indexed
 ```
 
 **You'll know it broke when…**

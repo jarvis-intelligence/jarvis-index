@@ -3,14 +3,16 @@
 // fonts replace the Google Fonts CDN links this head used to carry.
 import '../../design/tokens.css';
 import '../styles/landing.css';
+import InstallWidget from '../components/landing/InstallWidget.astro';
+import Badges from '../components/landing/Badges.astro';
 ---
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JARVIS — the intelligence system for your agents</title>
-<meta name="description" content="Everything your agents need to know, remember, and do. JARVIS gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine. Codebase intelligence ships today for Claude Code, Codex CLI, and Cursor.">
+<title>JARVIS — structural code intelligence, locally on your machine</title>
+<meta name="description" content="9 tools for go-to-definition, find-references, call/type hierarchy, and search — computed locally from your own repositories. Available for Claude Code, Codex CLI, and Cursor.">
 <link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
 <script is:inline>
 (function () {
@@ -26,9 +28,9 @@ import '../styles/landing.css';
 </head>
 <body>
 
-<header class="site-header" data-od-id="site-header">
+<header class="site-header">
   <div class="header-inner">
-    <a class="brand tap" href="#top" data-od-id="brand">
+    <a class="brand tap" href="#top">
       <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
         <g class="blades">
           <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
@@ -41,19 +43,15 @@ import '../styles/landing.css';
     </a>
 
     <nav class="header-nav" aria-label="Main">
-      <a href="#pipeline">Pipeline</a>
-      <a href="#usage">Usage</a>
-      <a href="#skills">Agent skills</a>
-      <a href="#roadmap">Roadmap</a>
+      <a href="#demo">Demo</a>
+      <a href="#tools">Tools</a>
+      <a href="#languages">Languages</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#architecture">Architecture</a>
     </nav>
 
     <div class="header-tools">
-      <a class="icon-btn tap" href="https://github.com/jarvis-intelligence/jarvis-index" aria-label="jarvis on GitHub">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-      </a>
-      <a class="icon-btn tap" href="https://pypi.org/project/jarvis-mcp/" aria-label="jarvis-mcp on PyPI">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5Z"/><path d="M3.3 7.5 12 12.5l8.7-5"/><path d="M12 21.5V12.5"/></svg>
-      </a>
+      <a class="primary-action tap" href="/jarvis-index/docs/">Docs</a>
       <button class="theme-toggle tap" type="button" id="theme-toggle" aria-label="Switch colour theme">
         <span class="toggle-track"><span class="toggle-knob"></span></span>
         <span class="toggle-label-light">Light</span>
@@ -66,7 +64,7 @@ import '../styles/landing.css';
 <main id="top">
 
   <!-- ============ HERO ============ -->
-  <section class="hero" data-od-id="hero">
+  <section class="hero" id="hero">
     <div class="hero-art" aria-hidden="true">
       <svg viewBox="0 0 900 720" preserveAspectRatio="xMidYMid slice" focusable="false">
         <defs>
@@ -105,303 +103,95 @@ import '../styles/landing.css';
 
     <div class="frame-wide hero-frame">
       <div>
-        <h1 data-od-id="hero-headline">JARVIS — The intelligence system for your agents.</h1>
-        <p class="hero-tagline">Everything your agents need to know, remember, and do.</p>
-        <p class="hero-lede">JARVIS is an intelligent layer that gives agents access to their code, knowledge, context, memory, tools, and runtime — starting locally on your machine, with the ability to extend into the cloud.</p>
-        <ul class="surfaces" aria-label="What JARVIS gives an agent access to" data-od-id="hero-surfaces">
-          <li class="surface-chip" data-state="shipped">Code <span class="state">Shipped</span></li>
-          <li class="surface-chip">Knowledge <span class="state">Planned</span></li>
-          <li class="surface-chip">Context <span class="state">Planned</span></li>
-          <li class="surface-chip">Memory <span class="state">Planned</span></li>
-          <li class="surface-chip">Tools <span class="state">Planned</span></li>
-          <li class="surface-chip">Runtime <span class="state">Planned</span></li>
-        </ul>
-        <p class="hero-ships">Codebase intelligence ships today: indexing and search across your own repositories, available in Claude&nbsp;Code, Codex&nbsp;CLI, and Cursor.</p>
-      </div>
-
-      <div class="hero-side">
-        <div>
-          <span class="chip-label">Install the binaries</span>
-          <button class="mono-box tap" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh" data-od-id="cta-install-command">
-            <span class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</span>
-            <span class="copy">Copy</span>
-          </button>
-        </div>
-        <div>
-          <span class="chip-label">Index a repository</span>
-          <button class="mono-box tap" type="button" data-copy="jarvis index /path/to/repo" data-od-id="cta-index-command">
-            <span class="cmd">jarvis index /path/to/repo</span>
-            <span class="copy">Copy</span>
-          </button>
-        </div>
-        <a class="text-link tap" href="#pipeline" data-od-id="cta-how-it-works">How it works <span class="arrow" aria-hidden="true">→</span></a>
+        <h1>Structural code intelligence, locally on your machine.</h1>
+        <p class="hero-tagline">9 tools for navigating and searching your code — computed locally from your own repositories.</p>
+        <p class="hero-lede">JARVIS gives your coding agent go-to-definition, find-references, call and type hierarchy, and semantic search across your own code. Everything runs on your machine — nothing is uploaded.</p>
+        <InstallWidget />
         <div class="hero-meta">
-          <span>macOS and Linux</span><span class="dot" aria-hidden="true"></span>
           <span>MIT licensed</span><span class="dot" aria-hidden="true"></span>
-          <span>plugin v0.7.0</span>
+          <span>macOS / Linux</span><span class="dot" aria-hidden="true"></span>
+          <span>open source</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ PIPELINE ============ -->
-  <section class="frame section" id="pipeline" data-od-id="section-pipeline">
-    <p class="eyebrow">Pipeline</p>
-    <h2 class="section-title">Index once. Nothing leaves the room.</h2>
-    <p class="section-lede">One command turns a repository into a local index. Your agent queries that index directly — same machine, same disk, no round trip.</p>
-
-    <div class="diagram-wrap" data-od-id="pipeline-diagram">
-      <svg class="diagram" viewBox="0 0 980 226" role="img" aria-labelledby="pipe-title pipe-desc">
-        <title id="pipe-title">The jarvis pipeline</title>
-        <desc id="pipe-desc">Four stages, all on your machine: your repository, the jarvis index command, the local index it produces, and your coding agent reading from that index.</desc>
-
-        <rect class="machine" x="1" y="26" width="978" height="180" rx="14"/>
-        <text class="m-label" x="26" y="52">YOUR MACHINE</text>
-
-        <rect class="box" x="26" y="76" width="201" height="96" rx="8"/>
-        <text class="t" x="46" y="118">Your repository</text>
-        <text class="s" x="46" y="141">stays where it is</text>
-
-        <path class="flow" d="M235 124 H253"/>
-        <path class="flow-cap" d="M253 120 L261 124 L253 128 Z"/>
-
-        <rect class="box" x="267" y="76" width="201" height="96" rx="8"/>
-        <text class="t" x="287" y="118">jarvis index</text>
-        <text class="s" x="287" y="141">one command</text>
-
-        <path class="flow" d="M476 124 H494"/>
-        <path class="flow-cap" d="M494 120 L502 124 L494 128 Z"/>
-
-        <rect class="box-accent" x="508" y="76" width="201" height="96" rx="8"/>
-        <text class="t" x="528" y="118">Local index</text>
-        <text class="s" x="528" y="141">on your disk</text>
-
-        <path class="flow" d="M717 124 H735"/>
-        <path class="flow-cap" d="M735 120 L743 124 L735 128 Z"/>
-
-        <rect class="box" x="749" y="76" width="201" height="96" rx="8"/>
-        <text class="t" x="769" y="118">Your agent</text>
-        <text class="s" x="769" y="141">asks, and gets answers</text>
-      </svg>
-    </div>
-    <p class="caption">No step in this pipeline contacts a network service.</p>
-  </section>
-
-  <!-- ============ USAGE ============ -->
-  <section class="frame section" id="usage" data-od-id="section-usage">
+  <!-- ============ DEMO (placeholder — 03-02) ============ -->
+  <section class="frame section" id="demo">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Using jarvis</p>
-        <h2 class="section-title">You ask a question. The skill picks the tool.</h2>
+        <p class="eyebrow">Demo</p>
+        <h2 class="section-title">See jarvis in action</h2>
       </div>
-      <p class="section-lede">The plugin ships three skills. Your client loads the right one on demand — you never call an MCP tool by hand.</p>
+      <p class="section-lede">Three real scenarios — pick a question, see the MCP call and recorded result.</p>
     </div>
-
-    <div class="card-grid cols-3">
-      <article class="card" data-od-id="skill-card-setup">
-        <span class="card-kicker">Skill 01 · Onboard</span>
-        <h3>jarvis-setup</h3>
-        <p>Prerequisites, <code>setup.sh</code>, MCP registration, and your first index. Fires when you are setting up a machine or indexing a repository for the first time.</p>
-      </article>
-
-      <article class="card accented" data-od-id="skill-card-use">
-        <span class="card-kicker">Skill 02 · Every day</span>
-        <h3>jarvis-use</h3>
-        <p>The matrix below, plus one rule it applies before every call: check the index, reindex it if stale, and fall back to grep if the repository was never indexed.</p>
-      </article>
-
-      <article class="card" data-od-id="skill-card-issues">
-        <span class="card-kicker">Skill 03 · When it breaks</span>
-        <h3>jarvis-issues</h3>
-        <p>Collects the error payload, version, and OS, checks them against the known limitations, and drafts the report — then asks you before filing anything public.</p>
-      </article>
-    </div>
-
-    <div class="table-wrap" data-od-id="decision-matrix">
-      <table class="table-matrix">
-        <thead><tr><th scope="col">What you ask</th><th scope="col">What jarvis-use runs</th></tr></thead>
-        <tbody>
-          <tr><td>Where is <code>X</code> defined?</td><td><code>goToDefinition(repo, X)</code></td></tr>
-          <tr><td>Who calls <code>X</code>?</td><td><code>findReferences(repo, X)</code></td></tr>
-          <tr><td>What calls <code>X</code>, and what does <code>X</code> call?</td><td><code>callHierarchy(repo, X)</code></td></tr>
-          <tr><td>What are <code>X</code>'s supertypes and subtypes?</td><td><code>typeHierarchy(repo, X)</code></td></tr>
-          <tr><td>What lives in this file?</td><td><code>documentSymbols(repo, path)</code></td></tr>
-          <tr><td>Is this repository indexed, and is it current?</td><td><code>getIndexStatus(repo, repo_path)</code></td></tr>
-          <tr><td>What else breaks if I change this package?</td><td><code>blastRadius(repo, pkg)</code></td></tr>
-          <tr><td>Find this exact string.</td><td><code>searchCode(query, repo?)</code></td></tr>
-          <tr><td>Find this idea, however it is worded.</td><td><code>semanticSearch(repo, query)</code></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="exchange" data-od-id="usage-example">
-      <div class="exchange-head">
-        <span>Example exchange</span>
-        <span>Illustrative</span>
-      </div>
-      <div class="exchange-body">
-<pre class="ex-you">you   Who calls search_zoekt?</pre>
-<pre class="ex-call">      → getIndexStatus(repo="jarvis", repo_path="~/src/jarvis")</pre>
-<pre class="ex-out">      ← indexed · fresh at HEAD</pre>
-<pre class="ex-call">      → findReferences(repo="jarvis", symbol="search_zoekt")</pre>
-<pre class="ex-out">      ← 3 references
-          src/search/zoekt.py:212
-          src/router.py:88
-          tests/test_search.py:41</pre>
-      </div>
-    </div>
-
-    <p class="caption">A bare symbol name is enough. When one is ambiguous, jarvis returns a list of candidates rather than guessing — you retry with the one you meant.</p>
-
-    <p class="note" data-od-id="semantic-caveat"><strong>One caveat worth knowing up front.</strong> <code>semanticSearch</code> needs the <code>[semantic]</code> extra, and the plugin's default MCP registration deliberately omits it so cold start stays free of lancedb and torch. Using it means registering a second, differently-named server — <code>jarvis-semantic</code>.</p>
   </section>
 
-  <!-- ============ AGENT SKILLS ============ -->
-  <section class="frame section" id="skills" data-od-id="section-skills">
+  <!-- ============ TOOLS (placeholder — 03-02) ============ -->
+  <section class="frame section" id="tools">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Agent skills</p>
-        <h2 class="section-title">Give your agent the skills.</h2>
+        <p class="eyebrow">Tools</p>
+        <h2 class="section-title">9 tools, honestly tiered</h2>
       </div>
-      <p class="section-lede">One plugin carries all three. Add the marketplace, install it, then run <code>setup.sh</code> once — it skips whatever is already present.</p>
-    </div>
-
-    <div class="card-grid cols-3">
-      <article class="card" data-od-id="install-card-claude-code">
-        <span class="card-kicker">Client 01</span>
-        <h3>Claude Code</h3>
-        <p>Two commands in the client. The marketplace and the plugin share a name.</p>
-        <div class="install-steps">
-          <button class="mono-box tap" type="button" data-copy="/plugin marketplace add jarvis-intelligence/jarvis-index">
-            <span class="cmd">/plugin marketplace add jarvis-intelligence/jarvis-index</span>
-            <span class="copy">Copy</span>
-          </button>
-          <button class="mono-box tap" type="button" data-copy="/plugin install jarvis@jarvis">
-            <span class="cmd">/plugin install jarvis@jarvis</span>
-            <span class="copy">Copy</span>
-          </button>
-        </div>
-      </article>
-
-      <article class="card" data-od-id="install-card-codex-cli">
-        <span class="card-kicker">Client 02</span>
-        <h3>Codex CLI</h3>
-        <p>Same two steps from your shell, pinned to the <code>main</code> ref.</p>
-        <div class="install-steps">
-          <button class="mono-box tap" type="button" data-copy="codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main">
-            <span class="cmd">codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main</span>
-            <span class="copy">Copy</span>
-          </button>
-          <button class="mono-box tap" type="button" data-copy="codex plugin add jarvis">
-            <span class="cmd">codex plugin add jarvis</span>
-            <span class="copy">Copy</span>
-          </button>
-        </div>
-      </article>
-
-      <article class="card" data-od-id="install-card-cursor">
-        <span class="card-kicker">Client 03</span>
-        <h3>Cursor</h3>
-        <p>Cursor exposes no CLI for adding a marketplace. On Teams or Enterprise: Dashboard → Plugins → Add Marketplace → Import from Repo. On any plan, symlink the plugin directory instead.</p>
-        <div class="flex-fill"></div>
-        <div class="install-steps">
-          <button class="mono-box tap" type="button" data-copy='ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis'>
-            <span class="cmd">ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis</span>
-            <span class="copy">Copy</span>
-          </button>
-        </div>
-      </article>
-    </div>
-
-    <div class="note" style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem" data-od-id="install-then">
-      <span><strong>Then, on every client.</strong> Install the external binaries with <code>setup.sh</code>, then index a repo.</span>
-      <button class="mono-box tap" type="button" style="width:auto;flex:1;min-width:16rem" data-copy="jarvis index /path/to/repo">
-        <span class="cmd">jarvis index /path/to/repo</span>
-        <span class="copy">Copy</span>
-      </button>
+      <p class="section-lede">7 core tools work out of the box. Two advanced tools require extra setup.</p>
     </div>
   </section>
 
-  <!-- ============ LOCAL-FIRST ============ -->
-  <section class="frame section" id="local-first" data-od-id="section-local-first">
+  <!-- ============ LANGUAGES (placeholder — 03-02) ============ -->
+  <section class="frame section" id="languages">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Local-first</p>
-        <h2 class="section-title">Four claims, each with the mechanism that enforces it.</h2>
+        <p class="eyebrow">Languages</p>
+        <h2 class="section-title">Four families get navigation</h2>
       </div>
-      <p class="section-lede">These are checkable rather than promised. Every row names the thing you can go read.</p>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th scope="col">Claim</th><th scope="col">Enforcement</th></tr></thead>
-        <tbody>
-          <tr><td>No telemetry, no analytics</td><td>No analytics code, and no outbound calls during queries.</td></tr>
-          <tr><td>The only network egress at runtime is the wheel fetch</td><td><code>uvx</code> on first server start, plus a one-time embedding-model download if you install the <code>[semantic]</code> extra.</td></tr>
-          <tr><td>Indexes are read-only</td><td>Opened <code>mode=ro&amp;immutable=1</code>.</td></tr>
-          <tr><td>Dependencies are pinned and verified</td><td>Exact commit or tag pins, each with a written justification; every tarball SHA256-verified before install.</td></tr>
-        </tbody>
-      </table>
+      <p class="section-lede">TypeScript, Python, Java/Kotlin, and Swift. Everything else gets search only.</p>
     </div>
   </section>
 
-  <!-- ============ ROADMAP ============ -->
-  <section class="frame section" id="roadmap" data-od-id="section-roadmap">
+  <!-- ============ PRIVACY (placeholder — 03-02) ============ -->
+  <section class="frame section" id="privacy">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Roadmap</p>
-        <h2 class="section-title">Know, remember, do.</h2>
+        <p class="eyebrow">Privacy</p>
+        <h2 class="section-title">Local-first. Nothing leaves your machine.</h2>
       </div>
-      <p class="section-lede">Three things an agent needs, and the axis jarvis is built along. Only the first has started shipping, and nothing here carries a date.</p>
+      <p class="section-lede">All computation is local. No telemetry, no network, no cloud.</p>
     </div>
-
-    <div class="card-grid cols-3">
-      <article class="card" data-od-id="roadmap-card-know">
-        <span class="surface-chip" data-state="shipped">Codebase shipped</span>
-        <h3>Know</h3>
-        <p>What an agent can look up. Your codebase is indexed and searchable today. Next is everything written around it — docs, wikis, and the decisions that never made it into a file.</p>
-      </article>
-
-      <article class="card" data-od-id="roadmap-card-remember">
-        <span class="surface-chip">Planned</span>
-        <h3>Remember</h3>
-        <p>What survives the end of a session. The context an agent built up, what it already tried, and what it should not try again — kept, rather than thrown away with the window.</p>
-      </article>
-
-      <article class="card" data-od-id="roadmap-card-do">
-        <span class="surface-chip">Planned</span>
-        <h3>Do</h3>
-        <p>Tools and a runtime, so an agent can act on what it knows and remembers instead of handing you a summary and waiting.</p>
-      </article>
-    </div>
-
-    <p class="note">It starts on your machine and stays useful there. The cloud is an extension for when you want one — a shared index, a team's memory — and never a requirement for any of the above.</p>
   </section>
 
-  <!-- ============ CLOSING ============ -->
-  <section class="frame section" data-od-id="section-closing">
+  <!-- ============ ARCHITECTURE (placeholder — 03-03) ============ -->
+  <section class="frame section" id="architecture">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Architecture</p>
+        <h2 class="section-title">How jarvis works</h2>
+      </div>
+      <p class="section-lede">Seven layers from your editor to SCIP's precise AST — all on your machine.</p>
+    </div>
+  </section>
+
+  <!-- ============ BADGES + CTA ============ -->
+  <section class="frame section">
     <div class="closing">
       <div>
-        <p class="eyebrow">Built in the open</p>
-        <h2 class="section-title">The installer, the indexer, and the issue tracker are public.</h2>
-        <p class="section-lede">Read the plugin documentation before you install, or open an issue if something on your machine disagrees with this page.</p>
+        <h2 class="section-title">Start indexing your code today.</h2>
+        <a class="text-link tap" href="/jarvis-index/docs/quickstart/" style="margin-top:1rem">Read the quickstart <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
-        <a class="primary-action tap" href="docs/" data-od-id="cta-read-docs">Read the docs <span aria-hidden="true">→</span></a>
-        <a class="secondary-action tap" href="https://github.com/jarvis-intelligence/jarvis-index/issues" data-od-id="cta-issues">Open an issue</a>
-      </div>
+      <Badges />
     </div>
   </section>
 
 </main>
 
-<footer class="site-footer" data-od-id="site-footer">
+<footer class="site-footer">
   <div class="footer-inner">
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/blob/main/LICENSE">MIT</a>
     <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
     <a class="tap" href="https://pypi.org/project/jarvis-mcp/">PyPI</a>
-    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/issues">Issues</a>
-    <a class="tap" href="docs/">Docs</a>
-    <span class="footer-meta">MIT · plugin v0.7.0</span>
+    <a class="tap" href="https://mcpregistry.com/servers/io.github.jarvis-intelligence/jarvis">MCP Registry</a>
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/discussions">Discussions</a>
+    <a class="tap" href="/jarvis-index/docs/">Docs</a>
   </div>
 </footer>
 

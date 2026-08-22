@@ -1,10 +1,8 @@
 /**
  * Landing layout CSS — extracted from the inline <style> block of
  * src/pages/index.astro (01-03) and mechanically re-tokened: every custom-
- * property reference now points at its --jv-* counterpart.
- * All colors/fonts resolve from design/tokens.css — this file defines
- * none. Non-token literals (#9aa4ac chip labels, #000 hero-art mask)
- * survive from the live page as-is; Phase 3 may tokenize them.
+ * Landing layout CSS — all colors resolve from design/tokens.css;
+ * this file defines none. All values use --jv-* custom properties.
  */
 
 * { box-sizing: border-box; }
@@ -27,7 +25,7 @@ h1, h2, h3 { margin: 0; letter-spacing: 0; text-wrap: balance; }
 p { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
 a { color: inherit; text-decoration: none; }
-:focus-visible {
+::focus-visible {
   outline: 2px solid var(--jv-accent-strong);
   outline-offset: 3px;
   border-radius: 4px;
@@ -237,8 +235,8 @@ p code, li code, td code { color: var(--jv-accent); }
   width: min(76rem, 66vw);
   opacity: 0.42;
   display: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, var(--jv-mask-opaque) 14%, var(--jv-mask-opaque) 100%);
+  mask-image: linear-gradient(90deg, transparent 0, var(--jv-mask-opaque) 14%, var(--jv-mask-opaque) 100%);
 }
 .hero-art svg { width: 100%; height: 100%; display: block; }
 .hero-art .stop-plane-a { stop-color: var(--jv-accent); stop-opacity: 0.16; }
@@ -333,6 +331,34 @@ p code, li code, td code { color: var(--jv-accent); }
   opacity: 0.72;
 }
 
+/* ---------- install widget ---------- */
+.install-widget { margin-top: 1.75rem; }
+.install-widget-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--jv-border);
+  margin-bottom: 1rem;
+}
+.install-widget-tab {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--jv-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s var(--jv-ease), border-color 0.15s var(--jv-ease);
+}
+.install-widget-tab:hover { color: var(--jv-fg); }
+.install-widget-tab[aria-selected="true"] {
+  color: var(--jv-accent);
+  border-bottom-color: var(--jv-accent);
+}
+.install-widget-panel { display: none; flex-direction: column; gap: 0.75rem; }
+.install-widget-panel[aria-hidden="false"] { display: flex; }
+
 /* ---------- terminal chips ---------- */
 .chip-label {
   display: block;
@@ -362,7 +388,7 @@ p code, li code, td code { color: var(--jv-accent); }
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 40px rgba(18, 24, 38, 0.18);
 }
-.mono-box .cmd { overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.mono-box .cmd { overflow-x: auto; white-space: pre; scrollbar-width: none; }
 .mono-box .cmd::-webkit-scrollbar { display: none; }
 .mono-box .cmd::before { content: "$ "; color: var(--jv-chip-accent); }
 .mono-box .copy {
@@ -371,7 +397,7 @@ p code, li code, td code { color: var(--jv-accent); }
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #9aa4ac;
+  color: var(--jv-muted-soft);
   transition: color 0.2s var(--jv-ease);
 }
 .mono-box:hover { border-color: var(--jv-chip-accent); }
@@ -400,18 +426,66 @@ p code, li code, td code { color: var(--jv-accent); }
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #9aa4ac;
+  color: var(--jv-muted-soft);
 }
-.exchange-body { padding: 1.15rem 1.25rem; overflow-x: auto; }
+.exchange-body { padding: 1.15rem 1.25rem; overflow-x: auto; white-space: pre; }
 .exchange-body pre {
   margin: 0;
   font-family: var(--jv-mono);
   font-size: 0.8125rem;
   line-height: 1.75;
+  white-space: pre-wrap;
 }
 .exchange-body .ex-you { color: var(--jv-chip-fg); }
 .exchange-body .ex-call { color: var(--jv-chip-accent); margin-top: 0.85rem; }
-.exchange-body .ex-out { color: #9aa4ac; }
+.exchange-body .ex-out { color: var(--jv-muted-soft); }
+
+/* ---------- demo panel (stub — populated 03-02) ---------- */
+.demo-panel { margin-top: 2rem; }
+.demo-step { display: none; }
+.demo-step[aria-hidden="false"] { display: block; }
+.demo-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  align-items: center;
+}
+.demo-nav button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--jv-border);
+  border-radius: var(--jv-radius);
+  background: var(--jv-surface);
+  color: var(--jv-fg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.demo-nav button:hover { border-color: var(--jv-accent); }
+
+/* ---------- gate chip ---------- */
+.gate-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2rem;
+  padding-inline: 0.8rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--jv-surface) 45%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, #b8860b 30%, transparent);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #92610a;
+}
+[data-theme="dark"] .gate-chip {
+  color: #d4a853;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, #d4a853 25%, transparent);
+}
+.gate-chip a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.gate-chip a:hover { color: var(--jv-accent); }
 
 /* ---------- cards ---------- */
 .card-grid { display: grid; gap: 1.25rem; }
@@ -445,6 +519,26 @@ p code, li code, td code { color: var(--jv-accent); }
 .card .surface-chip { align-self: flex-start; }
 
 .install-steps { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* ---------- badges ---------- */
+.badge-row { display: flex; flex-wrap: wrap; gap: 0.65rem; justify-content: flex-end; align-items: center; }
+@media (max-width: 899px) { .badge-row { justify-content: flex-start; } }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--jv-radius);
+  background: color-mix(in oklch, var(--jv-surface) 55%, transparent);
+  box-shadow: inset 0 0 0 1px var(--jv-border);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--jv-muted);
+  text-decoration: none;
+  transition: box-shadow 0.2s var(--jv-ease), color 0.2s var(--jv-ease);
+}
+.badge:hover { box-shadow: inset 0 0 0 1px var(--jv-accent); color: var(--jv-fg); }
+.badge svg { width: 1rem; height: 1rem; flex: none; }
 
 /* ---------- diagram ---------- */
 .diagram-wrap { margin-top: 3rem; overflow-x: auto; }
