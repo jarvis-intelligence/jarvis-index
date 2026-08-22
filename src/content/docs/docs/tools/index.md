@@ -12,7 +12,7 @@ tool returns `{"error": "..."}` rather than raising.
 |---|------|---------|---------------|
 | **Navigate** | [`documentSymbols`](/tools/document-symbols) | Every symbol in a file | SCIP index |
 | | [`goToDefinition`](/tools/go-to-definition) | Where is `X` defined? | SCIP index |
-| | [`findReferences`](/tools/findReferences) | Everywhere `X` is used | SCIP index |
+| | [`findReferences`](/tools/find-references/) | Everywhere `X` is used | SCIP index |
 | | [`callHierarchy`](/tools/call-hierarchy) | What calls `X`, and what `X` calls | SCIP index |
 | | [`typeHierarchy`](/tools/type-hierarchy) | Super/subtypes of `X` | Fork `scip` build |
 | **Search** | [`searchCode`](/tools/search-code) | Lexical search (Zoekt) | Zoekt index |
