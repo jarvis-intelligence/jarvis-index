@@ -24,7 +24,7 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [ ] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
 - [ ] **DOCS-03**: Four-channel install matrix — PyPI, Claude plugin, Codex plugin, MCP Registry
 - [ ] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
-- [ ] **DOCS-05**: CLI reference — 7 commands with flags and examples
+- [x] **DOCS-05**: CLI reference — 7 commands with flags and examples
 - [ ] **DOCS-06**: Requirements & limits stated before install, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats)
 - [ ] **DOCS-07**: Troubleshooting decision tree — symptom → diagnosis → fix, led by uvx cold-start, PATH, scip version-gate
 - [ ] **DOCS-08**: Changelog page imported from `../jarvis/CHANGELOG.md`
@@ -102,7 +102,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOCS-02 | Phase 2 | Planned |
 | DOCS-03 | Phase 2 | Planned |
 | DOCS-04 | Phase 2 | Planned |
-| DOCS-05 | Phase 2 | Planned |
+| DOCS-05 | Phase 2 | Complete |
 | DOCS-06 | Phase 2 | Planned |
 | DOCS-07 | Phase 2 | Planned |
 | DOCS-08 | Phase 2 | Planned |

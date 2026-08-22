@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Docs Rebuild — Tutorial-First Content
 status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-08-22T03:17:32.636Z"
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-08-22T03:25:58.001Z"
 last_activity: 2026-08-22
-state_head: fb6a206f75dc6cee3e2abb3875b47e47b9d2f297
+state_head: e0b281515371253c0b849922f7ebb3eea0383a03
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 7
+  completed_plans: 8
   percent: 20
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
 Phase: 2 — Docs Rebuild — Tutorial-First Content
-Plan: 02-02 complete (02-03 next)
+Plan: 02-03 complete (02-04 next)
 Status: Executing Phase 02
 Last activity: 2026-08-22
 
@@ -52,6 +52,8 @@ Progress: [██░░░░░░░░] 20%
 | Phase 01 P05 | 55min | 3 tasks | 8 files |
 | Phase 02 P01 | 8min | 3 tasks | 15 files |
 | Phase 02 P02 | 15min | 3 tasks | 10 files |
+| Phase 02 P03 | 4min | 3 tasks | 9 files |
+| Phase 02 P03 | 4min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -86,12 +88,14 @@ Recent decisions affecting current work:
 - [Phase 02]: Plan 02-01: WR-01 fixed — tools/index.md's findReferences link now targets /tools/find-references/ (kebab-case, trailing slash)
 - [Phase 2]: [Phase 02]: Plan 02-02: getIndexStatus's real shape now carries last_index_run and capabilities fields added to ../jarvis since 02-RESEARCH was written (2026-08-21) — documented the full current shape rather than the plan's now-stale contract subset (source wins per A4)
 - [Phase 2]: [Phase 02]: Plan 02-02: all 9 tool reference pages deepened with real transcripts traced through ../jarvis source + test fixtures (TypeScript toy-repo); semanticSearch's D-08 caution is the sole aside across all 9 pages, typeHierarchy's prior danger aside removed
+- [Phase 2]: [Phase 02]: Plan 02-03: index_cli.py's argparse block moved from the 02-RESEARCH-cited 1118-1177 to build_parser() at 1256-1318 in the now-1328-line file — all flags/entry-points re-verified against current source, matched byte-for-byte
 
 ### Blockers/Concerns
 
 - [Phase 01] Dispatch-before-push runs the workflow against a stale remote ref (observed in 01-02: run 32462513702 built the old tree, green but meaningless). Always `git push` before `gh workflow run --ref <branch>`.
 - [Phase 01] `gh` needs the phuongddx account (admin) for workflow dispatch + Pages branch-policy APIs on jarvis-intelligence/jarvis-index; phuongdoanduy is read-only there.
 - [Phase 01] `.planning/REQUIREMENTS.md` traceability rows for SITE-01..05 still read `Planned`/unchecked despite verified implementation — `gsd-tools requirements mark-complete` only recognizes `Pending`/`Gaps Found` as pre-complete states, so it silently no-ops on the `Planned` wording. Non-blocking (tracking-only); a maintainer should either reword REQUIREMENTS.md or file the gsd-tools compatibility fix.
+- [Phase 02] `gsd-tools query state.advance-plan` cannot parse this STATE.md's `Plan: 02-02 complete (02-03 next)` prose format (expects legacy `Current Plan`/`Total Plans in Phase` fields or a `Plan: X of Y` compound) — errored with "Cannot parse Current Plan or Total Plans in Phase from STATE.md" during 02-03's close-out. Worked around by hand-editing the `Plan:` line directly; `state.update-progress`/`state.record-metric`/`state.add-decision`/`state.record-session` all worked fine (they don't depend on that field). Non-blocking; same class of format-compatibility gap as the REQUIREMENTS.md row above.
 
 ## Deferred Items
 
@@ -102,6 +106,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T03:17:32.550Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-08-22T03:25:57.937Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
