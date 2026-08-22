@@ -1,0 +1,200 @@
+---
+---
+
+<!-- ============ Diagram 1: jarvis-layers (7-layer architecture) ============ -->
+<!-- Hand-adapted from ../jarvis/docs/assets/jarvis-layers.dot -->
+
+<div class="diagram-wrap">
+  <svg class="diagram" viewBox="0 0 640 520" role="img" aria-labelledby="layers-title layers-desc">
+    <title id="layers-title">jarvis 7-layer architecture — runtime half, storage seam, indexing half</title>
+    <desc id="layers-desc">Seven layers split into a runtime half (clients, MCP server, engines) that reads storage, and an indexing half (orchestration, language indexers, external toolchain) that writes storage. L4 is the storage seam between them.</desc>
+
+    <!-- Runtime half -->
+    <rect class="cluster-runtime" x="20" y="10" width="600" height="195" />
+    <text class="label-runtime" x="40" y="34">RUNTIME HALF  (reads storage, never writes)</text>
+
+    <rect class="box-accent" x="40" y="48" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="74">L1 · Clients</text>
+    <text class="s" x="170" y="74">Claude Code · Cursor · any MCP host</text>
+
+    <rect class="box-accent" x="40" y="100" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="126">L2 · MCP Server</text>
+    <text class="s" x="210" y="126">server.py — FastMCP stdio, 9 tools</text>
+
+    <rect class="box-accent" x="40" y="152" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="178">L3 · Engines</text>
+    <text class="s" x="175" y="178">query.py · search.py · graph.py · semantic.py</text>
+
+    <!-- Reads arrow down -->
+    <path class="flow" d="M320 194 V218" />
+    <path class="flow-cap" d="M316 218 L320 226 L324 218 Z" />
+    <text class="s" x="332" y="214" style="font-style:italic">reads (mode=ro)</text>
+
+    <!-- Storage seam -->
+    <rect class="cluster-storage" x="40" y="230" width="560" height="56" rx="8" />
+    <text class="t" x="60" y="254" style="font-weight:700">L4 · STORAGE  (the seam)</text>
+    <text class="s" x="60" y="272">index-&lt;sha&gt;.db + current pointer · .zoekt/ shards · registry.db · lancedb/</text>
+
+    <!-- Writes arrow up -->
+    <path class="flow-index" d="M320 230 V206" />
+    <path class="flow-index-cap" d="M316 206 L320 198 L324 206 Z" />
+    <text class="s" x="332" y="224" style="font-style:italic">writes (atomic os.replace)</text>
+
+    <!-- Indexing half -->
+    <rect class="cluster-index" x="20" y="300" width="600" height="200" />
+    <text class="label-index" x="40" y="324">INDEXING HALF  (writes storage, never reads on query path)</text>
+
+    <rect class="box" x="40" y="340" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="366">L5 · Indexing orchestration</text>
+    <text class="s" x="262" y="366">index_cli.py — detect → index → convert → graph+zoekt → atomic publish</text>
+
+    <rect class="box" x="40" y="392" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="418">L6 · Language indexers</text>
+    <text class="s" x="232" y="418">scip-typescript · scip-python · scip-java · scip-swift</text>
+
+    <rect class="box" x="40" y="444" width="560" height="42" rx="8" />
+    <text class="t" x="60" y="470">L7 · External toolchain</text>
+    <text class="s" x="220" y="470">Node/npm · Python · JDK · (Swift) Xcode + iOS SDK</text>
+
+    <!-- Indexing flow arrows -->
+    <path class="flow-index" d="M320 382 V392" />
+    <path class="flow-index" d="M320 434 V444" />
+    <path class="flow-index-cap" d="M316 392 L320 400 L324 392 Z" />
+    <path class="flow-index-cap" d="M316 444 L320 452 L324 444 Z" />
+
+    <!-- Runtime flow arrows -->
+    <path class="flow" d="M320 90 V100" />
+    <path class="flow" d="M320 142 V152" />
+    <path class="flow-cap" d="M316 100 L320 108 L324 100 Z" />
+    <path class="flow-cap" d="M316 152 L320 160 L324 152 Z" />
+  </svg>
+</div>
+<p class="caption">The storage seam (L4) is the only shared state. The runtime half reads it; the indexing half writes it atomically.</p>
+
+<!-- ============ Diagram 2: jarvis-index-pipeline ============ -->
+<!-- Hand-adapted from ../jarvis/docs/assets/jarvis-index-pipeline.dot -->
+
+<div class="diagram-wrap">
+  <svg class="diagram" viewBox="0 0 860 780" role="img" aria-labelledby="pipe-title pipe-desc">
+    <title id="pipe-title">jarvis index pipeline — two publish modes with failure semantics</title>
+    <desc id="pipe-desc">Preflight checks feed a publish-mode diamond. Full mode runs SCIP + search indexing then atomically publishes. Search-only mode skips SCIP. Any error leaves the previous index live (no half-published state).</desc>
+
+    <!-- Preflight cluster -->
+    <rect class="box" x="20" y="10" width="820" height="200" rx="12" stroke-dasharray="none" />
+    <text class="m-label" x="40" y="34">PREFLIGHT  (index_cli.index_repo)</text>
+
+    <rect class="box" x="40" y="48" width="780" height="34" rx="6" />
+    <text class="t" x="60" y="70">P1</text>
+    <text class="s" x="90" y="70">resolve path + slug · git HEAD sha</text>
+
+    <path class="flow" d="M430 82 V88" /><path class="flow-cap" d="M426 88 L430 96 L434 88 Z" />
+
+    <rect class="box" x="40" y="96" width="780" height="34" rx="6" />
+    <text class="t" x="60" y="118">P2</text>
+    <text class="s" x="90" y="118">one-slug-per-path gate · scip >= 0.9.0 check</text>
+
+    <path class="flow" d="M430 130 V136" /><path class="flow-cap" d="M426 136 L430 144 L434 136 Z" />
+
+    <rect class="box" x="40" y="144" width="780" height="34" rx="6" />
+    <text class="t" x="60" y="166">P3</text>
+    <text class="s" x="90" y="166">resolve sticky flags (search_only · language · scheme · semantic_include)</text>
+
+    <path class="flow" d="M430 178 V184" /><path class="flow-cap" d="M426 184 L430 192 L434 184 Z" />
+
+    <rect class="box" x="40" y="192" width="780" height="34" rx="6" style="visibility:hidden" />
+
+    <!-- Arrow to diamond -->
+    <path class="flow" d="M430 210 V238" /><path class="flow-cap" d="M426 238 L430 246 L434 238 Z" />
+
+    <!-- MODE diamond -->
+    <polygon class="diamond" points="430,248 520,296 430,344 340,296" />
+    <text class="t" x="412" y="292" text-anchor="middle" style="font-size:11px">publish</text>
+    <text class="t" x="412" y="306" text-anchor="middle" style="font-size:11px">mode?</text>
+
+    <!-- Full branch (left) -->
+    <path class="flow" d="M340 296 H240" /><path class="flow-cap" d="M240 292 L232 296 L240 300 Z" />
+    <text class="s" x="260" y="290" style="font-style:italic">full</text>
+
+    <!-- Search-only branch (right) -->
+    <path class="flow" d="M520 296 H620" /><path class="flow-cap" d="M620 292 L628 296 L620 300 Z" />
+    <text class="s" x="540" y="290" style="font-style:italic">search-only</text>
+
+    <!-- Full pipeline cluster -->
+    <rect class="cluster-runtime" x="20" y="360" width="440" height="300" />
+    <text class="label-runtime" x="40" y="384">FULL  (SCIP + search)</text>
+
+    <rect class="box-accent" x="40" y="396" width="400" height="34" rx="6" />
+    <text class="t" x="60" y="418">F1</text>
+    <text class="s" x="90" y="418">scip-* indexer → index.scip</text>
+
+    <path class="flow" d="M240 430 V436" /><path class="flow-cap" d="M236 436 L240 444 L244 436 Z" />
+
+    <rect class="box-accent" x="40" y="444" width="400" height="34" rx="6" />
+    <text class="t" x="60" y="466">F2</text>
+    <text class="s" x="90" y="466">scip expt-convert → index.db (scratch)</text>
+
+    <path class="flow" d="M240 478 V484" /><path class="flow-cap" d="M236 484 L240 492 L244 484 Z" />
+
+    <rect class="box-accent" x="40" y="492" width="400" height="34" rx="6" />
+    <text class="t" x="60" y="514">F3</text>
+    <text class="s" x="90" y="514">populate_graph_for_repo → registry.db</text>
+
+    <path class="flow" d="M240 526 V532" /><path class="flow-cap" d="M236 532 L240 540 L244 532 Z" />
+
+    <rect class="box-accent" x="40" y="540" width="400" height="34" rx="6" />
+    <text class="t" x="60" y="562">F4</text>
+    <text class="s" x="90" y="562">zoekt-git-index (HEAD · coverage warn)</text>
+
+    <path class="flow" d="M240 574 V580" /><path class="flow-cap" d="M236 580 L240 588 L244 580 Z" />
+
+    <rect class="box-accent" x="40" y="588" width="400" height="34" rx="6" />
+    <text class="t" x="60" y="610">F5</text>
+    <text class="s" x="90" y="610">semantic stage (optional, NON-FATAL)</text>
+
+    <path class="flow" d="M240 622 V628" /><path class="flow-cap" d="M236 628 L240 636 L244 628 Z" />
+
+    <rect class="box-accent" x="40" y="636" width="400" height="38" rx="6" style="stroke-width:1.5" />
+    <text class="t" x="60" y="660" style="font-weight:700">F6</text>
+    <text class="s" x="90" y="660" style="font-weight:600">ATOMIC PUBLISH — os.replace() pointer flip</text>
+
+    <!-- Search-only cluster -->
+    <rect class="cluster-index" x="480" y="360" width="360" height="150" />
+    <text class="label-index" x="500" y="384">SEARCH-ONLY</text>
+
+    <rect class="box" x="500" y="396" width="320" height="42" rx="6" />
+    <text class="t" x="520" y="414">S1</text>
+    <text class="s" x="548" y="414">retire prior SCIP artifacts</text>
+
+    <path class="flow-index" d="M660 438 V448" /><path class="flow-index-cap" d="M656 448 L660 456 L664 448 Z" />
+
+    <rect class="box" x="500" y="456" width="320" height="42" rx="6" />
+    <text class="t" x="520" y="474">S2</text>
+    <text class="s" x="548" y="474">zoekt-git-index + semantic stage</text>
+
+    <!-- Terminal nodes -->
+    <rect class="node-ok" x="140" y="700" width="200" height="40" rx="8" />
+    <text class="t" x="160" y="724" style="font-weight:700">OK</text>
+    <text class="s" x="195" y="724">status: indexed</text>
+
+    <path class="flow" d="M240 674 V700" /><path class="flow-cap" d="M236 700 L240 708 L244 700 Z" />
+
+    <rect class="node-ok" x="560" y="700" width="200" height="40" rx="8" />
+    <text class="t" x="580" y="724" style="font-weight:700">SO</text>
+    <text class="s" x="610" y="724">status: search-only</text>
+
+    <path class="flow-index" d="M660 498 V700" /><path class="flow-index-cap" d="M656 700 L660 708 L664 700 Z" />
+
+    <rect class="node-fail" x="350" y="700" width="200" height="40" rx="8" />
+    <text class="t" x="370" y="724" style="font-weight:700">FAIL</text>
+    <text class="s" x="415" y="724">previous index stays live</text>
+
+    <!-- Failure edge from F1 -->
+    <path class="flow-fail" d="M440 430 H530 V720" />
+    <text class="s" x="460" y="426" style="font-style:italic">any error</text>
+
+    <!-- Known-unfixable fallback from F1 to S1 -->
+    <path class="flow-index" d="M440 413 H500 V418" />
+    <text class="s" x="458" y="408" style="font-style:italic; font-size:9px">known-unfixable</text>
+  </svg>
+</div>
+<p class="caption">Any step that raises leaves the previous index live — the pointer is never touched until the new version is fully ready.</p>

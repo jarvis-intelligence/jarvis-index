@@ -584,6 +584,55 @@ p code, li code, td code { color: var(--jv-accent); }
 }
 .diagram .m-label { fill: var(--jv-accent); font-family: var(--jv-mono); font-size: 10.5px; letter-spacing: 0.1em; }
 .caption { margin-top: 1.25rem; font-size: 0.8125rem; color: var(--jv-muted); }
+.diagram .cluster-runtime {
+  fill: color-mix(in oklch, var(--jv-accent) 8%, transparent);
+  stroke: color-mix(in oklch, var(--jv-accent) 30%, transparent);
+  stroke-width: 1;
+  rx: 12;
+}
+.diagram .cluster-index {
+  fill: color-mix(in oklch, var(--jv-diagram-green) 12%, transparent);
+  stroke: color-mix(in oklch, var(--jv-diagram-green) 35%, transparent);
+  stroke-width: 1;
+  rx: 12;
+}
+.diagram .cluster-storage {
+  fill: color-mix(in oklch, var(--jv-diagram-amber) 10%, transparent);
+  stroke: color-mix(in oklch, var(--jv-diagram-amber) 30%, transparent);
+  stroke-width: 1;
+  rx: 12;
+}
+.diagram .node-ok {
+  fill: color-mix(in oklch, var(--jv-diagram-green) 18%, transparent);
+  stroke: color-mix(in oklch, var(--jv-diagram-green) 45%, transparent);
+  stroke-width: 1.2;
+}
+.diagram .node-fail {
+  fill: color-mix(in oklch, var(--jv-diagram-red) 15%, transparent);
+  stroke: color-mix(in oklch, var(--jv-diagram-red) 60%, transparent);
+  stroke-width: 1.2;
+}
+.diagram .flow-fail {
+  stroke: var(--jv-diagram-red);
+  stroke-width: 1.5;
+  fill: none;
+}
+.diagram .flow-index {
+  stroke: var(--jv-diagram-green);
+  stroke-width: 1.5;
+  fill: none;
+}
+.diagram .flow-index-cap {
+  fill: var(--jv-diagram-green);
+}
+.diagram .diamond {
+  fill: color-mix(in oklch, var(--jv-diagram-amber) 18%, transparent);
+  stroke: color-mix(in oklch, var(--jv-diagram-amber) 45%, transparent);
+  stroke-width: 1.2;
+}
+.diagram .label-runtime { fill: var(--jv-accent); font-family: var(--jv-mono); font-size: 10.5px; letter-spacing: 0.1em; }
+.diagram .label-index { fill: var(--jv-diagram-green); font-family: var(--jv-mono); font-size: 10.5px; letter-spacing: 0.1em; }
+.diagram .label-storage { fill: var(--jv-diagram-amber); font-family: var(--jv-mono); font-size: 10.5px; letter-spacing: 0.1em; }
 
 /* ---------- table ---------- */
 .table-wrap { margin-top: 2.5rem; overflow-x: auto; border-radius: var(--jv-radius); box-shadow: inset 0 0 0 1px var(--jv-border); }
