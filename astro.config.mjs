@@ -105,6 +105,7 @@ export default defineConfig({
             { label: 'Claude Code', link: 'docs/integrations/claude-code' },
             { label: 'Cursor', link: 'docs/integrations/cursor' },
             { label: 'Codex CLI', link: 'docs/integrations/codex-cli' },
+            { label: 'Any stdio client', link: 'docs/integrations/generic-stdio' },
           ],
         },
         {

@@ -35,6 +35,7 @@
     "/docs/integrations/claude-code/",
     "/docs/integrations/codex-cli/",
     "/docs/integrations/cursor/",
+    "/docs/integrations/generic-stdio/",
     "/docs/troubleshooting/",
     "/docs/troubleshooting/common-failures/",
     "/docs/troubleshooting/upstream-issues/",
