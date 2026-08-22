@@ -58,6 +58,7 @@ export default defineConfig({
             { label: 'Quickstart', link: 'docs/quickstart' },
             { label: 'Requirements & Limits', link: 'docs/guide/requirements' },
             { label: 'Install', link: 'docs/guide/install' },
+            { label: 'Install Channels', link: 'docs/guide/install-matrix' },
           ],
         },
         {

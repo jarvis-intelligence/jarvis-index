@@ -1,0 +1,81 @@
+---
+title: Install Channels
+description: "Four ways to install jarvis — PyPI, Claude Code plugin, Codex plugin, or the MCP Registry — all converging on the same jarvis-server."
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Four ways in, all converge on the same `jarvis-server`.
+
+## Channels
+
+| Channel | Command | Best when |
+|---------|---------|-----------|
+| PyPI direct | `uv tool install jarvis-mcp` | You want the CLI + server with no client-specific integration — works with any stdio client |
+| Claude Code plugin | `/plugin marketplace add jarvis-intelligence/jarvis-index` then `/plugin install jarvis@jarvis` | You use Claude Code — auto-registers the server and bundles the three skills |
+| Codex plugin | Same marketplace source, via the repo-root Codex manifest | You use Codex CLI — auto-registers the server and bundles the three skills |
+| MCP Registry | Entry `io.github.jarvis-intelligence/jarvis`, package `jarvis-mcp`, stdio transport | Your client discovers/installs servers through the MCP Registry |
+
+## Walkthrough by client
+
+<Tabs syncKey="client">
+  <TabItem label="Claude Code">
+    Install the plugin — it registers the server and bundles `jarvis-setup`, `jarvis-use`, and
+    `jarvis-issues`:
+
+    ```sh
+    /plugin marketplace add jarvis-intelligence/jarvis-index
+    /plugin install jarvis@jarvis
+    ```
+
+    See the [Claude Code guide](/integrations/claude-code/) for the manual path and PATH
+    troubleshooting.
+  </TabItem>
+  <TabItem label="Cursor">
+    Use the one-click install link, or add the plugin marketplace, or register manually:
+
+    [Add jarvis to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=jarvis&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyItLWZyb20iLCJqYXJ2aXMtbWNwPj0wLjYuMCIsImphcnZpcy1zZXJ2ZXIiXX0=)
+
+    See the [Cursor guide](/integrations/cursor/) for the plugin marketplace path and the manual
+    JSON block.
+  </TabItem>
+  <TabItem label="Codex CLI">
+    Codex CLI has no MCP install URL scheme — use the plugin marketplace or a manual config edit:
+
+    ```sh
+    codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main
+    codex plugin add jarvis
+    ```
+
+    See the [Codex CLI guide](/integrations/codex-cli/) for the manual `~/.codex` config.
+  </TabItem>
+  <TabItem label="Any stdio client">
+    Any MCP client that can launch a stdio server can run jarvis with this one block:
+
+    ```json title="mcp.json"
+    {
+      "mcpServers": {
+        "jarvis": {
+          "command": "uvx",
+          "args": ["--from", "jarvis-mcp>=0.6.0", "jarvis-server"]
+        }
+      }
+    }
+    ```
+
+    See the [generic stdio guide](/integrations/generic-stdio/) for where to paste it.
+  </TabItem>
+</Tabs>
+
+## MCP Registry deep links
+
+| Client | Deep link / command |
+|--------|---------------------|
+| Cursor | [`cursor://anysphere.cursor-deeplink/mcp/install?name=jarvis&config=…`](cursor://anysphere.cursor-deeplink/mcp/install?name=jarvis&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyItLWZyb20iLCJqYXJ2aXMtbWNwPj0wLjYuMCIsImphcnZpcy1zZXJ2ZXIiXX0=) — decode the `config` param yourself before trusting any install link |
+| Claude Code | No URL scheme — `claude mcp add jarvis --scope user -- jarvis-server` (or the plugin above) |
+| Codex CLI | No URL scheme — the plugin marketplace command above, or the manual `~/.codex` config |
+| Any other client | No registry deep link exists for arbitrary clients — see the [generic stdio JSON guide](/integrations/generic-stdio/) |
+
+The registry entry itself lives at `io.github.jarvis-intelligence/jarvis` (package `jarvis-mcp`,
+stdio transport) — clients that browse the registry directly will find jarvis there without any
+deep link.
