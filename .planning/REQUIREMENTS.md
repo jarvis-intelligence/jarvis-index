@@ -23,12 +23,12 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [x] **DOCS-01**: Tutorial-first quickstart — why → install → `jarvis index` → register per client → first tool call, with expected output shown
 - [x] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
 - [x] **DOCS-03**: Four-channel install matrix — PyPI, Claude plugin, Codex plugin, MCP Registry
-- [ ] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
+- [x] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
 - [x] **DOCS-05**: CLI reference — 7 commands with flags and examples
 - [x] **DOCS-06**: Requirements & limits stated before install, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats)
 - [x] **DOCS-07**: Troubleshooting decision tree — symptom → diagnosis → fix, led by uvx cold-start, PATH, scip version-gate
 - [x] **DOCS-08**: Changelog page imported from `../jarvis/CHANGELOG.md`
-- [ ] **DOCS-09**: Additive rebuild — every existing docs page classified keep / merge-with-redirect / retire; nav reaches every tool/CLI/troubleshooting page in one click
+- [x] **DOCS-09**: Additive rebuild — every existing docs page classified keep / merge-with-redirect / retire; nav reaches every tool/CLI/troubleshooting page in one click
 - [x] **DOCS-10**: "You'll know it works when…" success/failure shapes inline — first tool call self-verifiable without leaving the page
 - [x] **DOCS-11**: `llms.txt` agent-consumable docs index — generated; ships only after docs content stabilizes (sequencing constraint, enforced by roadmap ordering)
 - [x] **DOCS-12**: MCP Registry deep-link table — registry entry location plus per-client deep links
@@ -101,12 +101,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOCS-01 | Phase 2 | Complete |
 | DOCS-02 | Phase 2 | Complete |
 | DOCS-03 | Phase 2 | Complete |
-| DOCS-04 | Phase 2 | Planned |
+| DOCS-04 | Phase 2 | Complete |
 | DOCS-05 | Phase 2 | Complete |
 | DOCS-06 | Phase 2 | Complete |
 | DOCS-07 | Phase 2 | Complete |
 | DOCS-08 | Phase 2 | Complete |
-| DOCS-09 | Phase 2 | Planned |
+| DOCS-09 | Phase 2 | Complete |
 | DOCS-10 | Phase 2 | Complete |
 | DOCS-11 | Phase 2 | Complete |
 | DOCS-12 | Phase 2 | Complete |
