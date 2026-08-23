@@ -47,7 +47,7 @@ For Cursor: open Settings → Plugins → search "jarvis" → Install.
   <TabItem label="Manual uvx">
 
 ```sh
-uv tool install jarvis-mcp
+uv tool install --python 3.13 jarvis-mcp
 ```
 
 Requires `uv` on PATH. This is also the fix for the uvx cold-start timeout you'd otherwise hit
@@ -98,16 +98,21 @@ your shell still can't find it, that's a PATH issue — see
 ## Step 2: Install the CLI and MCP server
 
 ```sh
-uv tool install jarvis-mcp
+uv tool install --python 3.13 jarvis-mcp
 ```
+
+The `--python 3.13` pin is deliberate: on a machine with no Python at all, `uv tool install`
+fetches its own interpreter and can resolve an older `jarvis-mcp` for it (observed: 0.5.1 on a
+fresh 3.12-only environment — below the `>=0.6.0` registration floor). Pinning 3.13 always
+resolves the current release.
 
 This puts `jarvis` and `jarvis-server` on `PATH`, and it's also the fix for the uvx cold-start
 timeout you'd otherwise hit in Step 4 — `uv tool install` builds and caches the wheel once, so
 later `uvx` calls start in seconds.
 
 ::::tip[Optional extras]
-- `uv tool install "jarvis-mcp[semantic]"` — enables `semanticSearch` (vector + lexical fusion)
-- `uv tool install "jarvis-mcp[watch]"` — enables `jarvis watch` (auto-reindex on file changes)
+- `uv tool install --python 3.13 "jarvis-mcp[semantic]"` — enables `semanticSearch` (vector + lexical fusion)
+- `uv tool install --python 3.13 "jarvis-mcp[watch]"` — enables `jarvis watch` (auto-reindex on file changes)
 ::::
 
 See the [Install guide](/guide/install/) for alternatives (pip, uvx ad-hoc).
@@ -284,6 +289,17 @@ If `symbol` is ambiguous, you get a structured `candidates` list instead of a de
 
 Retry with a qualified name from `candidates` (e.g. `a.C.dup`). For anything else, work through
 the [troubleshooting decision tree](/troubleshooting/).
+
+## Watch the cold install
+
+This is a real cold-install run recorded on a fresh, isolated environment (fresh `HOME`,
+prerequisites-only `PATH`), following exactly the steps above — `setup.sh`, the pinned
+`uv tool install`, indexing a tiny repo, and the first `getIndexStatus` tool call over
+stdio JSON-RPC. Timings are wall-clock, not edited.
+
+import ColdInstallPlayer from '../../../components/landing/ColdInstallPlayer.astro';
+
+<ColdInstallPlayer />
 
 ## Next steps
 

@@ -29,8 +29,9 @@ indexed `--search-only`: `searchCode` and `semanticSearch` work, navigation does
 ## Platform requirements
 
 - **macOS and Linux only.** Windows is not supported.
-- **Python 3.12+**, installed via `uv`.
+- **Python 3.12+**, installed via `uv` (the quickstart pins `--python 3.13` so `uv tool install` always resolves the current `jarvis-mcp`).
 - **`git`** — language detection and Zoekt indexing both read the git-tracked tree.
+- **Node.js 18+ (`npm`)** — required to install the TypeScript and Python indexers (`scip-typescript`, `scip-python` are npm packages). Without it, `setup.sh` skips both with a warning and those languages get search-only coverage.
 
 `setup.sh` installs these external binaries:
 

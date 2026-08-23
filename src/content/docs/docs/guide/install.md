@@ -18,7 +18,7 @@ Before installing, [check your language is supported](/guide/requirements/).
 
 **uv tool (recommended):**
 ```sh
-uv tool install jarvis-mcp
+uv tool install --python 3.13 jarvis-mcp
 ```
 Puts `jarvis` and `jarvis-server` on `PATH` via uv's tool shims (`uv tool dir`'s `bin/`). This is
 also the fix for the [uvx cold-start timeout](/troubleshooting/common-failures/#first-mcp-connect-times-out-uvx-cold-start) —
@@ -49,10 +49,10 @@ Two entry points are installed:
 
 | Extra | Install | What it enables |
 |-------|---------|-----------------|
-| `semantic` | `uv tool install "jarvis-mcp[semantic]"` | `semanticSearch` (BAAI/bge-m3 embeddings, LanceDB, reciprocal rank fusion) |
-| `watch` | `uv tool install "jarvis-mcp[watch]"` | `jarvis watch` (debounced auto-reindex via `watchdog`) |
+| `semantic` | `uv tool install --python 3.13 "jarvis-mcp[semantic]"` | `semanticSearch` (BAAI/bge-m3 embeddings, LanceDB, reciprocal rank fusion) |
+| `watch` | `uv tool install --python 3.13 "jarvis-mcp[watch]"` | `jarvis watch` (debounced auto-reindex via `watchdog`) |
 
-Both can be combined: `uv tool install "jarvis-mcp[semantic,watch]"`.
+Both can be combined: `uv tool install --python 3.13 "jarvis-mcp[semantic,watch]"`.
 
 ## External binaries (`setup.sh`)
 
