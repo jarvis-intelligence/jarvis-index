@@ -208,8 +208,9 @@ Your client lists the jarvis tools (9 tools) after connecting.
 
 **You'll know it broke when…**
 
-The first connect times out. On a cold `uv` cache, `uvx --from jarvis-mcp jarvis-server` builds
-jarvis-mcp's Rust extension from source (5+ minutes) — see
+The first connect times out. On a cold `uv` cache and a platform without a prebuilt wheel
+(macOS and common Linux glibc platforms have wheels — anything else builds jarvis-mcp's
+Rust extension from source, 5+ minutes) — see
 [the uvx cold-start entry](/troubleshooting/common-failures/#first-mcp-connect-times-out-uvx-cold-start)
 (Step 2's `uv tool install` is the fix).
 

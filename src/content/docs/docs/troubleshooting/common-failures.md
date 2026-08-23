@@ -9,9 +9,10 @@ description: "Common operational failures and their fixes."
 
 - **Symptom:** the first MCP connect after registering jarvis-mcp exceeds the client's
   timeout — many clients give up around 30s.
-- **Diagnosis:** on a cold `uv` cache, `uvx --from jarvis-mcp jarvis-server` builds
-  jarvis-mcp's Rust extension from the source distribution (`maturin` via PEP 517), which
-  takes 5+ minutes the first time.
+- **Diagnosis:** on a cold `uv` cache, `uvx --from jarvis-mcp jarvis-server` either resolves
+  a prebuilt wheel (macOS and common Linux glibc platforms publish cp312–cp314 wheels —
+  that path is fast) or, on any other platform, builds jarvis-mcp's Rust extension from the
+  source distribution (`maturin` via PEP 517), which takes 5+ minutes the first time.
 - **Fix (verified):**
 
   ```sh
