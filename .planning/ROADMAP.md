@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks (completed 2026-08-21)
 - [x] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last (completed 2026-08-22)
 - [x] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget (completed 2026-08-23)
-- [ ] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release
+- [x] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release (completed 2026-08-23)
 - [ ] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled
 
 ## Phase Details
@@ -132,8 +132,8 @@ Plans:
 
 Plans:
 
-- [ ] 04-01: All-three-skills realignment — remove the CLAUDE.md reference, retarget reading links at the v0.7.3 tag (setup.sh command stays `main`), adopt the settled vocabulary, sync commands/examples with the rebuilt docs, fix tool-roster drift
-- [ ] 04-02: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3 with updated descriptions, check-manifests + Cursor marketplace validator pass, dual-config diff, git tag `v0.7.3` created and pushed after validation
+- [x] 04-01: All-three-skills realignment — remove the CLAUDE.md reference, retarget reading links at the v0.7.3 tag (setup.sh command stays `main`), adopt the settled vocabulary, sync commands/examples with the rebuilt docs, fix tool-roster drift
+- [x] 04-02: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3 with updated descriptions, check-manifests + Cursor marketplace validator pass, dual-config diff, git tag `v0.7.3` created and pushed after validation
 
 ### Phase 5: Launch Verification & Community
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Site Foundation & Identity | 5/5 | Complete    | 2026-08-21 |
 | 2. Docs Rebuild — Tutorial-First Content | 7/7 | Complete    | 2026-08-22 |
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
-| 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |
+| 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
 | 5. Launch Verification & Community | 0/3 | Not started | - |
 
 ## Notes

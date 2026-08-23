@@ -1,19 +1,19 @@
 ---
 gsd_state_version: 1.0
-current_phase: 4
-current_phase_name: Plugin Skills Realignment & Release
+milestone: v0.7.3
+current_phase: 5
+current_phase_name: Launch Verification & Community
 status: planning
-stopped_at: Phase 3 complete, ready to plan Phase 4
-last_updated: "2026-08-22T19:22:30.391Z"
+stopped_at: Phase 4 complete, ready to plan Phase 5
+last_updated: "2026-08-23T01:19:59.568Z"
 last_activity: 2026-08-23
-last_activity_desc: Phase 3 complete, transitioned to Phase 4
-state_head: e3764b181b8fa907aa628f3fd94a48bcc198ea56
+last_activity_desc: Phase 4 complete, transitioned to Phase 5
+state_head: 75e5795e0ee60ce988fd6ed06fcab793c17ea683
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 15
-  completed_plans: 15
-  percent: 60
+  completed_phases: 4
+  total_plans: 17
+  completed_plans: 17
 ---
 
 # Project State
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
 **Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
 
-Phase: 4 — Plugin Skills Realignment & Release
+Phase: 5 — Launch Verification & Community
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-08-23 — Phase 3 complete, transitioned to Phase 4
+Last activity: 2026-08-23 — Phase 4 complete, transitioned to Phase 5
 
 Progress: [██░░░░░░░░] 20%
 
@@ -36,7 +36,7 @@ Progress: [██░░░░░░░░] 20%
 
 **Velocity:**
 
-- Total plans completed: 15
+- Total plans completed: 17
 - Average duration: 16 min/plan
 - Total execution time: 48 min
 
@@ -47,6 +47,7 @@ Progress: [██░░░░░░░░] 20%
 | 01 | 5 | - | - |
 | 2 | 7 | - | - |
 | 3 | 3 | - | - |
+| 4 | 2 | - | - |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -108,6 +109,7 @@ Recent decisions affecting current work:
 - [Phase 2]: [Phase 02] Plan 02-07: llms.txt sections mirror the Starlight sidebar groups verbatim and every link description is copied from that page's own frontmatter description — zero re-authored prose, keeping the agent index and human nav in lockstep with no second source of truth
 - [Phase 3]: Phase-02 human verification closed via real system Chrome against npm run preview: the harness's embedded headless Chromium blob-wraps Web Workers, breaking Pagefind worker-mode relative fetches while the site is fine — all Phase 5 browser verification must use real Chrome via app.path
 - [Phase 4]: [Phase 03]: Landing rebuilt as single-scroll conversion surface — real-Chrome verification found+fixed 2 runtime defects (hero grid minmax(0,1fr) 8c0ffc6; widget roving tabindex 6ff3335); code review fixed 5/6 (WR-01 anchor claim rejected — built id IS bash--44); UI review 23/24 advisory, accent-shadow dark override + inline-style extraction applied
+- [Phase 5]: [Phase 04]: Plugin 0.7.3 shipped — skills realigned to settled voice, reading links at tag v0.7.3 (setup.sh command stays main by design), manifests synced, Cursor validator + check-manifests green, tag pushed at 651d66a
 
 ### Blockers/Concerns
 
@@ -130,5 +132,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-08-22T17:11:15.002Z
-Stopped at: Phase 3 complete, ready to plan Phase 4
+Stopped at: Phase 4 complete, ready to plan Phase 5
 Resume file: .planning/phases/03-landing-page-rebuild/03-UI-SPEC.md
