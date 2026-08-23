@@ -23,7 +23,6 @@ Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "incomingCalls": [...], "outgo
 ### typeHierarchy(repo, symbol) → dict
 Single-level super/subtypes for `symbol`. Same `symbol`-resolution behavior as `goToDefinition`. **Returns an explicit error when the index was built with an unpatched `scip`** (upstream through v0.9.0 never populates `relationships`). setup.sh now installs a fork-fixed build, so `jarvis reindex <slug>` after updating scip makes this tool work. Do not read the error as "this type has no supertypes" — it is missing data, not an empty hierarchy.
 
-
 ### getIndexStatus(repo, repo_path=None) → dict
 Whether `repo` has a published index, plus freshness and search coverage. Pass `repo_path` (the repo's local git dir) to compare the published commit against `git rev-parse HEAD`.
 Returns: `{"repo": ..., "indexed": bool, "status": ..., "stale": bool, "freshness": str, "commit": str, "generated_at": str, "checked_at": str, "searchCoverage": {"expected": int, "indexed": int, "complete": bool} | None, "searchCoverageReason": str, "last_index_run": {"outcome": str, "origin": str, "reason": str | None, "recovery": str | None}, "capabilities": {"navigation": {"available": bool, "reason": str | None, "recovery": str | None}, "search": {"available": bool, "reason": str | None}, "semantic": {"available": bool, "reason": str | None}}}`. Without `repo_path`, freshness is reported without a staleness check (never `stale: true` without evidence). `searchCoverage` is `{"expected": int, "indexed": int, "complete": bool}` comparing git-tracked files at last index time against what Zoekt currently holds (catches shards lost after a successful index); when it can't be computed (e.g. zoekt-webserver not running), it's `None` and `searchCoverageReason` explains why.
@@ -39,6 +38,7 @@ Returns: `{"query": ..., "results": [{"repo","filePath","startLine","endLine","s
 ### blastRadius(repo, symbol_or_package) → dict
 2-hop bounded BFS over the package dependency graph: every other indexed repo whose package directly (1 hop) or transitively through one intermediary (2 hops) depends on `symbol_or_package` as registered for `repo` (e.g. `"npm:@scope/name"`). The graph has no per-node timestamp, so `freshness` is always `unknown` here.
 Returns: `{"repo": ..., "symbolOrPackage": ..., "dependents": [{..., "hops": int}], "freshness": {...}}`.
+
 ## Freshness field
 
 Every nav tool returns flat top-level freshness fields alongside the result: `stale` (bool), `freshness` ("fresh" or "stale"), `commit` (the published index's git SHA), `generated_at` (ISO timestamp of the index build), `checked_at` (ISO timestamp of the staleness check). Use `stale` to decide whether to trust results or `jarvis reindex <slug>` first. When `repo_path` is not passed to `getIndexStatus`, `stale` is always `false` (no evidence to judge staleness).
