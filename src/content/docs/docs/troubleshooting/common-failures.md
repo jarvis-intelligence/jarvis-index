@@ -16,7 +16,7 @@ description: "Common operational failures and their fixes."
 - **Fix (verified):**
 
   ```sh
-  uv tool install jarvis-mcp
+  uv tool install --python 3.13 jarvis-mcp
   ```
 
   This builds and caches the wheel once. Subsequent `uvx --from jarvis-mcp jarvis-server`
@@ -75,7 +75,7 @@ description: "Common operational failures and their fixes."
 - **Fix:**
 
   ```sh
-  uv tool install "jarvis-mcp[semantic]"
+  uv tool install --python 3.13 "jarvis-mcp[semantic]"
   jarvis reindex <slug>
   ```
 
@@ -85,7 +85,7 @@ description: "Common operational failures and their fixes."
 - **Fix:**
 
   ```sh
-  uv tool install "jarvis-mcp[watch]"
+  uv tool install --python 3.13 "jarvis-mcp[watch]"
   ```
 
   This installs `watchdog` (>=4.0).
