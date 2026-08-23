@@ -1,0 +1,26 @@
+---
+// Cold-install walkthrough player (COMM-02): self-hosted asciinema-player 3.17.0
+// (Apache-2.0, public/assets/asciinema/) + the recorded cast from the VRFY-01 run.
+// Assets are local — the site keeps its zero-third-party-request property.
+// BASE_URL prefixes the site's /jarvis-index base — root-absolute paths 404 under it.
+const base = import.meta.env.BASE_URL;
+---
+
+<div id="cold-install-player" data-cast={`${base}/assets/asciinema/cold-install.cast`}></div>
+<link rel="stylesheet" href={`${base}/assets/asciinema/asciinema-player.css`} />
+<script is:inline src={`${base}/assets/asciinema/asciinema-player.min.js`}></script>
+<script is:inline>
+  (function () {
+    var start = function () {
+      var el = document.getElementById('cold-install-player');
+      AsciinemaPlayer.create(el.getAttribute('data-cast'), el, {
+        cols: 100,
+        rows: 28,
+        autoPlay: false,
+        loop: false,
+      });
+    };
+    if (typeof AsciinemaPlayer !== 'undefined') start();
+    else window.addEventListener('load', start);
+  })();
+</script>
