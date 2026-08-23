@@ -128,7 +128,7 @@ Plans:
   2. All three skills speak the new positioning, and their commands and examples behave exactly as the rebuilt docs say they do
   3. The release is shippable and verifiable: all three `plugin.json` manifests agree at 0.7.3, the Cursor marketplace validator passes, and `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`
 
-**Plans**: 3 plans
+**Plans**: 2 plans
 
 Plans:
 
