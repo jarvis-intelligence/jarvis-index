@@ -103,23 +103,33 @@ curl -sf "$SITEMAP_URL" > "$sitemap_tmp" 2>/dev/null || {
 if [ -f "$sitemap_tmp" ] && [ -s "$sitemap_tmp" ]; then
   # Extract <loc> URLs from sitemap
   sitemap_urls=$(grep -o '<loc>[^<]*</loc>' "$sitemap_tmp" | sed 's/<loc>//;s/<\/loc>//')
-  # Build expected set from contract
+  # Build expected set from contract. Direction is deliberate:
+  #   sitemap ⊆ contract (every sitemap entry must be a contracted URL), and
+  #   contract ⊆ sitemap + PASSTHROUGH (contract URLs may be public/ passthrough
+  #   files like /brand-logo.html — served and crawled as real URLs (Set A) but not
+  #   sitemapable, because @astrojs/sitemap enumerates Astro routes only. Matches
+  #   verify-build V9's one-directional semantics.)
   if [ -f "$CONTRACT" ]; then
-    expected=$(python3 -c "
-import json,sys
-contract = json.load(sys.stdin)
-for u in sorted(contract['urls']):
-    print(f'{contract[\"origin\"]}{u}')
-" < "$CONTRACT")
-    # Compare (sort both, diff)
-    diff_result=$(printf '%s\n' $sitemap_urls | sort | diff - <(printf '%s\n' $expected | sort) || true)
-    if [ -n "$diff_result" ]; then
-      echo "FAIL: sitemap does not match contract"
-      echo "$diff_result"
-      failures=$((failures + 1))
-    else
-      echo "  OK: sitemap matches contract ($(printf '%s\n' $expected | wc -l | tr -d ' ') entries)"
-    fi
+    result=$(python3 -c "
+import json, sys
+contract = json.load(open('$CONTRACT'))
+expected = {contract['origin'] + u for u in contract['urls']}
+passthrough = {contract['origin'] + u for u in contract['urls'] if u.endswith('.html') and u != '/index.html' and not u.startswith('/docs/')}
+sitemap = set(sys.stdin.read().split())
+extra = sitemap - expected
+missing = expected - sitemap - passthrough
+if extra:
+    print('sitemap has URLs outside the contract: ' + ', '.join(sorted(extra)))
+if missing:
+    print('contract URLs missing from sitemap (excluding passthrough): ' + ', '.join(sorted(missing)))
+if not extra and not missing:
+    print('OK: sitemap matches contract (sitemap %d entries; %d passthrough URLs excluded: %s)' % (len(sitemap), len(passthrough), ', '.join(sorted(passthrough)) or 'none'))
+sys.exit(1 if (extra or missing) else 0)
+" <<EOF
+$sitemap_urls
+EOF
+) || failures=$((failures + 1))
+    if [ -n "$result" ]; then echo "$result"; else echo "FAIL: sitemap comparison errored"; failures=$((failures + 1)); fi
   fi
 fi
 
