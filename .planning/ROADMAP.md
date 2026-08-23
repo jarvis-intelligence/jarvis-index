@@ -147,13 +147,17 @@ Plans:
   3. Every retired URL serves content or a redirect, and the sitemap matches the shipped pages exactly
   4. Maintainer docs (deployment-guide, code-standards, system-architecture) describe the new site structure, and GitHub Discussions is enabled and linked from the docs troubleshooting page as the support surface
 
-**Plans**: 3 plans
+**Plans**: 2 plans
 
 Plans:
 
-- [ ] 05-01: Clean-machine cold-install run (fresh macOS + Linux), honestly timed, screen-recorded as the walkthrough video
-- [ ] 05-02: Claims audit (landing + docs → README/CHANGELOG/`setup.sh`/manifests) and old-URL crawl + sitemap-vs-shipped-pages check
-- [ ] 05-03: Maintainer docs update; GitHub Discussions enabled and linked from troubleshooting; video walkthrough embedded
+**Wave 1**
+
+- [ ] 05-01-PLAN.md — Asciinema-player self-hosting, Discussions troubleshooting link, maintainer docs update, claims-audit + crawl tooling
+
+**Wave 2** *(blocked on Wave 1 — requires live site)*
+
+- [ ] 05-02-PLAN.md — Merge→deploy, Docker cold-install recording, quickstart video embed, live crawl, sitemap check, claims audit review (orchestrator-held)
 
 ## Progress
 
@@ -166,7 +170,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Docs Rebuild — Tutorial-First Content | 7/7 | Complete    | 2026-08-22 |
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
-| 5. Launch Verification & Community | 0/3 | Not started | - |
+| 5. Launch Verification & Community | 0/2 | Not started | - |
 
 ## Notes
 
