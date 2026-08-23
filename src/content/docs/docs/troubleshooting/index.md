@@ -58,6 +58,12 @@ A jarvis tool returned empty or an error. Start here.
 → This is **by design** (no per-node timestamp on the graph). See
 [Common Failures: blastRadius unknown](/troubleshooting/common-failures/#blastradius-freshness-is-always-unknown).
 
+## Getting help
+
+If the troubleshooting steps above don't resolve your issue, ask on
+[GitHub Discussions](https://github.com/jarvis-intelligence/jarvis-index/discussions)
+— the maintainers and community can help.
+
 ---
 
 ## Reference pages
