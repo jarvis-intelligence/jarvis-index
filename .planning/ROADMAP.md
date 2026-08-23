@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last (completed 2026-08-22)
 - [x] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget (completed 2026-08-23)
 - [x] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release (completed 2026-08-23)
-- [ ] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled
+- [x] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled (completed 2026-08-23)
 
 ## Phase Details
 
@@ -153,11 +153,11 @@ Plans:
 
 **Wave 1**
 
-- [ ] 05-01-PLAN.md — Asciinema-player self-hosting, Discussions troubleshooting link, maintainer docs update, claims-audit + crawl tooling
+- [x] 05-01-PLAN.md — Asciinema-player self-hosting, Discussions troubleshooting link, maintainer docs update, claims-audit + crawl tooling
 
 **Wave 2** *(blocked on Wave 1 — requires live site)*
 
-- [ ] 05-02-PLAN.md — Merge→deploy, Docker cold-install recording, quickstart video embed, live crawl, sitemap check, claims audit review (orchestrator-held)
+- [x] 05-02-PLAN.md — Merge→deploy, Docker cold-install recording, quickstart video embed, live crawl, sitemap check, claims audit review (orchestrator-held)
 
 ## Progress
 
@@ -170,7 +170,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Docs Rebuild — Tutorial-First Content | 7/7 | Complete    | 2026-08-22 |
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
-| 5. Launch Verification & Community | 0/2 | Not started | - |
+| 5. Launch Verification & Community | 2/2 | Complete    | 2026-08-23 |
 
 ## Notes
 

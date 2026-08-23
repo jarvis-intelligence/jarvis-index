@@ -1,6 +1,6 @@
 ---
 phase: 05-launch-verification
-status: verified
+status: passed
 score: 8/8
 human_verification:
   - item: "VRFY-01 Docker fallback qualification — the .cast is macOS temp-HOME isolated, not a Docker Linux container. The CONTEXT-documented fallback clause applies. A human confirmed this was acceptable (orchestrator ran it)."
