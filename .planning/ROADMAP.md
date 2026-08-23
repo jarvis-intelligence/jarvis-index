@@ -132,9 +132,8 @@ Plans:
 
 Plans:
 
-- [ ] 04-01: `jarvis-setup` realignment — remove the CLAUDE.md reference, retarget docs URLs at tags, sync the install path with the rebuilt quickstart
-- [ ] 04-02: `jarvis-use` + `jarvis-issues` realignment — new positioning vocabulary, commands/examples synced with rebuilt docs
-- [ ] 04-03: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3, Cursor validator pass, dual-config diff as definition of done
+- [ ] 04-01: All-three-skills realignment — remove the CLAUDE.md reference, retarget reading links at the v0.7.3 tag (setup.sh command stays `main`), adopt the settled vocabulary, sync commands/examples with the rebuilt docs, fix tool-roster drift
+- [ ] 04-02: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3 with updated descriptions, check-manifests + Cursor marketplace validator pass, dual-config diff, git tag `v0.7.3` created and pushed after validation
 
 ### Phase 5: Launch Verification & Community
 
