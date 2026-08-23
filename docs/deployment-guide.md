@@ -130,6 +130,25 @@ before bumping the pin.
 
 ---
 
+## Channel 5 — Docs & Landing site
+
+**Trigger:** a push to `main` that touches `src/**`, `public/**`, `design/**`, `astro.config.*`, or `package*.json`.
+**Mechanism:** GitHub Actions builds and deploys the Astro + Starlight site to GitHub Pages.
+**Your action:** edit content, then push to `main`. CI handles the rest.
+
+The build pipeline (`.github/workflows/deploy-pages.yml`):
+
+1. `npm ci` (Node 22)
+2. `npm run build` — Astro builds `dist/`, then `scripts/verify-build.mjs` runs V1–V10 assertions (page-set equality, asset resolution, font origin, Pagefind presence, sitemap correctness, llms.txt shape)
+3. `dist/` uploaded as Pages artifact
+4. Post-deploy smoke probe: curl `/` and `/docs/` → 200 + "jarvis" marker check + asset resolution check + sitemap sanity
+
+Local preview: `npm run preview` (starts a local server serving `dist/`).
+
+The site uses `build.format: 'directory'` — URLs carry a trailing slash. The canonical
+URL set is locked by `design/url-contract.json`; adding or retiring a URL requires
+a contract edit in the same commit (enforced by verify-build V2 in CI).
+
 ## The Python package (not this repo)
 
 `jarvis-mcp` is published to PyPI from the private repo. Wheels ship Cython-compiled `.so`

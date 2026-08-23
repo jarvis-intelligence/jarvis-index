@@ -1,0 +1,42 @@
+# SITE-07: manifest-drift guardrails. Separate from deploy-pages.yml because
+# that workflow is push-to-main + site-source path-filtered — a PR touching
+# only a plugin manifest triggers nothing there. This workflow gives PR-time
+# signal for exactly that change class.
+name: Manifest checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugin/**'
+      - '.codex-plugin/**'
+      - '.claude-plugin/**'
+      - '.cursor-plugin/**'
+      - 'scripts/check-manifests.mjs'
+      - '.github/workflows/checks.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugin/**'
+      - '.codex-plugin/**'
+      - '.claude-plugin/**'
+      - '.cursor-plugin/**'
+      - 'scripts/check-manifests.mjs'
+      - '.github/workflows/checks.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  manifest-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check manifests
+        run: node scripts/check-manifests.mjs

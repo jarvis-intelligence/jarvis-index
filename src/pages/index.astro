@@ -1,0 +1,251 @@
+---
+// Identity layer (SITE-03/SITE-04): the token sheet + self-hosted Fontsource
+// fonts replace the Google Fonts CDN links this head used to carry.
+import '../../design/tokens.css';
+import '../styles/landing.css';
+import InstallWidget from '../components/landing/InstallWidget.astro';
+import Badges from '../components/landing/Badges.astro';
+import DemoPanel from '../components/landing/DemoPanel.astro';
+import ToolShowcase from '../components/landing/ToolShowcase.astro';
+import Diagrams from '../components/landing/Diagrams.astro';
+import LanguageMatrix from '../components/landing/LanguageMatrix.astro';
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JARVIS — structural code intelligence, locally on your machine</title>
+<meta name="description" content="9 tools for go-to-definition, find-references, call/type hierarchy, and search — computed locally from your own repositories. Available for Claude Code, Codex CLI, and Cursor.">
+<link rel="icon" href="assets/jarvis-mark.svg" type="image/svg+xml">
+<script is:inline>
+(function () {
+  var root = document.documentElement;
+  var STORAGE_KEY = "starlight-theme";
+  var stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var theme = (stored && stored !== "auto") ? stored : (prefersDark ? "dark" : "light");
+  root.setAttribute("data-theme", theme);
+})();
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand tap" href="#top">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <g class="blades">
+          <path d="M19.14 47.32A20 20 0 0 1 35.47 12.30"/>
+          <path d="M43.18 15.42A20 20 0 0 1 48.58 43.18"/>
+          <path d="M43.18 48.58A20 20 0 0 1 26.49 51.23"/>
+        </g>
+        <circle class="core" cx="32" cy="32" r="6"/>
+      </svg>
+      <span class="wordmark"><span class="a">jar</span><span class="b">vis</span></span>
+    </a>
+
+    <nav class="header-nav" aria-label="Main">
+      <a href="#demo">Demo</a>
+      <a href="#tools">Tools</a>
+      <a href="#languages">Languages</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#architecture">Architecture</a>
+    </nav>
+
+    <div class="header-tools">
+      <a class="primary-action tap" href="/jarvis-index/docs/">Docs</a>
+      <button class="theme-toggle tap" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <span class="toggle-track"><span class="toggle-knob"></span></span>
+        <span class="toggle-label-light">Light</span>
+        <span class="toggle-label-dark">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 900 720" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+            <stop class="stop-plane-a" offset="0%"/>
+            <stop class="stop-plane-b" offset="100%"/>
+          </linearGradient>
+          <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+            <stop class="stop-edge-a" offset="0%"/>
+            <stop class="stop-edge-b" offset="55%"/>
+            <stop class="stop-edge-c" offset="100%"/>
+          </linearGradient>
+        </defs>
+        <g class="planes">
+          <path d="M150 470 L450 330 L750 470 L450 610 Z"/>
+          <path d="M150 360 L450 220 L750 360 L450 500 Z"/>
+          <path d="M150 250 L450 110 L750 250 L450 390 Z"/>
+        </g>
+        <g class="edges">
+          <path d="M300 295 L450 220 L600 295 M375 258 L375 478 M525 258 L525 478 M300 405 L450 480 L600 405 M450 165 L450 555"/>
+          <path d="M300 295 L300 515 M600 295 L600 515"/>
+        </g>
+        <g class="nodes">
+          <circle cx="450" cy="220" r="6"/><circle cx="450" cy="330" r="6"/><circle cx="450" cy="440" r="5"/>
+          <circle cx="300" cy="295" r="4.5"/><circle cx="600" cy="295" r="4.5"/>
+          <circle cx="375" cy="258" r="3.5"/><circle cx="525" cy="258" r="3.5"/>
+          <circle cx="300" cy="405" r="3.5"/><circle cx="600" cy="405" r="3.5"/>
+          <circle cx="450" cy="110" r="4"/><circle cx="450" cy="555" r="4"/>
+        </g>
+        <g class="nodes-soft">
+          <circle cx="375" cy="478" r="2.5"/><circle cx="525" cy="478" r="2.5"/>
+          <circle cx="300" cy="515" r="2.5"/><circle cx="600" cy="515" r="2.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="frame-wide hero-frame">
+      <div>
+        <h1>Structural code intelligence, locally on your machine.</h1>
+        <p class="hero-tagline">9 tools for navigating and searching your code — computed locally from your own repositories.</p>
+        <p class="hero-lede">JARVIS gives your coding agent go-to-definition, find-references, call and type hierarchy, and semantic search across your own code. Everything runs on your machine — nothing is uploaded.</p>
+        <InstallWidget />
+        <div class="hero-meta">
+          <span>MIT licensed</span><span class="dot" aria-hidden="true"></span>
+          <span>macOS / Linux</span><span class="dot" aria-hidden="true"></span>
+          <span>open source</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="frame section" id="demo">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">See it in action</p>
+        <h2 class="section-title">Try before you install</h2>
+      </div>
+      <p class="section-lede">Three real scenarios — pick a question, see the MCP call and the recorded result.</p>
+    </div>
+    <DemoPanel />
+  </section>
+
+  <!-- ============ TOOLS ============ -->
+  <section class="frame section" id="tools">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Tools</p>
+        <h2 class="section-title">9 tools, honestly tiered</h2>
+      </div>
+      <p class="section-lede">7 core tools work out of the box. Two advanced tools require extra setup.</p>
+    </div>
+    <ToolShowcase />
+  </section>
+
+  <!-- ============ LANGUAGES ============ -->
+  <section class="frame section" id="languages">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Languages</p>
+        <h2 class="section-title">Four families get navigation</h2>
+      </div>
+      <p class="section-lede">TypeScript, Python, Java/Kotlin, and Swift. Everything else gets search only.</p>
+    </div>
+    <LanguageMatrix />
+  </section>
+
+  <!-- ============ PRIVACY ============ -->
+  <section class="frame section" id="privacy">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Privacy</p>
+        <h2 class="section-title">Local-first. Nothing leaves your machine.</h2>
+      </div>
+      <p class="section-lede">All computation is local. No telemetry, no network, no cloud.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero telemetry.</strong> jarvis phones home to exactly zero endpoints. No usage data, no error reports, no analytics. The server process connects to nothing outside your filesystem.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero cloud.</strong> Every index, every search, every hierarchy walk is computed on your machine from your own git-tracked source. There is no jarvis API, no jarvis account, and no jarvis server that sees your code.</p>
+    </div>
+    <div class="note">
+      <p><strong>Zero network at runtime.</strong> After the one-time install, jarvis needs no network. The MCP server listens on a local stdio pipe. Your code never leaves your machine.</p>
+    </div>
+  </section>
+
+  <!-- ============ ARCHITECTURE (placeholder — 03-03) ============ -->
+  <section class="frame section" id="architecture">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Architecture</p>
+        <h2 class="section-title">Seven layers, two halves, one seam</h2>
+      </div>
+      <p class="section-lede">The runtime half reads storage to answer your queries. The indexing half writes storage when you build or update an index. The seam between them is the only shared state — and it flips atomically.</p>
+    </div>
+    <Diagrams />
+  </section>
+
+  <!-- ============ BADGES + CTA ============ -->
+  <section class="frame section">
+    <div class="closing">
+      <div>
+        <h2 class="section-title">Start indexing your code today.</h2>
+        <a class="text-link tap" href="/jarvis-index/docs/quickstart/" style="margin-top:1rem">Read the quickstart <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <Badges />
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/blob/main/LICENSE">MIT</a>
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index">GitHub</a>
+    <a class="tap" href="https://pypi.org/project/jarvis-mcp/">PyPI</a>
+    <a class="tap" href="https://mcpregistry.com/servers/io.github.jarvis-intelligence/jarvis">MCP Registry</a>
+    <a class="tap" href="https://github.com/jarvis-intelligence/jarvis-index/discussions">Discussions</a>
+    <a class="tap" href="/jarvis-index/docs/">Docs</a>
+  </div>
+</footer>
+
+<script is:inline>
+(function () {
+  var root = document.documentElement;
+  var STORAGE_KEY = "starlight-theme";
+
+  var toggle = document.getElementById("theme-toggle");
+  toggle.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+
+  document.querySelectorAll(".mono-box[data-copy]").forEach(function (box) {
+    var label = box.querySelector(".copy");
+    var timer;
+    box.addEventListener("click", function () {
+      var text = box.getAttribute("data-copy");
+      var done = function () {
+        box.setAttribute("data-copied", "true");
+        label.textContent = "Copied";
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          box.removeAttribute("data-copied");
+          label.textContent = "Copy";
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { label.textContent = "Select manually"; });
+      } else {
+        label.textContent = "Select manually";
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

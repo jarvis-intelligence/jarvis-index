@@ -1,0 +1,105 @@
+---
+// Install widget with Starlight syncKey="channel" sync.
+// Reads/writes localStorage['starlight-synced-tabs__channel'] so the
+// hero widget and quickstart <Tabs syncKey="channel"> stay in sync.
+// Label strings MUST match the quickstart TabItem labels exactly.
+---
+
+<div class="install-widget" data-widget="channel">
+  <div class="install-widget-tabs" role="tablist" aria-label="Installation method">
+    <button class="install-widget-tab tap" role="tab" aria-selected="true" data-tab="Installer + uv" tabindex="0">Installer + uv</button>
+    <button class="install-widget-tab tap" role="tab" aria-selected="false" data-tab="Plugin marketplace" tabindex="-1">Plugin marketplace</button>
+    <button class="install-widget-tab tap" role="tab" aria-selected="false" data-tab="Manual uvx" tabindex="-1">Manual uvx</button>
+  </div>
+
+  <div class="install-widget-panel" role="tabpanel" aria-label="Installer + uv" aria-hidden="false" data-panel="Installer + uv">
+    <button class="mono-box tap" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh">
+      <span class="cmd">curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh</span>
+      <span class="copy">Copy</span>
+    </button>
+    <p class="chip-label">Installs SCIP, Zoekt, and language indexers into ~/.jarvis/bin</p>
+  </div>
+
+  <div class="install-widget-panel" role="tabpanel" aria-label="Plugin marketplace" aria-hidden="true" data-panel="Plugin marketplace">
+    <p class="chip-label">Claude Code</p>
+    <button class="mono-box tap" type="button" data-copy="/plugin marketplace add jarvis-intelligence/jarvis-index">
+      <span class="cmd">/plugin marketplace add jarvis-intelligence/jarvis-index</span>
+      <span class="copy">Copy</span>
+    </button>
+    <p class="chip-label">Codex CLI</p>
+    <button class="mono-box tap" type="button" data-copy="codex plugin marketplace add jarvis-intelligence/jarvis-index">
+      <span class="cmd">codex plugin marketplace add jarvis-intelligence/jarvis-index</span>
+      <span class="copy">Copy</span>
+    </button>
+    <p class="chip-label">Cursor</p>
+    <button class="mono-box static tap" type="button">
+      <span class="cmd cmd--wrap">Open Settings → Plugins → search "jarvis" → Install</span>
+      <span class="copy copy--hidden">Copy</span>
+    </button>
+  </div>
+
+  <div class="install-widget-panel" role="tabpanel" aria-label="Manual uvx" aria-hidden="true" data-panel="Manual uvx">
+    <button class="mono-box tap" type="button" data-copy="uv tool install jarvis-mcp">
+      <span class="cmd">uv tool install jarvis-mcp</span>
+      <span class="copy">Copy</span>
+    </button>
+    <p class="chip-label">Requires uv on PATH</p>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  var STORAGE_KEY = 'starlight-synced-tabs__channel';
+  var widget = document.querySelector('[data-widget="channel"]');
+  if (!widget) return;
+  var tabs = widget.querySelectorAll('[role="tab"]');
+  var panels = widget.querySelectorAll('[role="tabpanel"]');
+
+  function activate(label) {
+    tabs.forEach(function (t) {
+      var match = t.getAttribute('data-tab') === label;
+      t.setAttribute('aria-selected', match ? 'true' : 'false');
+      t.tabIndex = match ? 0 : -1;
+    });
+    panels.forEach(function (p) {
+      var match = p.getAttribute('data-panel') === label;
+      p.setAttribute('aria-hidden', match ? 'false' : 'true');
+    });
+    try { localStorage.setItem(STORAGE_KEY, label); } catch (e) {}
+  }
+
+  // Restore from storage or default to first tab
+  var stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  var initial = stored || 'Installer + uv';
+  activate(initial);
+
+  // Click handler
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      activate(tab.getAttribute('data-tab'));
+    });
+  });
+
+  // Arrow key roving tabindex
+  widget.querySelector('[role="tablist"]').addEventListener('keydown', function (e) {
+    // Roving tabindex over ALL tabs. Do not filter by tabIndex >= 0: in the roving
+    // pattern only the active tab carries 0, so that filter reduces to a single
+    // element and the arrow keys cycle onto the same tab forever.
+    var idx = Array.prototype.indexOf.call(tabs, document.activeElement);
+    if (idx < 0) return;
+    var next;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault(); next = tabs[(idx + 1) % tabs.length];
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); next = tabs[(idx - 1 + tabs.length) % tabs.length];
+    }
+    if (next) { next.focus(); next.click(); }
+  });
+
+  // Cross-widget sync: listen for storage events (other tab/window)
+  window.addEventListener('storage', function (e) {
+    if (e.key === STORAGE_KEY && e.newValue) activate(e.newValue);
+  });
+})();
+</script>

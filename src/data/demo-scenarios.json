@@ -1,0 +1,77 @@
+[
+  {
+    "id": "index-status",
+    "question": "Is my repo indexed?",
+    "toolCall": { "repo": "toy-repo" },
+    "result": {
+      "repo": "toy-repo",
+      "indexed": true,
+      "status": "indexed",
+      "commit": "abc1234",
+      "generated_at": "2026-07-08T12:00:00+00:00",
+      "stale": false,
+      "freshness": "fresh",
+      "checked_at": "2026-07-08T12:00:05+00:00",
+      "searchCoverage": { "expected": 120, "indexed": 120, "complete": true },
+      "last_index_run": {
+        "outcome": "indexed",
+        "origin": "signature",
+        "reason": null,
+        "recovery": null
+      },
+      "capabilities": {
+        "navigation": { "available": true, "reason": null, "recovery": null },
+        "search": { "available": true, "reason": null },
+        "semantic": { "available": false, "reason": "semantic index not built for this repo (requires the `semantic` extra)" }
+      }
+    }
+  },
+  {
+    "id": "go-to-definition",
+    "question": "Where is the Greeter class defined?",
+    "toolCall": { "repo": "toy-repo", "symbol": "Greeter" },
+    "result": {
+      "symbol": "Greeter",
+      "resolvedSymbol": "scip-typescript npm @toy/pkg 0.0.1 src/`greeter.ts`/Greeter#",
+      "definitions": [
+        {
+          "path": "toy/greeter.ts",
+          "range": { "start": { "line": 0, "character": 6 }, "end": { "line": 0, "character": 13 } }
+        }
+      ],
+      "commit": "abc1234",
+      "generated_at": "2026-07-08T12:00:00+00:00",
+      "stale": false,
+      "freshness": "fresh",
+      "checked_at": "2026-07-08T12:00:05+00:00"
+    }
+  },
+  {
+    "id": "find-references",
+    "question": "Who calls greet?",
+    "toolCall": { "repo": "toy-repo", "symbol": "greet" },
+    "result": {
+      "symbol": "greet",
+      "resolvedSymbol": "scip-typescript npm @toy/pkg 0.0.1 src/`greeter.ts`/Greeter#greet().",
+      "references": [
+        {
+          "path": "toy/constants.ts",
+          "range": { "start": { "line": 0, "character": 0 }, "end": { "line": 0, "character": 20 } }
+        },
+        {
+          "path": "toy/greeter.ts",
+          "range": { "start": { "line": 1, "character": 2 }, "end": { "line": 1, "character": 7 } }
+        },
+        {
+          "path": "toy/greeter.ts",
+          "range": { "start": { "line": 9, "character": 4 }, "end": { "line": 9, "character": 9 } }
+        }
+      ],
+      "commit": "abc1234",
+      "generated_at": "2026-07-08T12:00:00+00:00",
+      "stale": false,
+      "freshness": "fresh",
+      "checked_at": "2026-07-08T12:00:05+00:00"
+    }
+  }
+]

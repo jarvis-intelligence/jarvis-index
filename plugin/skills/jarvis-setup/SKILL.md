@@ -1,6 +1,6 @@
 ---
 name: jarvis-setup
-description: Install and configure jarvis, the local-first code-intelligence MCP server. Use when onboarding, running setup.sh, registering the MCP server, or indexing a repo for the first time.
+description: Install and configure jarvis, the local-first structural code intelligence. Use when onboarding, running setup.sh, registering the MCP server, or indexing a repo for the first time.
 version: "0.1.0"
 ---
 
@@ -28,7 +28,7 @@ Binaries installed: `scip` (a fork build — upstream v0.9.0 plus the scip#465 r
 
 Java/Kotlin repos have real limits: Android/Gradle projects and Kotlin repos not on the pinned
 Kotlin version cannot produce a SCIP index, and are published search-only instead (lexical and
-semantic search work; navigation does not). See CLAUDE.md for the detail.
+semantic search work; navigation does not). See [Requirements & Limits](https://jarvis-intelligence.github.io/jarvis-index/docs/guide/requirements/) for the full language-support matrix and caveats.
 
 Optional extras aren't covered by the default install: `uv tool install "jarvis-mcp[semantic]"` for `semanticSearch`, `[watch]` for `jarvis watch`.
 

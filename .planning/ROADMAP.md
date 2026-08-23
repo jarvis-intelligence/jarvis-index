@@ -13,10 +13,10 @@ Horizontal layers, assembled at the end. Phase 1 lays the complete infrastructur
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks
-- [ ] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last
-- [ ] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget
-- [ ] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release
+- [x] **Phase 1: Site Foundation & Identity** - Live-deploy fix, unified Astro 5 + Starlight site on Node 22, design tokens + self-hosted fonts, dark mode + local search, URL contract, CI safety checks (completed 2026-08-21)
+- [x] **Phase 2: Docs Rebuild — Tutorial-First Content** - Additive restructure to a tutorial-first IA: quickstart to first tool call, per-client guides, full tool/CLI reference, troubleshooting tree, redirects live, llms.txt last (completed 2026-08-22)
+- [x] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget (completed 2026-08-23)
+- [x] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release (completed 2026-08-23)
 - [ ] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled
 
 ## Phase Details
@@ -34,25 +34,25 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Both surfaces render the new jarvis identity from one `design/tokens.css`, and the site makes zero third-party font requests
   5. The URL contract exists (every existing public URL enumerated + old→new redirect map) and CI fails loudly on three-manifest version disagreement, `plugin/.mcp.json` ≠ `plugin/mcp.json`, or unparseable manifest JSON
 
-**Plans**: 5 plans
+**Plans**: 5/5 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Live base-path hotfix + post-deploy smoke probe (stack-independent; stop the bleeding today)
+- [x] 01-01-PLAN.md — Live base-path hotfix + post-deploy smoke probe (stack-independent; stop the bleeding today)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Unified Astro 5 + Starlight project — landing at `/`, docs at `/docs/`; Node 20→22 + `engines` field; `deploy-pages.yml` diff in the same commit
+- [x] 01-02-PLAN.md — Unified Astro 5 + Starlight project — landing at `/`, docs at `/docs/`; Node 20→22 + `engines` field; `deploy-pages.yml` diff in the same commit
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Identity layer — `design/tokens.css` carrying the new jarvis identity + Fontsource self-hosted variable fonts
+- [x] 01-03-PLAN.md — Identity layer — `design/tokens.css` carrying the new jarvis identity + Fontsource self-hosted variable fonts
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-04-PLAN.md — Dark mode (persisting toggle) + Pagefind local search wired into the unified shell
-- [ ] 01-05-PLAN.md — URL contract + redirect map mechanism; the three CI checks (manifest version agreement, dual-config diff, JSON parse)
+- [x] 01-04-PLAN.md — Dark mode (persisting toggle) + Pagefind local search wired into the unified shell
+- [x] 01-05-PLAN.md — URL contract + redirect map mechanism; the three CI checks (manifest version agreement, dual-config diff, JSON parse)
 
 ### Phase 2: Docs Rebuild — Tutorial-First Content
 
@@ -67,15 +67,34 @@ Plans:
   4. Requirements and limits, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats), appear before any install step; the troubleshooting decision tree takes a stuck user symptom → diagnosis → fix, led by uvx cold-start, PATH, and the scip version-gate
   5. Nothing rots and nothing goes stale: every existing docs page is classified keep / merge-with-redirect / retire with stubs or the 404 lookup page served at every retired URL, the changelog page mirrors `../jarvis/CHANGELOG.md`, and `llms.txt` indexes the stabilized content
 
-**Plans**: 5 plans
+**Plans**: 7/7 plans executed
 
-Plans:
+Plans (planned 2026-08-21 — the 5-plan sketch split to 7 to respect task-size caps once D-02's deepen-all-32-pages scope landed; journey content moved late so its links target real anchors; `llms.txt` stays strictly last):
 
-- [ ] 02-01: Additive restructure — classify every existing docs page keep / merge-with-redirect / retire; ship meta-refresh stubs + lookup-table `404.html` (executes the Phase 1 URL contract)
-- [ ] 02-02: Journey content — tutorial-first quickstart with inline success/failure shapes, per-client install guides, four-channel install matrix, MCP Registry deep-link table
-- [ ] 02-03: Reference depth — 9 tool reference pages (request→response + error contract), CLI reference for 7 commands
-- [ ] 02-04: Guardrails — requirements & limits with the language-support matrix placed before install; troubleshooting decision tree; changelog import
-- [ ] 02-05: `llms.txt` generation — sequenced strictly last, after docs content stabilizes
+**Wave 1**
+
+- [x] 02-01-PLAN.md — Additive restructure mechanics: keep/merge/retire classification of all 34 URLs, lookup-table 404, brand-logo self-hosted fonts + V4 exclusion removal, WR-01 fix, concepts deepen (DOCS-09)
+
+**Wave 2**
+
+- [x] 02-02-PLAN.md — Tool reference depth: 9 tool pages with real request→response shapes + error contract (DOCS-04)
+- [x] 02-03-PLAN.md — CLI reference depth: 7 commands incl. new `jarvis-server` page (DOCS-05)
+
+**Wave 3**
+
+- [x] 02-04-PLAN.md — Guardrails: Requirements & Limits page (language matrix first), troubleshooting decision tree + issue-mined entries, verbatim changelog import (DOCS-06, DOCS-07, DOCS-08)
+
+**Wave 4**
+
+- [x] 02-05-PLAN.md — Per-client install guides: Claude Code, Cursor, Codex CLI + new generic stdio page (DOCS-02)
+
+**Wave 5**
+
+- [x] 02-06-PLAN.md — Journey capstone: tutorial-first quickstart with inline works/broke shapes, four-channel install matrix + MCP Registry deep-link table, docs home (DOCS-01, DOCS-03, DOCS-10, DOCS-12)
+
+**Wave 6** *(strictly last, after content stabilizes)*
+
+- [x] 02-07-PLAN.md — `llms.txt` agent index, TDD: RED verify-build assertion then GREEN file (DOCS-11)
 
 ### Phase 3: Landing Page Rebuild
 
@@ -90,14 +109,13 @@ Plans:
   4. A pre-install visitor sees the payoff and the proof: a simulated query→result demo with real recorded JSON shapes (deliberately not live), architecture diagrams reused from `../jarvis/docs/assets/` rendered dark-mode-safe, the local-first privacy section, and GitHub / PyPI / MIT / MCP Registry badges
   5. Channel choice happens in-page: the tabbed install widget (installer+uv / plugin marketplace / manual uvx) appears on the hero and on the docs quickstart
 
-**Plans**: 4 plans
+**Plans**: 3 plans
 
 Plans:
 
-- [ ] 03-01: Landing scaffold on `tokens.css` — hero with one-line value prop + copyable install, badges, copy-to-clipboard behavior
-- [ ] 03-02: Tiered 9-tool showcase with honest gating, compact language-support matrix, local-first privacy section
-- [ ] 03-03: Simulated demo panel (real recorded JSON shapes) + architecture diagrams section, dark-mode-safe
-- [ ] 03-04: Tabbed install widget on hero and quickstart; mobile-responsiveness pass across all sections
+- [x] 03-01: Tracer — tokens refined (`--jv-muted-soft`, `--jv-mask-opaque`), hero with one-line value prop + copyable install, tabbed install widget (hero + quickstart sync), badges, footer, copy-to-clipboard behavior
+- [x] 03-02: Tiered 9-tool showcase with honest gating chips, compact language-support matrix, local-first privacy section, simulated demo panel (real recorded JSON shapes)
+- [x] 03-03: Architecture diagrams (token-driven inline SVG, dark-mode-safe), mobile-responsiveness pass across all sections, structural verification
 
 ### Phase 4: Plugin Skills Realignment & Release
 
@@ -110,13 +128,12 @@ Plans:
   2. All three skills speak the new positioning, and their commands and examples behave exactly as the rebuilt docs say they do
   3. The release is shippable and verifiable: all three `plugin.json` manifests agree at 0.7.3, the Cursor marketplace validator passes, and `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`
 
-**Plans**: 3 plans
+**Plans**: 2 plans
 
 Plans:
 
-- [ ] 04-01: `jarvis-setup` realignment — remove the CLAUDE.md reference, retarget docs URLs at tags, sync the install path with the rebuilt quickstart
-- [ ] 04-02: `jarvis-use` + `jarvis-issues` realignment — new positioning vocabulary, commands/examples synced with rebuilt docs
-- [ ] 04-03: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3, Cursor validator pass, dual-config diff as definition of done
+- [x] 04-01: All-three-skills realignment — remove the CLAUDE.md reference, retarget reading links at the v0.7.3 tag (setup.sh command stays `main`), adopt the settled vocabulary, sync commands/examples with the rebuilt docs, fix tool-roster drift
+- [x] 04-02: Release protocol — synchronized triple-manifest bump 0.7.2→0.7.3 with updated descriptions, check-manifests + Cursor marketplace validator pass, dual-config diff, git tag `v0.7.3` created and pushed after validation
 
 ### Phase 5: Launch Verification & Community
 
@@ -130,13 +147,17 @@ Plans:
   3. Every retired URL serves content or a redirect, and the sitemap matches the shipped pages exactly
   4. Maintainer docs (deployment-guide, code-standards, system-architecture) describe the new site structure, and GitHub Discussions is enabled and linked from the docs troubleshooting page as the support surface
 
-**Plans**: 3 plans
+**Plans**: 2 plans
 
 Plans:
 
-- [ ] 05-01: Clean-machine cold-install run (fresh macOS + Linux), honestly timed, screen-recorded as the walkthrough video
-- [ ] 05-02: Claims audit (landing + docs → README/CHANGELOG/`setup.sh`/manifests) and old-URL crawl + sitemap-vs-shipped-pages check
-- [ ] 05-03: Maintainer docs update; GitHub Discussions enabled and linked from troubleshooting; video walkthrough embedded
+**Wave 1**
+
+- [ ] 05-01-PLAN.md — Asciinema-player self-hosting, Discussions troubleshooting link, maintainer docs update, claims-audit + crawl tooling
+
+**Wave 2** *(blocked on Wave 1 — requires live site)*
+
+- [ ] 05-02-PLAN.md — Merge→deploy, Docker cold-install recording, quickstart video embed, live crawl, sitemap check, claims audit review (orchestrator-held)
 
 ## Progress
 
@@ -145,11 +166,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation & Identity | 0/5 | Not started | - |
-| 2. Docs Rebuild — Tutorial-First Content | 0/5 | Not started | - |
-| 3. Landing Page Rebuild | 0/4 | Not started | - |
-| 4. Plugin Skills Realignment & Release | 0/3 | Not started | - |
-| 5. Launch Verification & Community | 0/3 | Not started | - |
+| 1. Site Foundation & Identity | 5/5 | Complete    | 2026-08-21 |
+| 2. Docs Rebuild — Tutorial-First Content | 7/7 | Complete    | 2026-08-22 |
+| 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
+| 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
+| 5. Launch Verification & Community | 0/2 | Not started | - |
 
 ## Notes
 

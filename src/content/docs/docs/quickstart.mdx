@@ -1,0 +1,293 @@
+---
+title: Quickstart
+description: "Install jarvis and index your first repo in five minutes."
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+jarvis gives your coding agent structural code intelligence — go-to-definition, find-references,
+call/type hierarchy, and search — computed locally from your own repositories, so it can ask
+*who calls this?* or *where is this defined?* instead of guessing from grep. Everything runs on
+your machine (macOS or Linux); nothing is uploaded.
+
+Before you install, [check your language is supported](/guide/requirements/) — navigation tools
+cover four language families, and every other language gets search only.
+
+Choose your install path:
+
+<Tabs syncKey="channel">
+  <TabItem label="Installer + uv">
+
+`setup.sh` installs the SCIP fork, Zoekt, and the language indexers into `~/.jarvis/bin`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
+```
+
+`setup.sh` is idempotent — re-running it skips whatever is already installed. Use `--force` to
+reinstall everything, or `--only <name>` to retry one dependency.
+
+  </TabItem>
+  <TabItem label="Plugin marketplace">
+
+Install directly from your agent's plugin marketplace:
+
+```sh
+# Claude Code
+/plugin marketplace add jarvis-intelligence/jarvis-index
+/plugin install jarvis@jarvis
+
+# Codex CLI
+codex plugin marketplace add jarvis-intelligence/jarvis-index
+```
+
+For Cursor: open Settings → Plugins → search "jarvis" → Install.
+
+  </TabItem>
+  <TabItem label="Manual uvx">
+
+```sh
+uv tool install jarvis-mcp
+```
+
+Requires `uv` on PATH. This is also the fix for the uvx cold-start timeout you'd otherwise hit
+in Step 4 — `uv tool install` builds and caches the wheel once.
+
+  </TabItem>
+</Tabs>
+
+## Step 1: Install the external binaries
+
+`setup.sh` installs the SCIP fork, Zoekt, and the language indexers into `~/.jarvis/bin`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
+```
+
+`setup.sh` is idempotent — re-running it skips whatever is already installed. Use `--force` to
+reinstall everything, or `--only <name>` to retry one dependency.
+
+**You'll know it works when…**
+
+```
+summary
+  scip             ok
+  zoekt            ok
+  scip-swift       ok
+  scip-typescript  ok
+  scip-python      ok
+  scip-java        ok
+```
+
+**You'll know it broke when…**
+
+```
+summary
+  scip             FAILED
+  zoekt            ok
+  scip-swift       ok
+  scip-typescript  ok
+  scip-python      ok
+  scip-java        ok
+```
+
+Re-run just the failed dependency: `sh ./setup.sh --only scip --force`. If a binary installs but
+your shell still can't find it, that's a PATH issue — see
+[PATH troubleshooting](/troubleshooting/common-failures/#jarvis-or-jarvis-server-not-found-path).
+
+## Step 2: Install the CLI and MCP server
+
+```sh
+uv tool install jarvis-mcp
+```
+
+This puts `jarvis` and `jarvis-server` on `PATH`, and it's also the fix for the uvx cold-start
+timeout you'd otherwise hit in Step 4 — `uv tool install` builds and caches the wheel once, so
+later `uvx` calls start in seconds.
+
+::::tip[Optional extras]
+- `uv tool install "jarvis-mcp[semantic]"` — enables `semanticSearch` (vector + lexical fusion)
+- `uv tool install "jarvis-mcp[watch]"` — enables `jarvis watch` (auto-reindex on file changes)
+::::
+
+See the [Install guide](/guide/install/) for alternatives (pip, uvx ad-hoc).
+
+**You'll know it works when…**
+
+```sh
+$ jarvis --help
+usage: jarvis [-h] {index,list,status,reindex,forget,watch} ...
+$ command -v jarvis-server
+/Users/you/.local/bin/jarvis-server
+```
+
+**You'll know it broke when…**
+
+```sh
+$ jarvis --help
+zsh: command not found: jarvis
+```
+
+~/.jarvis/bin` or uv's tool bin directory isn't on `PATH` yet — see
+[PATH troubleshooting](/troubleshooting/common-failures/#jarvis-or-jarvis-server-not-found-path).
+
+## Step 3: Index a repo
+
+```sh
+jarvis index /path/to/your/repo
+```
+
+The slug defaults to the directory name. Re-running `jarvis index` (or `jarvis reindex <slug>`)
+against the same repo always re-indexes and republishes atomically — safe to run again any time.
+
+**You'll know it works when…**
+
+```sh
+$ jarvis status <slug>
+:indexed
+```
+
+**You'll know it broke when…**
+
+```
+jarvis index: error: installed scip 0.8.3 is below the required 0.9.0 — refusing to publish
+a zero-chunk index
+```
+
+Below `scip 0.9.0`, the converter silently writes a schema-valid database with zero chunks and
+zero mentions — see
+[the scip version-gate entry](/troubleshooting/common-failures/#jarvis-index-refuses-an-old-scip-version-gate).
+
+## Step 4: Register jarvis with your client
+
+<Tabs syncKey="client">
+  <TabItem label="Claude Code">
+    ```sh
+    /plugin marketplace add jarvis-intelligence/jarvis-index
+    /plugin install jarvis@jarvis
+    ```
+    Full guide: [Claude Code](/integrations/claude-code/).
+  </TabItem>
+  <TabItem label="Cursor">
+    [Add jarvis to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=jarvis&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyItLWZyb20iLCJqYXJ2aXMtbWNwPj0wLjYuMCIsImphcnZpcy1zZXJ2ZXIiXX0=)
+    Full guide: [Cursor](/integrations/cursor/).
+  </TabItem>
+  <TabItem label="Codex CLI">
+    ```sh
+    codex plugin marketplace add https://github.com/jarvis-intelligence/jarvis-index --ref main
+    codex plugin add jarvis
+    ```
+    Full guide: [Codex CLI](/integrations/codex-cli/).
+  </TabItem>
+  <TabItem label="Any stdio client">
+    ```json title="mcp.json"
+    {
+      "mcpServers": {
+        "jarvis": {
+          "command": "uvx",
+          "args": ["--from", "jarvis-mcp>=0.6.0", "jarvis-server"]
+        }
+      }
+    }
+    ```
+    Full guide: [Any stdio client](/integrations/generic-stdio/).
+  </TabItem>
+</Tabs>
+
+Registering jarvis in several clients at once is safe — the stdio transport means each client
+launches its own `jarvis-server` process, so there's no shared state to race on.
+
+**You'll know it works when…**
+
+Your client lists the jarvis tools (9 tools) after connecting.
+
+**You'll know it broke when…**
+
+The first connect times out. On a cold `uv` cache, `uvx --from jarvis-mcp jarvis-server` builds
+jarvis-mcp's Rust extension from source (5+ minutes) — see
+[the uvx cold-start entry](/troubleshooting/common-failures/#first-mcp-connect-times-out-uvx-cold-start)
+(Step 2's `uv tool install` is the fix).
+
+## Step 5: Make your first tool call
+
+Ask your agent to call `getIndexStatus`:
+
+```json
+{ "repo": "toy-repo" }
+```
+
+**You'll know it works when…**
+
+```json
+{
+  "repo": "toy-repo",
+  "indexed": true,
+  "status": "indexed",
+  "commit": "abc1234",
+  "generated_at": "2026-07-08T12:00:00+00:00",
+  "stale": false,
+  "freshness": "fresh",
+  "checked_at": "2026-07-08T12:00:05+00:00",
+  "searchCoverage": { "expected": 120, "indexed": 120, "complete": true },
+  "last_index_run": {
+    "outcome": "indexed",
+    "origin": "signature",
+    "reason": null,
+    "recovery": null
+  },
+  "capabilities": {
+    "navigation": { "available": true, "reason": null, "recovery": null },
+    "search": { "available": true, "reason": null },
+    "semantic": { "available": false, "reason": "semantic index not built for this repo (requires the `semantic` extra)" }
+  }
+}
+```
+
+Then try a real navigation query — `goToDefinition`:
+
+```json
+{ "repo": "toy-repo", "symbol": "Greeter" }
+```
+
+```json
+{
+  "symbol": "Greeter",
+  "resolvedSymbol": "scip-typescript npm @toy/pkg 0.0.1 src/`greeter.ts`/Greeter#",
+  "definitions": [
+    {
+      "path": "toy/greeter.ts",
+      "range": { "start": { "line": 0, "character": 6 }, "end": { "line": 0, "character": 13 } }
+    }
+  ],
+  "commit": "abc1234",
+  "generated_at": "2026-07-08T12:00:00+00:00",
+  "stale": false,
+  "freshness": "fresh",
+  "checked_at": "2026-07-08T12:00:05+00:00"
+}
+```
+
+**You'll know it broke when…**
+
+If `symbol` is ambiguous, you get a structured `candidates` list instead of a definition:
+
+```json
+{
+  "error": "'dup' is ambiguous in toy-repo (2 matches). Retry with a qualifier, e.g. 'a.C.dup'.",
+  "candidates": [
+    { "symbol": "sym-a", "dottedPath": "a.C.dup", "kind": "METHOD" },
+    { "symbol": "sym-b", "dottedPath": "b.D.dup", "kind": "METHOD" }
+  ],
+  "candidateTotal": 2
+}
+```
+
+Retry with a qualified name from `candidates` (e.g. `a.C.dup`). For anything else, work through
+the [troubleshooting decision tree](/troubleshooting/).
+
+## Next steps
+
+- [Tools](/tools/) — the 9 MCP tools
+- [CLI](/cli/) — the `jarvis` indexer CLI
+- [Install Channels](/guide/install-matrix/) — PyPI, plugins, and the MCP Registry compared
+- [Concepts](/concepts/scip) — how indexing and search actually work

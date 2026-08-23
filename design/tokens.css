@@ -1,0 +1,86 @@
+/**
+ * jarvis identity tokens — the single design-token layer (SITE-03).
+ *
+ * Provenance: values transplanted verbatim from the live landing's `:root` +
+ * `[data-theme="dark"]` blocks (site/index.html:13-52, carried into
+ * src/pages/index.astro by the 01-02 unification) on 2026-08-21.
+ *
+ * STATUS: PROVISIONAL — Phase 1 ships the current live palette under the
+ * --jv-* architecture; Phase 3 refines these same variables, it never forks
+ * them. Values here are the live baseline, not final brand decisions
+ * (docs/brand-spec.md and the 0807 landing specs are superseded history).
+ *
+ * Dark mode: `[data-theme='dark']` is the project-wide dark selector — the
+ * landing toggle and Starlight's ThemeProvider both set `data-theme` on
+ * <html>.
+ *
+ * Fonts are self-hosted via Fontsource (SITE-04): zero third-party font
+ * requests. The variable families register under their Fontsource family
+ * names ("Geist Variable", "Geist Mono Variable"); Rajdhani has no variable
+ * package — static 600/700 cover the wordmark.
+ *
+ * Both surfaces consume this file: Starlight via astro.config.mjs customCss
+ * (remapped onto --sl-* in src/styles/starlight-tokens.css), the landing via
+ * a direct import in src/pages/index.astro. No other file may define a color.
+ */
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource/rajdhani/600.css';
+@import '@fontsource/rajdhani/700.css';
+
+/* ---- Light (default) ---- */
+:root {
+  --jv-bg: #f3f7fa;
+  --jv-surface: #e9edf2;
+  --jv-fg: #12181d;
+  --jv-muted: #58626a;
+  --jv-border: #c3cad0;
+  --jv-accent: #29527d;
+  --jv-accent-strong: #0a3966;
+  --jv-accent-soft: #cfe0f3;
+  --jv-accent-shadow: 33, 82, 148;
+  --jv-header-bg: rgba(243, 247, 250, 0.92);
+  --jv-header-shadow: 0 12px 30px rgba(18, 24, 38, 0.06);
+  --jv-card-shadow: 0 18px 48px rgba(18, 24, 38, 0.08);
+  --jv-chip-bg: #0a0e11;
+  --jv-chip-fg: #e1e5e8;
+  --jv-chip-accent: #7cafe4;
+  --jv-muted-soft: #9aa4ac;
+  --jv-chip-ring: rgba(124, 175, 228, 0.26);
+  --jv-gate-amber: #92610a;
+  --jv-gate-amber-strong: #b8860b;
+  --jv-mask-opaque: #000;
+  --jv-radius: 0.5rem;
+  --jv-radius-lg: 0.9rem;
+  --jv-frame: min(100% - 3rem, 72rem);
+  --jv-frame-wide: min(100% - 3rem, 88rem);
+  --jv-sans: "Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --jv-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --jv-logo: "Rajdhani", "Geist Variable", system-ui, sans-serif;
+  --jv-ease: cubic-bezier(0.2, 0, 0, 1);
+  --jv-diagram-green: #16a34a;
+  --jv-diagram-red: #b91c1c;
+  --jv-diagram-amber: #b45309;
+ }
+
+/* ---- Dark overrides ---- */
+[data-theme='dark'] {
+  --jv-bg: #040506;
+  --jv-surface: #0d0f12;
+  --jv-fg: #dee2e5;
+  --jv-muted: #8c9399;
+  --jv-border: #282c30;
+  --jv-accent: #5b86b7;
+  --jv-accent-strong: #7cafe4;
+  --jv-accent-soft: #112031;
+  --jv-header-bg: rgba(2, 3, 4, 0.94);
+  --jv-header-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+  --jv-muted-soft: #626a71;
+  --jv-chip-ring: rgba(124, 175, 228, 0.18);
+  --jv-card-shadow: 0 18px 46px rgba(0, 0, 0, 0.2);
+  --jv-gate-amber: #d4a853;
+  --jv-accent-shadow: 124, 175, 228;
+  --jv-diagram-green: #4ade80;
+  --jv-diagram-red: #f87171;
+  --jv-diagram-amber: #fbbf24;
+}

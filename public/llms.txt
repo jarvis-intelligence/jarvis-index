@@ -1,0 +1,61 @@
+# jarvis
+
+> Local-first code intelligence for coding agents — an MCP server answering structural questions (definitions, references, call hierarchy, search) over your own indexed repos.
+
+## Getting started
+
+- [jarvis docs](https://jarvis-intelligence.github.io/jarvis-index/docs/): jarvis docs — local-first code intelligence for coding agents using Claude Code, Cursor, and Codex CLI.
+- [Quickstart](https://jarvis-intelligence.github.io/jarvis-index/docs/quickstart/): Install jarvis and index your first repo in five minutes.
+- [Requirements & Limits](https://jarvis-intelligence.github.io/jarvis-index/docs/guide/requirements/): Platform requirements and per-language limits — read before installing.
+- [Install guide](https://jarvis-intelligence.github.io/jarvis-index/docs/guide/install/): Detailed install reference for jarvis: uv, uvx, pip, extras, and what setup.sh provisions.
+- [Install Channels](https://jarvis-intelligence.github.io/jarvis-index/docs/guide/install-matrix/): Four ways to install jarvis — PyPI, Claude Code plugin, Codex plugin, or the MCP Registry — all converging on the same jarvis-server.
+
+## MCP Tools
+
+- [Tools overview](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/): The 9 MCP tools jarvis exposes: navigation, search, graph, and status.
+- [documentSymbols](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/document-symbols/): documentSymbols — every top-level symbol defined in a file within a repo.
+- [goToDefinition](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/go-to-definition/): goToDefinition — resolve where a symbol is defined.
+- [findReferences](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/find-references/): findReferences — every occurrence of a symbol, definition included.
+- [callHierarchy](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/call-hierarchy/): callHierarchy — incoming and outgoing calls for a symbol.
+- [typeHierarchy](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/type-hierarchy/): typeHierarchy — super/subtypes of a symbol.
+- [getIndexStatus](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/get-index-status/): getIndexStatus — whether a repo is indexed, fresh, and search-complete.
+- [searchCode](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/search-code/): searchCode — lexical and regex search via Zoekt.
+- [semanticSearch](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/semantic-search/): semanticSearch — natural-language code search via vector + lexical + SCIP fusion.
+- [blastRadius](https://jarvis-intelligence.github.io/jarvis-index/docs/tools/blast-radius/): blastRadius — which indexed repos depend on this package (2-hop BFS).
+
+## CLI
+
+- [CLI overview](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/): The jarvis CLI: index, list, status, reindex, forget, watch, jarvis-server.
+- [jarvis index](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/index-cmd/): jarvis index — index a repo for SCIP navigation and Zoekt search.
+- [jarvis list](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/list/): jarvis list — list all indexed repos.
+- [jarvis status](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/status/): jarvis status — show a repo's index status and freshness.
+- [jarvis reindex](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/reindex/): jarvis reindex — re-run indexing for a registered repo.
+- [jarvis forget](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/forget/): jarvis forget — remove a repo's registration and published index.
+- [jarvis watch](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/watch/): jarvis watch — auto-reindex on file changes. Requires the [watch] extra.
+- [jarvis-server](https://jarvis-intelligence.github.io/jarvis-index/docs/cli/jarvis-server/): jarvis-server — the stdio MCP server every client config launches.
+
+## Concepts
+
+- [SCIP](https://jarvis-intelligence.github.io/jarvis-index/docs/concepts/scip/): SCIP (Source Code Intelligence Protocol) is the open format jarvis uses to index and navigate code.
+- [Zoekt search](https://jarvis-intelligence.github.io/jarvis-index/docs/concepts/zoekt/): Zoekt provides fast lexical and regex search across your indexed repositories.
+- [Semantic search](https://jarvis-intelligence.github.io/jarvis-index/docs/concepts/semantic-search/): Semantic search combines vector, lexical, and SCIP signals via reciprocal rank fusion.
+- [Blast radius](https://jarvis-intelligence.github.io/jarvis-index/docs/concepts/blast-radius/): Blast radius is a 2-hop dependency graph showing which indexed repos depend on a package.
+- [Architecture](https://jarvis-intelligence.github.io/jarvis-index/docs/concepts/architecture/): jarvis is local-first: SQLite on disk, no cloud, no auth, no network calls at runtime.
+
+## Integrations
+
+- [Integrations overview](https://jarvis-intelligence.github.io/jarvis-index/docs/integrations/): Register jarvis with Claude Code, Cursor, Codex CLI, or any other stdio client.
+- [Claude Code](https://jarvis-intelligence.github.io/jarvis-index/docs/integrations/claude-code/): Register jarvis with Claude Code via plugin or manual MCP config.
+- [Cursor](https://jarvis-intelligence.github.io/jarvis-index/docs/integrations/cursor/): Register jarvis with Cursor via a one-click install link, the plugin, or manual MCP config.
+- [Codex CLI](https://jarvis-intelligence.github.io/jarvis-index/docs/integrations/codex-cli/): Register jarvis with Codex CLI via plugin or manual MCP config.
+- [Any stdio client](https://jarvis-intelligence.github.io/jarvis-index/docs/integrations/generic-stdio/): Register jarvis with any MCP client that can launch a stdio server.
+
+## Troubleshooting
+
+- [Decision tree](https://jarvis-intelligence.github.io/jarvis-index/docs/troubleshooting/): Diagnostic decision tree for when a jarvis tool returns empty or an error.
+- [Common failures](https://jarvis-intelligence.github.io/jarvis-index/docs/troubleshooting/common-failures/): Common operational failures and their fixes.
+- [Upstream issues](https://jarvis-intelligence.github.io/jarvis-index/docs/troubleshooting/upstream-issues/): Known upstream issues: scip typeHierarchy, scip-java AGP, scip-kotlinc version mismatch.
+
+## Optional
+
+- [Changelog](https://jarvis-intelligence.github.io/jarvis-index/docs/changelog/): jarvis release history, mirrored verbatim from the jarvis repo.

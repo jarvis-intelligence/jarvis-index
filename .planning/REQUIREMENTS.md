@@ -14,24 +14,24 @@ Requirements for this milestone. Each maps to roadmap phases (traceability below
 - [ ] **SITE-03**: `design/tokens.css` — single design-token layer carrying the new jarvis identity, consumed by landing and docs
 - [ ] **SITE-04**: Self-hosted fonts (Fontsource variable fonts) — no third-party font CDN requests
 - [ ] **SITE-05**: Node 20→22 bump with `engines` field; `deploy-pages.yml` diff ships in the same commit as any stack change
-- [ ] **SITE-06**: URL contract — existing public URLs enumerated, old→new redirect map built, meta-refresh stubs + lookup-table `404.html` shipped with the restructure
-- [ ] **SITE-07**: Three CI checks — 3-manifest version agreement, `plugin/.mcp.json` ≡ `plugin/mcp.json`, manifest JSON parse
-- [ ] **SITE-08**: Dark mode (toggle, persists) + local search (Pagefind) across docs
+- [x] **SITE-06**: URL contract — existing public URLs enumerated, old→new redirect map built, meta-refresh stubs + lookup-table `404.html` shipped with the restructure
+- [x] **SITE-07**: Three CI checks — 3-manifest version agreement, `plugin/.mcp.json` ≡ `plugin/mcp.json`, manifest JSON parse
+- [x] **SITE-08**: Dark mode (toggle, persists) + local search (Pagefind) across docs
 
 ### DOCS — Docs Rebuild
 
-- [ ] **DOCS-01**: Tutorial-first quickstart — why → install → `jarvis index` → register per client → first tool call, with expected output shown
-- [ ] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
-- [ ] **DOCS-03**: Four-channel install matrix — PyPI, Claude plugin, Codex plugin, MCP Registry
-- [ ] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
-- [ ] **DOCS-05**: CLI reference — 7 commands with flags and examples
-- [ ] **DOCS-06**: Requirements & limits stated before install, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats)
-- [ ] **DOCS-07**: Troubleshooting decision tree — symptom → diagnosis → fix, led by uvx cold-start, PATH, scip version-gate
-- [ ] **DOCS-08**: Changelog page imported from `../jarvis/CHANGELOG.md`
-- [ ] **DOCS-09**: Additive rebuild — every existing docs page classified keep / merge-with-redirect / retire; nav reaches every tool/CLI/troubleshooting page in one click
-- [ ] **DOCS-10**: "You'll know it works when…" success/failure shapes inline — first tool call self-verifiable without leaving the page
-- [ ] **DOCS-11**: `llms.txt` agent-consumable docs index — generated; ships only after docs content stabilizes (sequencing constraint, enforced by roadmap ordering)
-- [ ] **DOCS-12**: MCP Registry deep-link table — registry entry location plus per-client deep links
+- [x] **DOCS-01**: Tutorial-first quickstart — why → install → `jarvis index` → register per client → first tool call, with expected output shown
+- [x] **DOCS-02**: Per-client install guides — Claude Code, Cursor, Codex CLI, generic stdio JSON
+- [x] **DOCS-03**: Four-channel install matrix — PyPI, Claude plugin, Codex plugin, MCP Registry
+- [x] **DOCS-04**: All 9 tool reference pages with request→response examples and the `{"error": ...}` contract
+- [x] **DOCS-05**: CLI reference — 7 commands with flags and examples
+- [x] **DOCS-06**: Requirements & limits stated before install, led by the language-support matrix (4 nav families / 10 search-only / per-language caveats)
+- [x] **DOCS-07**: Troubleshooting decision tree — symptom → diagnosis → fix, led by uvx cold-start, PATH, scip version-gate
+- [x] **DOCS-08**: Changelog page imported from `../jarvis/CHANGELOG.md`
+- [x] **DOCS-09**: Additive rebuild — every existing docs page classified keep / merge-with-redirect / retire; nav reaches every tool/CLI/troubleshooting page in one click
+- [x] **DOCS-10**: "You'll know it works when…" success/failure shapes inline — first tool call self-verifiable without leaving the page
+- [x] **DOCS-11**: `llms.txt` agent-consumable docs index — generated; ships only after docs content stabilizes (sequencing constraint, enforced by roadmap ordering)
+- [x] **DOCS-12**: MCP Registry deep-link table — registry entry location plus per-client deep links
 
 ### LNDG — Landing Page
 
@@ -95,21 +95,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SITE-03 | Phase 1 | Planned |
 | SITE-04 | Phase 1 | Planned |
 | SITE-05 | Phase 1 | Planned |
-| SITE-06 | Phase 1 | Planned |
-| SITE-07 | Phase 1 | Planned |
-| SITE-08 | Phase 1 | Planned |
-| DOCS-01 | Phase 2 | Planned |
-| DOCS-02 | Phase 2 | Planned |
-| DOCS-03 | Phase 2 | Planned |
-| DOCS-04 | Phase 2 | Planned |
-| DOCS-05 | Phase 2 | Planned |
-| DOCS-06 | Phase 2 | Planned |
-| DOCS-07 | Phase 2 | Planned |
-| DOCS-08 | Phase 2 | Planned |
-| DOCS-09 | Phase 2 | Planned |
-| DOCS-10 | Phase 2 | Planned |
-| DOCS-11 | Phase 2 | Planned |
-| DOCS-12 | Phase 2 | Planned |
+| SITE-06 | Phase 1 | Complete |
+| SITE-07 | Phase 1 | Complete |
+| SITE-08 | Phase 1 | Complete |
+| DOCS-01 | Phase 2 | Complete |
+| DOCS-02 | Phase 2 | Complete |
+| DOCS-03 | Phase 2 | Complete |
+| DOCS-04 | Phase 2 | Complete |
+| DOCS-05 | Phase 2 | Complete |
+| DOCS-06 | Phase 2 | Complete |
+| DOCS-07 | Phase 2 | Complete |
+| DOCS-08 | Phase 2 | Complete |
+| DOCS-09 | Phase 2 | Complete |
+| DOCS-10 | Phase 2 | Complete |
+| DOCS-11 | Phase 2 | Complete |
+| DOCS-12 | Phase 2 | Complete |
 | LNDG-01 | Phase 3 | Planned |
 | LNDG-02 | Phase 3 | Planned |
 | LNDG-03 | Phase 3 | Planned |

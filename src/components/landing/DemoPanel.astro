@@ -1,0 +1,95 @@
+---
+import scenarios from '../../data/demo-scenarios.json';
+---
+
+<div class="demo-panel" id="demo-panel">
+  <div class="demo-nav" role="tablist" aria-label="Demo scenarios">
+    {scenarios.map((s, i) => (
+      <button
+        class="demo-step-btn tap"
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? '0' : '-1'}
+        aria-controls={`demo-step-${s.id}`}
+        id={`demo-btn-${s.id}`}
+        data-step={String(i)}
+      >
+        {s.question}
+      </button>
+    ))}
+  </div>
+
+  {scenarios.map((s, i) => (
+    <div
+      class="demo-step"
+      role="tabpanel"
+      id={`demo-step-${s.id}`}
+      aria-labelledby={`demo-btn-${s.id}`}
+      aria-hidden={i === 0 ? 'false' : 'true'}
+    >
+      <div class="exchange">
+        <div class="exchange-head">
+          <span>{s.id === 'index-status' ? 'getIndexStatus' : s.id === 'go-to-definition' ? 'goToDefinition' : 'findReferences'}({s.id === 'index-status' ? `repo="${s.toolCall.repo}"` : `repo="${s.toolCall.repo}", symbol="${s.toolCall.symbol}"`})</span>
+          <span>Recorded result</span>
+        </div>
+        <div class="exchange-body">
+          <pre class="ex-call">{JSON.stringify(s.toolCall, null, 2)}</pre>
+          <pre class="ex-out">{JSON.stringify(s.result, null, 2)}</pre>
+        </div>
+      </div>
+    </div>
+  ))}
+
+  <div class="demo-nav demo-nav-arrows">
+    <button class="tap" id="demo-prev" aria-label="Previous scenario" disabled>← Prev</button>
+    <span class="demo-counter">1 / {scenarios.length}</span>
+    <button class="tap" id="demo-next" aria-label="Next scenario">Next →</button>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  var panel = document.getElementById('demo-panel');
+  if (!panel) return;
+  var steps = panel.querySelectorAll('.demo-step');
+  var btns = panel.querySelectorAll('.demo-step-btn');
+  var prev = document.getElementById('demo-prev');
+  var next = document.getElementById('demo-next');
+  var counter = panel.querySelector('.demo-counter');
+  var total = steps.length;
+  var current = 0;
+
+  function show(n) {
+    steps.forEach(function (s, i) {
+      var hidden = i !== n;
+      s.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+      s.style.display = hidden ? 'none' : 'block';
+    });
+    btns.forEach(function (b, i) {
+      b.setAttribute('aria-selected', i === n ? 'true' : 'false');
+      b.tabIndex = i === n ? 0 : -1;
+    });
+    current = n;
+    if (counter) counter.textContent = (n + 1) + ' / ' + total;
+    if (prev) prev.disabled = n === 0;
+    if (next) next.disabled = n === total - 1;
+  }
+
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      show(parseInt(b.getAttribute('data-step'), 10));
+    });
+  });
+  if (prev) prev.addEventListener('click', function () { if (current > 0) show(current - 1); });
+  if (next) next.addEventListener('click', function () { if (current < total - 1) show(current + 1); });
+
+  /* arrow-key roving within tablist */
+  panel.addEventListener('keydown', function (e) {
+    var focused = document.activeElement;
+    if (!focused || !focused.classList.contains('demo-step-btn')) return;
+    var idx = parseInt(focused.getAttribute('data-step'), 10);
+    if (e.key === 'ArrowRight' && idx < total - 1) { e.preventDefault(); show(idx + 1); btns[idx + 1].focus(); }
+    if (e.key === 'ArrowLeft' && idx > 0) { e.preventDefault(); show(idx - 1); btns[idx - 1].focus(); }
+  });
+})();
+</script>

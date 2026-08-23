@@ -1,6 +1,6 @@
 ---
 name: jarvis-use
-description: "Use jarvis MCP tools for code structure queries: finding references, go-to-definition, call/type hierarchy, who calls a function, where a symbol is defined, document symbols, natural-language semantic search. Prefer over grep."
+description: "Use jarvis structural code intelligence for code structure queries: finding references, go-to-definition, call/type hierarchy, who calls a function, where a symbol is defined, document symbols, natural-language semantic search. Prefer over grep."
 version: "0.1.0"
 ---
 
