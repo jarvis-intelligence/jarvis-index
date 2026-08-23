@@ -163,6 +163,42 @@ is what the agent matches against.
 - Update docs when user-visible behavior, install steps, commands, architecture, or public
   contracts change. Skip changelog noise for internal edits.
 
+## Site (Astro + Starlight)
+
+
+### Content structure
+
+```
+src/content/docs/docs/    Starlight docs pages (MDX / Markdown, kebab-case directories, `index.md` or `index.mdx` per page)
+src/pages/                Non-docs Astro pages (e.g. `index.astro` for the landing)
+src/components/            Astro components (`landing/` for landing-specific, top-level for Starlight overrides)
+src/styles/               CSS imported by Astro / Starlight (`landing.css`, `starlight-tokens.css`)
+```
+
+### Design tokens
+
+`design/tokens.css` is the single source of truth for the visual identity (`--jv-*` variables).
+Both the landing page and Starlight docs import it — Astro via `import '../../design/tokens.css'` in
+`src/pages/index.astro`, Starlight via the `customCss` array in `astro.config.mjs`.
+
+### Static assets (`public/`)
+
+Files in `public/` are copied to `dist/` unhashed (Astro passthrough). This is where
+self-hosted fonts (`public/fonts/`), the asciinema player (`public/assets/asciinema/`),
+`llms.txt`, `favicon.svg`, and legacy pages (`brand-logo.html`) live.
+
+### URL discipline
+
+The canonical URL set is locked by `design/url-contract.json`. Adding a page requires
+adding its URL to the contract in the same commit — `scripts/verify-build.mjs` V2
+enforces set equality in CI. The site uses `build.format: 'directory'` (trailing
+slashes on all URLs).
+
+Maintainer docs (`docs/system-architecture.md`, `docs/deployment-guide.md`,
+`docs/code-standards.md`, `docs/codebase-summary.md`, `docs/project-overview-pdr.md`,
+`docs/project-roadmap.md`, `docs/brand-spec.md`) are excluded from the built site via
+`srcExclude` in `astro.config.mjs`.
+
 ## Commits
 
 - Conventional-commit format. No AI attribution or co-author trailers.

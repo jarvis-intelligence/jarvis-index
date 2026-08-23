@@ -177,3 +177,31 @@ Consequence: under the default plugin registration `semanticSearch` **always** e
 installing/reindexing with `[semantic]` does not fix it — the extra must be present in the server
 process answering the query. Users who need it register a *second*, differently-named server
 (`jarvis-semantic`). This is documented in the `jarvis-use` skill's gotchas as a settled decision.
+## Docs & Landing site (Channel 5)
+
+The public website at `/` (landing) and `/docs/` (documentation) is built with **Astro 5 +
+Starlight** and deployed to GitHub Pages.
+
+```
+src/pages/index.astro          landing page (custom Astro, not Starlight)
+src/content/docs/docs/        Starlight docs content (MDX, Markdown)
+src/components/landing/       Astro components for the landing page
+src/components/           Starlight overrides (if any)
+design/tokens.css            design-token source of truth (imported by both surfaces)
+public/                     passthrough files (not hashed by Astro)
+  ├── fonts/                self-hosted woff2 (Geist, Geist Mono, Rajdhani)
+  ├── assets/asciinema/     asciinema-player JS/CSS (self-hosted, Apache-2.0)
+  ├── llms.txt              llmstxt.org machine-readable index
+  ├── brand-logo.html       legacy brand page
+  └── favicon.svg
+```
+
+Build: `npm run build` (runs `astro build` producing `dist/`, then
+`scripts/verify-build.mjs` V1–V10 assertions). Deploy: push to `main` triggers
+`.github/workflows/deploy-pages.yml`, which runs on Node 22, uploads `dist/` as
+the Pages artifact, and runs a post-deploy smoke probe (curl `/` and `/docs/`
+→ 200 + marker check).
+
+The URL set is locked by `design/url-contract.json`; `scripts/verify-build.mjs` V2
+asserts set equality between the built pages and the contract. Adding or retiring
+a URL requires editing the contract in the same commit.
