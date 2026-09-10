@@ -1,6 +1,6 @@
 {
   "name": "jarvis",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "Local-first structural code intelligence over your own indexed repositories, with skills that teach the agent to prefer structural queries over grep.",
   "author": {
     "name": "phuongddx",
@@ -32,8 +32,8 @@
       "Index this repo for code navigation."
     ],
     "websiteURL": "https://github.com/jarvis-intelligence/jarvis-index",
-    "privacyPolicyURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.7.3/plugin/README.md#privacy",
-    "termsOfServiceURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.7.3/plugin/LICENSE",
+    "privacyPolicyURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.8.0/plugin/README.md#privacy",
+    "termsOfServiceURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.8.0/plugin/LICENSE",
     "brandColor": "#3B82F6",
     "composerIcon": "./plugin/assets/jarvis-small.svg",
     "logo": "./plugin/assets/app-icon.png",

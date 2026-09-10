@@ -5,27 +5,27 @@ The 9 MCP tools registered by `jarvis-server`. All take `repo` (the slug from `j
 ## Tool detail
 
 ### documentSymbols(repo, path) → dict
-Every top-level symbol defined in `path` within `repo`, each with its range. `symbol` is the full SCIP string; `displayName`/`kind` are readable. Useful for browsing a file or picking a qualifier when a nav tool reports an ambiguous name — not a mandatory first step.
-Returns: `{"path": ..., "symbols": [{...}], "freshness": {...}}`.
+Returns the per-file outline. When the file has usable SCIP outline coverage, entries come from SCIP; otherwise they come from the always-on Tree-sitter syntax baseline. Syntax-served responses include `coverage` with parsed/partial/failed counts and a reason. Entries carry readable names/kinds and ranges; syntax entries also carry `selectionRange`, `qualifiedName`, and `parentSymbol`.
+Returns: `{"path": ..., "symbols": [{...}], "coverage"?: {...}, "freshness": {...}}`.
 
 ### goToDefinition(repo, symbol) → dict
-Resolve `symbol`'s definition location(s) within `repo`. `symbol` accepts a bare name (`Greeter`), a qualified name (`Greeter.greet`, or `package-name.Greeter.greet` when a bare name collides across packages/modules), or the full SCIP symbol string. Resolution tries an exact match, then a dotted-suffix match; an ambiguous name returns an error payload with `candidates`/`candidateTotal` instead of a silent empty result. When resolution changed the input, the response includes `resolvedSymbol` (the canonical form); omitted when the caller already passed the exact full symbol.
-Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "definitions": [{...}], "freshness": {...}}`.
+Resolves `symbol` within `repo`. A bare name, qualified name, or full SCIP symbol is resolved across both providers; an opaque `syntax:` identifier returned by the syntax baseline round-trips directly. Resolution tries an exact match and then dotted suffixes. An ambiguous input returns an error payload with `candidates`/`candidateTotal` rather than a silent empty result. Locations carry `source` (`"scip"` or `"tree-sitter"`) and `positionEncoding`; `resolvedSymbol` is present when the input was canonicalized.
+Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "definitions": [{..., "source": "scip" | "tree-sitter", "positionEncoding": ...}], "freshness": {...}}`.
 
 ### findReferences(repo, symbol) → dict
-Every occurrence of `symbol` within `repo`, definition sites included. Same `symbol`-resolution behavior as `goToDefinition`.
+Every occurrence of `symbol` within `repo`, definition sites included. **SCIP-only:** when the published snapshot has no usable SCIP occurrence data, returns the established error payload plus `requiredCapability`, `reason`, and `recovery`; it never returns an empty list as a substitute for missing data.
 Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "references": [{...}], "freshness": {...}}`.
 
 ### callHierarchy(repo, symbol) → dict
-Single-level incoming + outgoing call hierarchy for `symbol`. Same `symbol`-resolution behavior as `goToDefinition`.
+Single-level incoming and outgoing call hierarchy for `symbol`. **SCIP-only:** missing call-edge data returns `requiredCapability`/`reason`/`recovery`, never empty hierarchies that pretend the graph was indexed.
 Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "incomingCalls": [...], "outgoingCalls": [...], "freshness": {...}}`.
 
 ### typeHierarchy(repo, symbol) → dict
-Single-level super/subtypes for `symbol`. Same `symbol`-resolution behavior as `goToDefinition`. **Returns an explicit error when the index was built with an unpatched `scip`** (upstream through v0.9.0 never populates `relationships`). setup.sh now installs a fork-fixed build, so `jarvis reindex <slug>` after updating scip makes this tool work. Do not read the error as "this type has no supertypes" — it is missing data, not an empty hierarchy.
+Single-level supertypes/subtypes for `symbol`. **SCIP-only:** missing relationship data returns `requiredCapability`/`reason`/`recovery`. The bundled setup.sh installs a patched `scip` because upstream through v0.9.0 did not populate relationships; re-run setup.sh and `jarvis reindex <slug> --scip` after upgrading it.
 
 ### getIndexStatus(repo, repo_path=None) → dict
-Whether `repo` has a published index, plus freshness and search coverage. Pass `repo_path` (the repo's local git dir) to compare the published commit against `git rev-parse HEAD`.
-Returns: `{"repo": ..., "indexed": bool, "status": ..., "stale": bool, "freshness": str, "commit": str, "generated_at": str, "checked_at": str, "searchCoverage": {"expected": int, "indexed": int, "complete": bool} | None, "searchCoverageReason": str, "last_index_run": {"outcome": str, "origin": str, "reason": str | None, "recovery": str | None}, "capabilities": {"navigation": {"available": bool, "reason": str | None, "recovery": str | None}, "search": {"available": bool, "reason": str | None}, "semantic": {"available": bool, "reason": str | None}}}`. Without `repo_path`, freshness is reported without a staleness check (never `stale: true` without evidence). `searchCoverage` is `{"expected": int, "indexed": int, "complete": bool}` comparing git-tracked files at last index time against what Zoekt currently holds (catches shards lost after a successful index); when it can't be computed (e.g. zoekt-webserver not running), it's `None` and `searchCoverageReason` explains why.
+Whether `repo` has a published index, plus freshness, snapshot generation, search coverage, and live provider coverage. Pass `repo_path` (the local git directory) to compare the published commit against `git rev-parse HEAD`. `capabilities.tools` reports `available`, `providers`, `reason`, and `recovery` for each of `documentSymbols`, `goToDefinition`, `findReferences`, `callHierarchy`, and `typeHierarchy`; `capabilities.syntax` reports extraction availability, parsed/partial/failed/skipped/unsupported counts, and the extraction identity.
+Returns: `{"repo": ..., "indexed": bool, "status": ..., "stale": bool, "freshness": str, "commit": str, "generated_at": str, "checked_at": str, "generation": str | None, "searchCoverage": {"expected": int, "indexed": int, "complete": bool} | None, "searchCoverageReason": str, "last_index_run": {"outcome": str, "origin": str, "reason": str | None, "recovery": str | None}, "capabilities": {"navigation": {...}, "search": {...}, "semantic": {...}, "tools": {"documentSymbols": {"available": bool, "providers": [...], "reason": str | None, "recovery": str | None}, ...}, "syntax": {"available": bool, "parsed": int, "partial": int, "failed": int, "skipped": int, "unsupported": int, "extractionIdentity": str | None}}}`. Without `repo_path`, freshness is reported without a staleness check (never `stale: true` without evidence).
 
 ### searchCode(query, repo=None) → dict
 Lexical search via an embedded Zoekt index (lazy-started on first call). `repo`, if given, is applied as a Zoekt `r:` filter scoping results to that one indexed repo.
@@ -41,4 +41,4 @@ Returns: `{"repo": ..., "symbolOrPackage": ..., "dependents": [{..., "hops": int
 
 ## Freshness field
 
-Every nav tool returns flat top-level freshness fields alongside the result: `stale` (bool), `freshness` ("fresh" or "stale"), `commit` (the published index's git SHA), `generated_at` (ISO timestamp of the index build), `checked_at` (ISO timestamp of the staleness check). Use `stale` to decide whether to trust results or `jarvis reindex <slug>` first. When `repo_path` is not passed to `getIndexStatus`, `stale` is always `false` (no evidence to judge staleness).
+Every navigation tool returns flat top-level freshness fields alongside the result: `stale` (bool), `freshness` (`"fresh"` or `"stale"`), `commit` (the published index's git SHA), `generated_at` (the index build timestamp), `checked_at` (the staleness-check timestamp), and `generation` (the immutable snapshot identifier). Use `stale` to decide whether to trust results or `jarvis reindex <slug>` first. When `repo_path` is not passed to `getIndexStatus`, `stale` is always `false` because there is no evidence to judge staleness.
