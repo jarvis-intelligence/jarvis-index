@@ -1,18 +1,18 @@
 # jarvis
 
-Local-first code intelligence over your own indexed repositories. Every index has an always-on Tree-sitter syntax baseline for declaration navigation and outlines; optional SCIP enrichment adds precise references and hierarchies, while Zoekt provides lexical search. Installs as a plugin for **Codex CLI**, **Claude Code**, and **Cursor**, exposing nine MCP tools and three agent skills.
+Local-first code intelligence over your own indexed repositories. Every index has an always-on Tree-sitter syntax baseline for declaration navigation and outlines; optional SCIP enrichment adds precise references and hierarchies, while Zoekt provides lexical search. Installs as a plugin for **Codex CLI**, **Claude Code**, and **Cursor**, exposing ten MCP tools and three agent skills.
 
 ## What it gives you
 
-Nine MCP tools (all take `repo` = the slug from `jarvis index`):
+Ten MCP tools (navigation tools take `repo` = the slug from `jarvis index`):
 
 - `documentSymbols` — per-file outline from SCIP when available, otherwise Tree-sitter declarations.
 - `goToDefinition` — resolves definitions from SCIP coverage or the syntax baseline.
 - `findReferences` — every occurrence of a symbol; SCIP-only, with a capability error when SCIP occurrence data is unavailable.
 - `callHierarchy` — single-level incoming and outgoing calls; SCIP-only, with a capability error when call-edge data is unavailable.
 - `typeHierarchy` — supertypes/subtypes; SCIP-only, with a capability error when relationship data is unavailable.
-- `getIndexStatus` — published-index freshness, snapshot generation, and live provider coverage for each navigation tool.
-- `searchCode` — lexical search via Zoekt (lazy-started webserver).
+- `getIndexStatus` — published-index freshness, snapshot generation, live provider coverage for each navigation tool, and an `indexing` block while a build started by `indexRepo` is in flight (terminal in every failure mode, so poll loops always exit).
+- `indexRepo` — builds an index for a local git repo itself: pre-flights, spawns `jarvis index` detached (`semantic=false` by default, so no embedding-model download), and returns `{slug, state, pid, log}` immediately; poll `getIndexStatus` to completion.
 - `semanticSearch` — vector + Zoekt + optional SCIP symbol-definition hybrid via reciprocal rank fusion (needs the `[semantic]` extra).
 - `blastRadius` — 2-hop package-dependency BFS across indexed repos.
 
@@ -70,15 +70,15 @@ same `setup.sh` + `jarvis index` flow.
 
 - `[semantic]` for `semanticSearch` — install with `uv tool install "jarvis-mcp[semantic]"`, then register a second MCP server (the `jarvis` name is already taken by the plugin's default registration):
   ```bash
-  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.8.0" jarvis-server
-  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.8.0" jarvis-server
+  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
+  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
   ```
   Cursor has no `mcp add` CLI — add the same server to `~/.cursor/mcp.json` (global) or
   `.cursor/mcp.json` (project) by hand:
   ```json
   { "mcpServers": { "jarvis-semantic": {
       "command": "uvx",
-      "args": ["--from", "jarvis-mcp[semantic]>=0.8.0", "jarvis-server"] } } }
+      "args": ["--from", "jarvis-mcp[semantic]>=0.9.0", "--python", ">=3.12", "jarvis-server"] } } }
   ```
 - `[watch]` for `jarvis watch` (foreground auto-reindex on file changes).
 
