@@ -13,6 +13,7 @@ Ten MCP tools (navigation tools take `repo` = the slug from `jarvis index`):
 - `typeHierarchy` — supertypes/subtypes; SCIP-only, with a capability error when relationship data is unavailable.
 - `getIndexStatus` — published-index freshness, snapshot generation, live provider coverage for each navigation tool, and an `indexing` block while a build started by `indexRepo` is in flight (terminal in every failure mode, so poll loops always exit).
 - `indexRepo` — builds an index for a local git repo itself: pre-flights, spawns `jarvis index` detached (`semantic=false` by default, so no embedding-model download), and returns `{slug, state, pid, log}` immediately; poll `getIndexStatus` to completion.
+- `searchCode` — lexical search via Zoekt (lazy-started webserver).
 - `semanticSearch` — vector + Zoekt + optional SCIP symbol-definition hybrid via reciprocal rank fusion (needs the `[semantic]` extra).
 - `blastRadius` — 2-hop package-dependency BFS across indexed repos.
 
