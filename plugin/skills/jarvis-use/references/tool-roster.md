@@ -1,6 +1,6 @@
 # jarvis tool roster
 
-The 9 MCP tools registered by `jarvis-server`. All take `repo` (the slug from `jarvis index`). On failure every tool returns `{"error": "..."}` rather than raising.
+The 10 MCP tools registered by `jarvis-server`. All navigation tools take `repo` (the slug from `jarvis index`). On failure every tool returns `{"error": "..."}` rather than raising.
 
 ## Tool detail
 
@@ -24,8 +24,13 @@ Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "incomingCalls": [...], "outgo
 Single-level supertypes/subtypes for `symbol`. **SCIP-only:** missing relationship data returns `requiredCapability`/`reason`/`recovery`. The bundled setup.sh installs a patched `scip` because upstream through v0.9.0 did not populate relationships; re-run setup.sh and `jarvis reindex <slug> --scip` after upgrading it.
 
 ### getIndexStatus(repo, repo_path=None) → dict
-Whether `repo` has a published index, plus freshness, snapshot generation, search coverage, and live provider coverage. Pass `repo_path` (the local git directory) to compare the published commit against `git rev-parse HEAD`. `capabilities.tools` reports `available`, `providers`, `reason`, and `recovery` for each of `documentSymbols`, `goToDefinition`, `findReferences`, `callHierarchy`, and `typeHierarchy`; `capabilities.syntax` reports extraction availability, parsed/partial/failed/skipped/unsupported counts, and the extraction identity.
+
+Whether `repo` has a published index, plus freshness, snapshot generation, search coverage, live provider coverage, and — while a run started by `indexRepo` is in flight — an `indexing` block (`state`: `starting`/`running`/`failed-at-startup`/`abandoned`, with `pid`, `exitCode`, and `log` on the failure states). The block is terminal-or-progressing in every failure mode, so a poll loop over it always exits. Pass `repo_path` (the local git directory) to compare the published commit against `git rev-parse HEAD`. `capabilities.tools` reports `available`, `providers`, `reason`, and `recovery` for each of `documentSymbols`, `goToDefinition`, `findReferences`, `callHierarchy`, and `typeHierarchy`; `capabilities.syntax` reports extraction availability, parsed/partial/failed/skipped/unsupported counts, and the extraction identity.
 Returns: `{"repo": ..., "indexed": bool, "status": ..., "stale": bool, "freshness": str, "commit": str, "generated_at": str, "checked_at": str, "generation": str | None, "searchCoverage": {"expected": int, "indexed": int, "complete": bool} | None, "searchCoverageReason": str, "last_index_run": {"outcome": str, "origin": str, "reason": str | None, "recovery": str | None}, "capabilities": {"navigation": {...}, "search": {...}, "semantic": {...}, "tools": {"documentSymbols": {"available": bool, "providers": [...], "reason": str | None, "recovery": str | None}, ...}, "syntax": {"available": bool, "parsed": int, "partial": int, "failed": int, "skipped": int, "unsupported": int, "extractionIdentity": str | None}}}`. Without `repo_path`, freshness is reported without a staleness check (never `stale: true` without evidence).
+
+### indexRepo(path, semantic=false) → dict
+Builds an index for the git repo at `path` so the other tools have something to read. Spawns `jarvis index` as a detached child and returns immediately — poll `getIndexStatus(repo=...)` until `indexed` is true or the `indexing.state` is terminal. `semantic` defaults to false so an agent call never implicitly downloads a ~2 GB embedding model. A live lock or live child returns `{"alreadyRunning": true, ...}` instead of spawning twice; a missing index error from any tool names `indexRepo` as its `recoveryTool`.
+Returns: `{"slug": ..., "state": "starting", "pid": ..., "log": ..., "reindex"?: true}`.
 
 ### searchCode(query, repo=None) → dict
 Lexical search via an embedded Zoekt index (lazy-started on first call). `repo`, if given, is applied as a Zoekt `r:` filter scoping results to that one indexed repo.

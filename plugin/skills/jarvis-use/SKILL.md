@@ -19,7 +19,8 @@ For any **structural** code question, prefer the jarvis tool over grep when the 
 | What calls `X` / what `X` calls? | `callHierarchy(repo, X)` | SCIP-only; returns a capability error when call-edge data is unavailable |
 | Super/subtypes of `X`? | `typeHierarchy(repo, X)` | SCIP-only; returns a capability error when relationship data is unavailable |
 | Symbols in a file? | `documentSymbols(repo, path)` | SCIP outline when usable for that file, otherwise Tree-sitter declarations |
-| Is this repo indexed or capable? | `getIndexStatus(repo, repo_path)` | Freshness, snapshot generation, and providers for all five navigation tools |
+| Is this repo indexed or capable? | `getIndexStatus(repo, repo_path)` | Freshness, snapshot generation, providers for all five navigation tools, and the in-flight `indexing` block while an `indexRepo` run is live |
+| Repo has no index (or errors name `recoveryTool: "indexRepo"`)? | `indexRepo(path)` | Builds the index itself; returns `{slug, state, pid, log}` immediately, then poll `getIndexStatus(repo=slug)` until `indexed` or the `indexing.state` is terminal. `semantic` defaults to false — no embedding download unless asked |
 | Cross-repo dependents of a package? | `blastRadius(repo, pkg)` | — |
 | Lexical text search? | grep **or** `searchCode(query, repo?)` | — |
 | Natural-language / conceptual code search? | `semanticSearch(repo, query, limit?)` | `searchCode` (needs `semantic` extra + reindex) |
@@ -44,7 +45,7 @@ Full signatures and return shapes: `grep -nA20 "## Tool detail" references/tool-
 Before a structural tool call:
 
 1. Call `getIndexStatus(repo, repo_path)` — pass `repo_path` = the repo's local git working directory to compare the published commit against `git rev-parse HEAD`.
-2. If the snapshot is stale, run `jarvis reindex <slug>` before relying on results. If it is not indexed, offer `jarvis index <path>`; use grep for the immediate question.
+2. If the snapshot is stale, run `jarvis reindex <slug>` before relying on results. If it is not indexed at all, call `indexRepo(path=...)` with the repo's local git working directory (the error payload's `recoveryToolArgs` names the shape), then poll `getIndexStatus(repo=<returned slug>)` — the `indexing` block terminates in every failure mode (`failed-at-startup` and `abandoned` carry the log path). If spawning is impossible, fall back to offering `jarvis index <path>` and use grep for the immediate question.
 3. For a navigation query, check `capabilities.tools.<tool>` — `available`, `providers`, `reason`, `recovery`:
    - `documentSymbols` and `goToDefinition` serve from `"scip"` when the file has coverage, else from the always-on `"tree-sitter"` baseline.
    - `findReferences`, `callHierarchy`, and `typeHierarchy` need `"scip"`; when unavailable, surface the tool's `requiredCapability`/`reason`/`recovery` error instead of reading it as an empty result.
@@ -61,8 +62,8 @@ Before a structural tool call:
 - **`semanticSearch` needs the `semantic` extra.** If the repo was indexed without `uv tool install "jarvis-mcp[semantic]"`, it returns `{"error": "..."}` with an install hint; index or reindex after installing the extra.
 - **The default plugin registration deliberately omits the `semantic` extra.** A semantic query must go to a separately registered server:
   ```bash
-  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.8.0" jarvis-server
-  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.8.0" jarvis-server
+  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
+  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
   ```
   In Cursor there is no `mcp add` CLI — add the same server entry to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) by hand (exact JSON in the plugin README's Optional extras).
 - **`blastRadius` only sees already-indexed repos.** Index the dependency first, or re-run `jarvis index`/`reindex` after indexing it, for an edge to appear.
