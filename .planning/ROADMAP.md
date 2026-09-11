@@ -18,6 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Landing Page Rebuild** - New-identity conversion page: hero with copyable install, honestly tiered 9-tool showcase, language matrix, privacy, demo panel, diagrams, tabbed install widget (completed 2026-08-23)
 - [x] **Phase 4: Plugin Skills Realignment & Release** - Three skills realigned to the final voice and docs, shipped as a synchronized 0.7.2→0.7.3 triple-manifest release (completed 2026-08-23)
 - [x] **Phase 5: Launch Verification & Community** - Clean-machine cold-install run (recorded as video), claims audit, old-URL crawl, maintainer docs, Discussions enabled (completed 2026-08-23)
+- [ ] **Phase 6: Plugin & Skills Enhancement** - Realign the three skills and the plugin surface with jarvis 0.9.1 (10 tools, tree-sitter syntax baseline), ship the absent plugin capabilities (slash commands, stale-index hook, navigator subagent), add CI guards for every drift class, release a synchronized tagged bump
 
 ## Phase Details
 
@@ -159,10 +160,52 @@ Plans:
 
 - [x] 05-02-PLAN.md — Merge→deploy, Docker cold-install recording, quickstart video embed, live crawl, sitemap check, claims audit review (orchestrator-held)
 
+### Phase 6: Plugin & Skills Enhancement
+
+**Goal**: Make the shipped plugin surface true to jarvis 0.9.1 and mechanically hard to un-true: realign the three skills, all five manifests, and both READMEs with the real 10-tool roster and the tree-sitter syntax baseline; ship the plugin capabilities the client docs recommend but the tree lacks (slash commands, a stale-index session hook, a navigator subagent); extend `check-manifests.mjs` into a guard that fails on every drift class this phase fixes; and land it as one synchronized, correctly tagged release whose in-manifest URLs resolve.
+**Depends on**: Phase 5
+**Requirements**: TBD (post-v0.7.3 phase — requirement IDs not remapped)
+**Success Criteria** (what must be TRUE):
+
+  1. Every tool count and tool list on the install surface matches the 10 tools registered in `../jarvis/src/jarvis/server.py` — `.codex-plugin/plugin.json` longDescription, root `README.md`, `plugin/README.md`, and all three SKILL.md files — and the shipped skills describe the tree-sitter syntax baseline and `syntax:` identifiers that 0.9.1 actually has
+  2. No manifest, skill, or README points at a URL that 404s: the tag referenced by `privacyPolicyURL`/`termsOfServiceURL` exists at release time, and `jarvis-mcp` version pins match the released server (0.9.1+)
+  3. The plugin ships the recommended capabilities: `plugin/commands/` slash commands for indexing and status, a SessionStart stale-index hook wired for all three clients, and a navigator subagent — each loaded through the documented manifest/discovery path for Claude Code, Cursor, and Codex
+  4. Every drift class this phase fixes is guarded by an automated check that fails red before it passes green: tool-roster ↔ server tool set, manifest ↔ MCP pin ↔ tag existence, marketplace manifest validity, SKILL.md frontmatter conformance to the Agent Skills spec
+  5. The release is shippable and verifiable in one synchronized bump: all three `plugin.json` manifests agree, `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`, the Cursor submission checklist passes, and the git tag the manifests reference is created and pushed
+
+**Plans**: 8 plans
+
+Plans (planned 2026-09-11 — tracer-first: plan 01 proves the whole machine end-to-end on one drift
+class before anything expands from it. No REQ-IDs exist for this phase, so plans trace to CONTEXT
+decision IDs D-01..D-18 and success criteria SC-1..SC-5):
+
+**Wave 1** *(tracer — verified before any expansion)*
+
+- [ ] 06-01-PLAN.md — Tracer: tool-roster truth (root README, Codex longDescription, snake_case trigger examples) + guard dimension P1 shown red-then-green + `check:plugin` alias, CI step, and the D-14 path-filter additions (D-01, D-12, D-13, D-14)
+
+**Wave 2** *(four parallel plans, zero file overlap)*
+
+- [ ] 06-02-PLAN.md — Skills truth: off-spec frontmatter key removed from all three SKILL.md + the two convention docs that mandate it, `jarvis-setup` progressive-disclosure move with a `universal-ctags` row and the `indexRepo` recovery path, `jarvis-use` `syntax:` nuance and exit-2 contract, 0.9.1 prose floors, `jarvis-issues` limitations re-verified (D-02, D-03, D-05, D-10, D-11, D-18)
+- [ ] 06-03-PLAN.md — SessionStart stale-index hook: exit-0-always POSIX probe script, two client-shaped hook configs, the single Cursor manifest declaration, and honest Codex/Cursor caveats in `plugin/README.md` (D-03, D-07)
+- [ ] 06-04-PLAN.md — New components: `/jarvis:index` and `/jarvis:status` slash commands, read-only `jarvis-navigator` subagent, `$schema` on the Claude manifest only (D-06, D-08, D-09)
+- [ ] 06-05-PLAN.md — Vendor validator adopted at a pinned version behind a blocking package-legitimacy gate (D-12, D-17)
+
+**Wave 3** *(blocked on Wave 2 — P4 needs the frontmatter fixed, P5 needs the new components to exist)*
+
+- [ ] 06-06-PLAN.md — Guard expansion: P3 marketplace validity, P4 skill/command/agent frontmatter allowed-keys, P5 referenced-path existence and hook executable bit — each demonstrated red first (D-12, D-13)
+
+**Wave 4** *(blocked on Wave 3 — shares `scripts/check-plugin.mjs`)*
+
+- [ ] 06-07-PLAN.md — Synchronized 0.9.1 bump: three manifests, both Codex policy URLs at the `v0.9.1` tag, byte-identical `jarvis-mcp>=0.9.1` floors, plus dimensions P2a (offline) and P2b (`--release`-gated) (D-03, D-04, D-05, D-12, D-13, D-15, D-16)
+
+**Wave 5** *(release gate — post-merge, not autonomous)*
+
+- [ ] 06-08-PLAN.md — Push `v0.9.1` behind a blocking-human decision checkpoint, prove the release gate and both URL probes, walk the Cursor submission checklist and record every CI-unprovable client verification (D-04, D-13, D-15, D-16)
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -171,6 +214,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
 | 5. Launch Verification & Community | 2/2 | Complete    | 2026-08-23 |
+| 6. Plugin & Skills Enhancement | 0/8 | Planning    | - |
 
 ## Notes
 
