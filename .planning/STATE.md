@@ -1,17 +1,18 @@
 ---
-gsd_state_version: 1.0
-milestone: v0.7.3
-status: completed
-stopped_at: Phase 5 complete — all phases complete
-last_updated: "2026-08-23T05:39:04.534Z"
-last_activity: 2026-08-23
-state_head: d2f87646df85cb76bd7d1c5f76917440760b5a7a
+gsd_state_version: "1.0"
+milestone: v0.9.1
+current_phase: 06
+current_phase_name: Plugin & Skills Enhancement
+status: planning
+stopped_at: "Phase 06 planned: 8 plans / 5 waves / 23 tasks, plan-checker passed (0 blockers, 0 warnings, 4 advisories). Ready to execute."
+last_updated: "2026-09-11T17:21:17.552Z"
+last_activity: 2026-09-12
+state_head: 4f79d99eed5c52b4d824203458ed774cd8097880
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 19
-  completed_plans: 19
-current_phase: 5
+  total_phases: 6
+  completed_phases: 0
+  total_plans: 8
+  completed_plans: 0
 ---
 
 # Project State
@@ -21,14 +22,14 @@ current_phase: 5
 See: .planning/PROJECT.md (updated 2026-08-21)
 
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
-**Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
+**Current focus:** Phase 06 — Plugin & Skills Enhancement (plugin + skills realignment to jarvis 0.9.1, new plugin capabilities, CI drift guards, synchronized tagged release)
 
-Phase: 5
-Plan: Not started
-Status: v0.7.3 milestone complete
-Last activity: 2026-08-23
+Phase: 06
+Plan: Not started (8 plans ready)
+Status: Planned — ready to execute
+Last activity: 2026-09-12
 
-Progress: [██░░░░░░░░] 20%
+Progress: [░░░░░░░░░░] 0% of Phase 06 (v0.7.3's 5 phases are archived under .planning/milestones/)
 
 ## Performance Metrics
 
@@ -130,17 +131,20 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T17:11:15.002Z
-Stopped at: Phase 5 complete — all phases complete
-Resume file: .planning/phases/03-landing-page-rebuild/03-UI-SPEC.md
+Last session: 2026-09-12 (Phase 06 planning: scout audits → research → plan → plan-checker revision loop)
+Stopped at: Phase 06 planned — 8 plans / 5 waves / 23 tasks; plan-checker passed on revision iteration 1 (0 blockers, 0 warnings, 4 advisories); decision coverage 18/18
+Resume file: .planning/phases/06-plugin-skills-enhancement/06-01-PLAN.md
 
 ## Current Position
 
-Phase: Milestone v0.7.3 complete
-Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-08-23 — Milestone v0.7.3 completed and archived
+Phase: 06 (Plugin & Skills Enhancement) — READY TO EXECUTE
+Plan: — (06-01 is the tracer slice; waves 1→5)
+Status: Planned, not started
+Last activity: 2026-09-12 — Phase 06 planning artifacts committed (4f79d99, 412d158)
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Execute the planned phase: `/gsd-execute-phase 6` (run from /Users/ddphuong/Projects/jarvis-ai/jarvis-index)
+- Phase 06 was appended to the CURRENT roadmap by explicit operator choice this session — do NOT run `/gsd-new-milestone` to start it. The v0.7.3 milestone is shipped and archived under `.planning/milestones/`; `milestone: v0.9.1` in the frontmatter names the release Phase 06 ships (D-16), not a new milestone block in ROADMAP.md.
+- Before executing: commit or stash any pending working-tree changes. Execute-phase makes atomic commits per task and will otherwise sweep unrelated WIP.
+- Optional first: `/gsd-review --phase 6 --all` (cross-AI plan review), then `/gsd-plan-phase 6 --reviews`.
