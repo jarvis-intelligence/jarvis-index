@@ -173,7 +173,7 @@ Plans:
   4. Every drift class this phase fixes is guarded by an automated check that fails red before it passes green: tool-roster ↔ server tool set, manifest ↔ MCP pin ↔ tag existence, marketplace manifest validity, SKILL.md frontmatter conformance to the Agent Skills spec
   5. The release is shippable and verifiable in one synchronized bump: all three `plugin.json` manifests agree, `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`, the Cursor submission checklist passes, and the git tag the manifests reference is created and pushed
 
-**Plans**: 5/8 plans executed
+**Plans**: 6/8 plans executed
 
 Plans (planned 2026-09-11 — tracer-first: plan 01 proves the whole machine end-to-end on one drift
 class before anything expands from it. No REQ-IDs exist for this phase, so plans trace to CONTEXT
@@ -196,7 +196,7 @@ decision IDs D-01..D-18 and success criteria SC-1..SC-5):
 
 **Wave 4** *(blocked on Wave 3 — shares `scripts/check-plugin.mjs`)*
 
-- [ ] 06-07-PLAN.md — Synchronized 0.9.1 bump: three manifests, both Codex policy URLs at the `v0.9.1` tag, byte-identical `jarvis-mcp>=0.9.1` floors, plus dimensions P2a (offline) and P2b (`--release`-gated) (D-03, D-04, D-05, D-12, D-13, D-15, D-16)
+- [x] 06-07-PLAN.md — Synchronized 0.9.1 bump: three manifests, both Codex policy URLs at the `v0.9.1` tag, byte-identical `jarvis-mcp>=0.9.1` floors, plus dimensions P2a (offline) and P2b (`--release`-gated) (D-03, D-04, D-05, D-12, D-13, D-15, D-16)
 
 **Wave 5** *(release gate — post-merge, not autonomous)*
 
@@ -214,7 +214,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
 | 5. Launch Verification & Community | 2/2 | Complete    | 2026-08-23 |
-| 6. Plugin & Skills Enhancement | 5/8 | In Progress |  |
+| 6. Plugin & Skills Enhancement | 6/8 | In Progress |  |
 
 ## Notes
 

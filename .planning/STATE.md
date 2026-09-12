@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 milestone: v0.9.1
 current_phase: 06
 current_phase_name: Plugin & Skills Enhancement
-current_plan: 6 (next runnable: 06-07; 06-05 gated on human decision)
+current_plan: "8 (next runnable: 06-08 release gate; 06-05 gated on human decision)"
 status: planning
-stopped_at: Completed 06-06 (guards P3/P4/P5 red-proven, green); 06-05 awaits human gate
-last_updated: "2026-09-12T04:19:13.740Z"
+stopped_at: Completed 06-07 (0.9.1 synchronized; P2a/P2b red-proven, green); 06-05 awaits human gate; 06-08 awaits release-gate decision
+last_updated: "2026-09-12T04:41:40.147Z"
 last_activity: 2026-09-12
-state_head: 466097d88f34ebdf13110bcc1c64e6df97f14c5a
+state_head: 4a2e04aae7f79af9e5b2200846e67234e61b191a
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 06 — Plugin & Skills Enhancement (plugin + skills realignment to jarvis 0.9.1, new plugin capabilities, CI drift guards, synchronized tagged release)
 
 Phase: 06
-Current Plan: 6 (next runnable: 06-07; 06-05 gated on human decision)
+Current Plan: 8 (next runnable: 06-08 release gate; 06-05 gated on human decision)
 Total Plans in Phase: 8
-Status: In Progress — 06-01, 06-02, 06-03, 06-04, 06-06 complete
+Status: In Progress — 06-01, 06-02, 06-03, 06-04, 06-06, 06-07 complete
 Last activity: 2026-09-12
 
 ## Performance Metrics
