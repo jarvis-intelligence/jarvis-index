@@ -51,3 +51,17 @@ jobs:
 
       - name: Check plugin surface
         run: node scripts/check-plugin.mjs
+
+      # Vendor-supplied guard, supplementing dimensions P1-P5 rather than replacing them:
+      # `claude plugin validate --strict` is the only tool measured to catch hooks-schema
+      # drift, emitting an unknown-hook-event finding and exiting 1 on a wrong event name.
+      # It was also measured to NOT report unknown SKILL.md, command, or agent frontmatter
+      # keys, so it can never stand in for P4. The version below is pinned deliberately so
+      # a vendor release cannot turn this CI red without a change in this repository.
+      - name: Install Claude Code CLI
+        run: npm i -g @anthropic-ai/claude-code@2.1.268
+
+      - name: Validate plugin + marketplace
+        run: |
+          claude plugin validate ./plugin --strict
+          claude plugin validate . --strict
