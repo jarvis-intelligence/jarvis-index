@@ -16,15 +16,22 @@
 //        whose name collides with a reserved name; that list is re-checked by
 //        the client on every load and is not enumerated here — P3 asserts
 //        shape and resolution, not name availability.
-//   P4 — skill, command, and agent frontmatter uses only allowed keys.
+//   P4 — skill, command, and agent frontmatter uses only its allowed key set.
+//        Hand-rolled and must stay: `claude plugin validate --strict` was
+//        measured NOT to report unknown frontmatter keys in skills, commands,
+//        or agents (research C-4), so no vendor guard covers this — do not
+//        delete P4 believing the validator has it handled. For agents,
+//        `hooks`, `mcpServers`, and `permissionMode` fail by name:
+//        unsupported in plugin scope for security reasons, and Claude Code
+//        would otherwise load the agent anyway via silent filename fallback.
 //   P5 — manifest-referenced components and hook executables exist.
 //
 // All subject paths resolve against process.cwd(), never against this file's
 // own location — this is the testability seam that lets this script run
 // unmodified against a scratch copy of the repo by changing the working
 // directory before invoking it.
-import { existsSync, readFileSync, statSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { basename, join, resolve } from 'node:path'
 
 const ROSTER_PATH = 'plugin/skills/jarvis-use/references/tool-roster.md'
 const SURFACE_PATHS = ['plugin/README.md', 'README.md']
@@ -216,10 +223,161 @@ for (const marketplace of MARKETPLACES) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// P4 — skill, command, and agent frontmatter allowed keys
+// ─────────────────────────────────────────────────────────────────────────
+// Allowed key sets, each commented with its source of truth.
+const SKILL_ALLOWED_KEYS = new Set([
+  // Agent Skills specification frontmatter set (agentskills.io/specification).
+  // `name` and `description` are the two required members; `version` is not a
+  // member, so its return fails here.
+  'name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools',
+])
+const COMMAND_ALLOWED_KEYS = new Set([
+  // Claude Code's documented command frontmatter set. `name` is included
+  // deliberately: Claude Code ignores it in a command file, but Cursor's
+  // documented command frontmatter requires it. `paths` is excluded
+  // deliberately so a command can never silently narrow its own applicability.
+  'name', 'description', 'argument-hint', 'arguments', 'disable-model-invocation',
+  'user-invocable', 'allowed-tools', 'disallowed-tools', 'model', 'effort',
+  'when_to_use', 'metadata',
+])
+const AGENT_ALLOWED_KEYS = new Set([
+  // Claude Code's documented plugin-scope agent key list.
+  'name', 'description', 'model', 'effort', 'maxTurns', 'tools', 'disallowedTools',
+  'skills', 'memory', 'background', 'isolation',
+])
+const AGENT_FORBIDDEN_KEYS = new Set([
+  // Unsupported in plugin scope for security reasons; reported with the
+  // specific exclusion message, never a generic unknown-key one.
+  'hooks', 'mcpServers', 'permissionMode',
+])
+
+// Frontmatter parsing without a YAML dependency: the opening --- must be the
+// file's first line (Claude Code reads frontmatter only in that case), the
+// block ends at the next --- line, and top-level keys are leading
+// identifier-colon matches on non-indented lines only — an indented line
+// belongs to a nested map such as metadata. Returns null after reporting a
+// structural failure.
+function frontmatter(relPath) {
+  let text
+  try {
+    text = readFileSync(resolve(process.cwd(), relPath), 'utf8')
+  } catch (err) {
+    fail('P4', `${relPath}: could not read file (${err.message})`)
+    return null
+  }
+  const lines = text.split('\n')
+  if (lines[0] !== '---') {
+    fail('P4', `${relPath}: frontmatter must open with --- on line 1 — Claude Code reads frontmatter only in that case`)
+    return null
+  }
+  let close = -1
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i] === '---') {
+      close = i
+      break
+    }
+  }
+  if (close === -1) {
+    fail('P4', `${relPath}: frontmatter has no closing --- line`)
+    return null
+  }
+  const keys = new Map()
+  for (const line of lines.slice(1, close)) {
+    if (/^\s/.test(line)) continue
+    const match = line.match(/^([A-Za-z0-9_-]+):(.*)$/)
+    if (match) keys.set(match[1], match[2].trim())
+  }
+  return keys
+}
+
+function unquote(value) {
+  if (value.length >= 2 && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
+    return value.slice(1, -1)
+  }
+  return value
+}
+
+function checkKeys(relPath, keys, allowed, forbidden) {
+  for (const key of keys.keys()) {
+    if (forbidden?.has(key)) {
+      fail('P4', `${relPath}: frontmatter key "${key}" is forbidden in plugin scope — hooks, mcpServers, and permissionMode are not supported for plugin-shipped agents (plugin-scope security exclusion)`)
+    } else if (!allowed.has(key)) {
+      fail('P4', `${relPath}: unknown frontmatter key "${key}"`)
+    }
+  }
+  for (const key of ['name', 'description']) {
+    if (!keys.has(key)) {
+      fail('P4', `${relPath}: frontmatter key "${key}" is required`)
+    }
+  }
+}
+
+// Markdown files directly under a component directory, or null when the
+// component is not shipped at all (absent directory = not a failure; existing
+// directory with zero markdown files = packaging mistake).
+function componentMarkdownFiles(dirRelPath) {
+  const absDir = resolve(process.cwd(), dirRelPath)
+  if (!existsSync(absDir)) return null
+  return readdirSync(absDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => join(dirRelPath, entry.name))
+}
+
+function failIfEmpty(dirRelPath, files) {
+  if (files !== null && files.length === 0) {
+    fail('P4', `${dirRelPath}: exists but contains zero markdown files — an empty component directory is a packaging mistake`)
+  }
+}
+
+let frontmatterSubjects = 0
+
+const skillsDir = 'plugin/skills'
+if (existsSync(resolve(process.cwd(), skillsDir))) {
+  const skillDirs = readdirSync(resolve(process.cwd(), skillsDir), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => join(skillsDir, entry.name))
+  let subjects = 0
+  for (const dir of skillDirs) {
+    const relPath = join(dir, 'SKILL.md')
+    if (!existsSync(resolve(process.cwd(), relPath))) continue
+    subjects++
+    const keys = frontmatter(relPath)
+    if (keys === null) continue
+    checkKeys(relPath, keys, SKILL_ALLOWED_KEYS, null)
+    if (keys.has('name') && keys.get('name') !== basename(dir)) {
+      fail('P4', `${relPath}: name ${JSON.stringify(keys.get('name'))} does not match parent directory name ${JSON.stringify(basename(dir))}`)
+    }
+    if (keys.has('description')) {
+      const description = unquote(keys.get('description'))
+      if (description.length < 1 || description.length > 1024) {
+        fail('P4', `${relPath}: description must be 1-1024 characters, got ${description.length}`)
+      }
+    }
+  }
+  failIfEmpty(`${skillsDir}/*/SKILL.md`, subjects === 0 ? [] : null)
+  frontmatterSubjects += subjects
+}
+
+for (const [dirRelPath, allowed, forbidden] of [
+  ['plugin/commands', COMMAND_ALLOWED_KEYS, null],
+  ['plugin/agents', AGENT_ALLOWED_KEYS, AGENT_FORBIDDEN_KEYS],
+]) {
+  const files = componentMarkdownFiles(dirRelPath)
+  failIfEmpty(dirRelPath, files)
+  for (const relPath of files ?? []) {
+    frontmatterSubjects++
+    const keys = frontmatter(relPath)
+    if (keys === null) continue
+    checkKeys(relPath, keys, allowed, forbidden)
+  }
+}
+
 if (failed) {
   process.exit(1)
 }
 
 console.log(
-  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources) green`
+  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources), P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets) green`
 )
