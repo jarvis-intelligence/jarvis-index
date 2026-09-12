@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "jarvis",
   "version": "0.9.0",
   "description": "Local-first structural code intelligence over your own indexed repositories, with skills that teach Claude to prefer structural queries over grep.",
