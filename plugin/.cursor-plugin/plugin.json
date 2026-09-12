@@ -28,5 +28,6 @@
     "zoekt"
   ],
   "skills": "./skills/",
-  "mcpServers": "./mcp.json"
+  "mcpServers": "./mcp.json",
+  "hooks": "./hooks/cursor.json"
 }
