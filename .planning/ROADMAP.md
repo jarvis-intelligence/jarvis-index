@@ -173,7 +173,7 @@ Plans:
   4. Every drift class this phase fixes is guarded by an automated check that fails red before it passes green: tool-roster ↔ server tool set, manifest ↔ MCP pin ↔ tag existence, marketplace manifest validity, SKILL.md frontmatter conformance to the Agent Skills spec
   5. The release is shippable and verifiable in one synchronized bump: all three `plugin.json` manifests agree, `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`, the Cursor submission checklist passes, and the git tag the manifests reference is created and pushed
 
-**Plans**: 1/8 plans executed
+**Plans**: 4/8 plans executed
 
 Plans (planned 2026-09-11 — tracer-first: plan 01 proves the whole machine end-to-end on one drift
 class before anything expands from it. No REQ-IDs exist for this phase, so plans trace to CONTEXT
@@ -185,10 +185,10 @@ decision IDs D-01..D-18 and success criteria SC-1..SC-5):
 
 **Wave 2** *(four parallel plans, zero file overlap)*
 
-- [ ] 06-02-PLAN.md — Skills truth: off-spec frontmatter key removed from all three SKILL.md + the two convention docs that mandate it, `jarvis-setup` progressive-disclosure move with a `universal-ctags` row and the `indexRepo` recovery path, `jarvis-use` `syntax:` nuance and exit-2 contract, 0.9.1 prose floors, `jarvis-issues` limitations re-verified (D-02, D-03, D-05, D-10, D-11, D-18)
-- [ ] 06-03-PLAN.md — SessionStart stale-index hook: exit-0-always POSIX probe script, two client-shaped hook configs, the single Cursor manifest declaration, and honest Codex/Cursor caveats in `plugin/README.md` (D-03, D-07)
-- [ ] 06-04-PLAN.md — New components: `/jarvis:index` and `/jarvis:status` slash commands, read-only `jarvis-navigator` subagent, `$schema` on the Claude manifest only (D-06, D-08, D-09)
-- [ ] 06-05-PLAN.md — Vendor validator adopted at a pinned version behind a blocking package-legitimacy gate (D-12, D-17)
+- [x] 06-02-PLAN.md — Skills truth: off-spec frontmatter key removed from all three SKILL.md + the two convention docs that mandate it, `jarvis-setup` progressive-disclosure move with a `universal-ctags` row and the `indexRepo` recovery path, `jarvis-use` `syntax:` nuance and exit-2 contract, 0.9.1 prose floors, `jarvis-issues` limitations re-verified (D-02, D-03, D-05, D-10, D-11, D-18)
+- [x] 06-03-PLAN.md — SessionStart stale-index hook: exit-0-always POSIX probe script, two client-shaped hook configs, the single Cursor manifest declaration, and honest Codex/Cursor caveats in `plugin/README.md` (D-03, D-07). Executed against TDD-revised plan `2dc67fe` — persistent `scripts/test-jarvis-index-status.sh` harness, validated RED→GREEN.
+- [x] 06-04-PLAN.md — New components: `/jarvis:index` and `/jarvis:status` slash commands, read-only `jarvis-navigator` subagent, `$schema` on the Claude manifest only (D-06, D-08, D-09)
+- [ ] 06-05-PLAN.md — Vendor validator adopted at a pinned version behind a blocking package-legitimacy gate (D-12, D-17). AUTONOMOUS: FALSE — awaiting human decision; excluded from autonomous waves by design.
 
 **Wave 3** *(blocked on Wave 2 — P4 needs the frontmatter fixed, P5 needs the new components to exist)*
 
@@ -214,7 +214,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
 | 5. Launch Verification & Community | 2/2 | Complete    | 2026-08-23 |
-| 6. Plugin & Skills Enhancement | 1/8 | In Progress|  |
+| 6. Plugin & Skills Enhancement | 4/8 | In Progress |  |
 
 ## Notes
 
