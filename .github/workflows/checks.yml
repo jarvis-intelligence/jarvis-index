@@ -13,6 +13,10 @@ on:
       - '.claude-plugin/**'
       - '.cursor-plugin/**'
       - 'scripts/check-manifests.mjs'
+      - 'scripts/check-plugin.mjs'
+      - 'README.md'
+      # setup.sh is sync-owned by the private repo; changes to --only flags or ctags behaviour must re-validate the installer claims in the skills.
+      - 'setup.sh'
       - '.github/workflows/checks.yml'
   pull_request:
     branches: [main]
@@ -22,6 +26,10 @@ on:
       - '.claude-plugin/**'
       - '.cursor-plugin/**'
       - 'scripts/check-manifests.mjs'
+      - 'scripts/check-plugin.mjs'
+      - 'README.md'
+      # setup.sh is sync-owned by the private repo; changes to --only flags or ctags behaviour must re-validate the installer claims in the skills.
+      - 'setup.sh'
       - '.github/workflows/checks.yml'
 
 permissions:
@@ -40,3 +48,6 @@ jobs:
 
       - name: Check manifests
         run: node scripts/check-manifests.mjs
+
+      - name: Check plugin surface
+        run: node scripts/check-plugin.mjs

@@ -72,5 +72,5 @@ Before a structural tool call:
 
 ## Trigger examples (lightweight validation)
 
-Should trigger: "find all callers of `index_repo`", "where is `QueryService` defined", "call hierarchy of `blast_radius`", "list symbols in server.py".
+Should trigger: "find all callers of `indexRepo`", "where is `QueryService` defined", "call hierarchy of `blastRadius`", "list symbols in server.py".
 Should NOT trigger: "search for the string TODO" (text → grep/searchCode), "how do I install jarvis" (→ jarvis-setup).
