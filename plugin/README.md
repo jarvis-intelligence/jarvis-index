@@ -71,17 +71,35 @@ same `setup.sh` + `jarvis index` flow.
 
 - `[semantic]` for `semanticSearch` — install with `uv tool install "jarvis-mcp[semantic]"`, then register a second MCP server (the `jarvis` name is already taken by the plugin's default registration):
   ```bash
-  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
-  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
+  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.1" --python ">=3.12" jarvis-server
+  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.1" --python ">=3.12" jarvis-server
   ```
   Cursor has no `mcp add` CLI — add the same server to `~/.cursor/mcp.json` (global) or
   `.cursor/mcp.json` (project) by hand:
   ```json
   { "mcpServers": { "jarvis-semantic": {
       "command": "uvx",
-      "args": ["--from", "jarvis-mcp[semantic]>=0.9.0", "--python", ">=3.12", "jarvis-server"] } } }
+      "args": ["--from", "jarvis-mcp[semantic]>=0.9.1", "--python", ">=3.12", "jarvis-server"] } } }
   ```
 - `[watch]` for `jarvis watch` (foreground auto-reindex on file changes).
+
+### Session-start index status
+
+The plugin ships a `SessionStart` hook (`plugin/hooks/hooks.json` for Claude Code and Codex,
+`plugin/hooks/cursor.json` for Cursor) that runs `plugin/hooks/jarvis-index-status.sh` once when a
+session starts. It reports when the current repository's index is stale or missing, stays silent
+when there is nothing to report, and makes no network call.
+
+Three caveats, stated plainly:
+
+- Codex treats plugin-bundled hooks as non-managed hooks and skips them until the user reviews and
+  trusts the current hook definition, so the hook is inert in Codex until a human accepts it.
+- It is unverified whether a Codex install sourced at `./plugin` resolves the plugin root to
+  `plugin/`; if it resolves to the repository root instead, Codex never discovers the hook file at
+  all. Treat Codex support as best-effort.
+- Cursor documents `sessionStart` as fire-and-forget for environment variables and context but
+  publishes no output-field schema for it, so Cursor may drop the injected string; the hook is
+  harmless either way.
 
 ## Privacy
 
