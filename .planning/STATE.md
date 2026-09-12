@@ -3,7 +3,7 @@ gsd_state_version: "1.0"
 milestone: v0.9.1
 current_phase: 06
 current_phase_name: Plugin & Skills Enhancement
-current_plan: "8 (next runnable: 06-08 release gate; 06-05 gated on human decision)"
+current_plan: 8
 status: planning
 stopped_at: Completed 06-07 (0.9.1 synchronized; P2a/P2b red-proven, green); 06-05 awaits human gate; 06-08 awaits release-gate decision
 last_updated: "2026-09-12T04:41:40.147Z"
