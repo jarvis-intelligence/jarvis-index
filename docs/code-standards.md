@@ -134,9 +134,11 @@ plugin/skills/<name>/
 └── references/*.md       optional, loaded on demand
 ```
 
-Frontmatter carries `name`, `description`, and `version`. The `description` is the trigger
-surface — it must name the concrete situations that should invoke the skill, because that string
-is what the agent matches against.
+Agent Skills frontmatter allows only `name`, `description`, `license`, `compatibility`, `metadata`, and
+`allowed-tools`; `name` and `description` are required and are the two keys jarvis skills use. The
+`description` is the trigger surface — it must name the concrete situations that should invoke the skill, because that
+string is what the agent matches against. Do not add off-spec keys: claude.ai upload and the Skills API hard-error on
+an unexpected frontmatter key with `Unexpected key(s) in SKILL.md frontmatter`.
 
 ### Writing conventions
 

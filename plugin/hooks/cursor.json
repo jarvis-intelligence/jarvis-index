@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "./hooks/jarvis-index-status.sh"
+      }
+    ]
+  }
+}

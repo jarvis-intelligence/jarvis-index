@@ -17,7 +17,7 @@ assets, and the issue tracker. It holds no source — see [Why this repo exists]
 
 ## What you get
 
-Nine MCP tools, exposed to any MCP client:
+Ten MCP tools, exposed to any MCP client:
 
 | | Tool | Answers |
 |---|---|---|
@@ -29,6 +29,7 @@ Nine MCP tools, exposed to any MCP client:
 | **Search** | `searchCode` | Lexical search across indexed repos (Zoekt) |
 | | `semanticSearch` | Natural-language search — needs the `[semantic]` extra |
 | **Scope** | `blastRadius` | Which other indexed repos depend on this package |
+| | `indexRepo` | Builds an index for a local git repo and returns immediately for polling |
 | | `getIndexStatus` | Is this repo indexed, and is the index stale? |
 
 Plus three agent skills that ship with the plugin: **`jarvis-setup`** (onboarding),

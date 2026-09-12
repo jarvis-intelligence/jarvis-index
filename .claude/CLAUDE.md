@@ -126,14 +126,14 @@ The public distribution surface for **jarvis**, a local-first code-intelligence 
 
 ## Manifest & Skill Conventions
 
-- **Skill file shape** (from `docs/code-standards.md`): `SKILL.md` (required, YAML frontmatter `name` + `description` + `version`), optional `agents/openai.yaml` (Codex interface block with `interface.display_name` / `short_description` / `default_prompt`), optional `references/*.md` loaded on demand. See `plugin/skills/jarvis-use/`.
+- **Skill file shape** (from `docs/code-standards.md`): `SKILL.md` (required, YAML frontmatter using only Agent Skills allowed keys: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`; jarvis skills require `name` + `description`), optional `agents/openai.yaml` (Codex interface block with `interface.display_name` / `short_description` / `default_prompt`), optional `references/*.md` loaded on demand. See `plugin/skills/jarvis-use/`.
 - **`description` is the trigger surface** — it must name the concrete situations that should invoke the skill; quote it in frontmatter when it contains colons (`plugin/skills/jarvis-use/SKILL.md:3`).
 - **Version bump is the delivery mechanism.** Any change under `plugin/` requires bumping `version` to the same value in all three manifests: `plugin/.claude-plugin/plugin.json`, `plugin/.cursor-plugin/plugin.json`, `.codex-plugin/plugin.json`. Plugin version is independent of the `jarvis-mcp` PyPI package (`docs/code-standards.md`).
 - **MCP registration is duplicated, not symlinked:** `plugin/.mcp.json` (Claude Code, Codex) and `plugin/mcp.json` (Cursor) hold identical JSON — edit both or neither. Keep `--from jarvis-mcp>=0.6.0` as a `>=` floor (never exact-pin, never below 0.6.0), and never add the `[semantic]` extra (`docs/code-standards.md`).
 
 ## Markdown & Docs Conventions
 
-- **Frontmatter:** docs pages carry only `description` (`docs/tools/go-to-definition.md:1-3`); skills carry `name`/`description`/`version`.
+- **Frontmatter:** docs pages carry only `description` (`docs/tools/go-to-definition.md:1-3`); skills use only Agent Skills allowed keys: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`, with `name` + `description` required.
 - **Skills open with sibling cross-links:** first body line names the two sibling skills so a mis-landed agent can redirect (`plugin/skills/jarvis-setup/SKILL.md:9`).
 - **Procedure docs use numbered H2 sections** (`## 1. Check prerequisites` … `## 7. Next`, `plugin/skills/jarvis-setup/SKILL.md`).
 - **Tables for decision surfaces:** decision matrices (`plugin/skills/jarvis-use/SKILL.md:15-25`), troubleshooting (`plugin/skills/jarvis-setup/SKILL.md:83-91`), ownership rules (`docs/code-standards.md:5-13`), API parameters (`docs/tools/go-to-definition.md:17-20`).
@@ -266,7 +266,7 @@ The public distribution surface for **jarvis**, a local-first code-intelligence 
 - Pattern: idempotent (presence-gated; `install_scip` version-gated), SHA256-verified
 - Purpose: shippable agent behavior consumed by all three clients
 - Examples: `plugin/skills/jarvis-setup/`, `plugin/skills/jarvis-use/`,
-- Pattern: `SKILL.md` with YAML frontmatter (`name`, `description` trigger surface, `version`),
+- Pattern: `SKILL.md` with Agent Skills frontmatter using only `name`, `description`, `license`, `compatibility`, `metadata`, or `allowed-tools` (`name` + `description` required),
 - Purpose: let the private repo's `tests/test_setup_sh.py` exercise individual functions
 - Examples: `setup.sh:758-762` (`JARVIS_SETUP_SOURCED` guard), overridable env vars
 - Pattern: guard-at-bottom main invocation; fixtures via environment redirection

@@ -1,7 +1,7 @@
 {
   "name": "jarvis",
   "displayName": "jarvis",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Local-first structural code intelligence over your own indexed repositories, with skills that teach the agent to prefer structural queries over grep.",
   "author": {
     "name": "phuongddx",
@@ -28,5 +28,6 @@
     "zoekt"
   ],
   "skills": "./skills/",
-  "mcpServers": "./mcp.json"
+  "mcpServers": "./mcp.json",
+  "hooks": "./hooks/cursor.json"
 }

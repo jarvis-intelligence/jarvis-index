@@ -1,17 +1,19 @@
 ---
-gsd_state_version: 1.0
-milestone: v0.7.3
-status: completed
-stopped_at: Phase 5 complete — all phases complete
-last_updated: "2026-08-23T05:39:04.534Z"
-last_activity: 2026-08-23
-state_head: d2f87646df85cb76bd7d1c5f76917440760b5a7a
+gsd_state_version: "1.0"
+milestone: v0.9.1
+current_phase: 06
+current_phase_name: Plugin & Skills Enhancement
+current_plan: 8
+status: planning
+stopped_at: Completed 06-05 (vendor validator pinned, package legitimacy verified and approved); only 06-08 (release gate) outstanding
+last_updated: "2026-09-12T04:41:40.147Z"
+last_activity: 2026-09-12
+state_head: 4a2e04aae7f79af9e5b2200846e67234e61b191a
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 19
-  completed_plans: 19
-current_phase: 5
+  total_phases: 6
+  completed_phases: 0
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -21,14 +23,13 @@ current_phase: 5
 See: .planning/PROJECT.md (updated 2026-08-21)
 
 **Core value:** A cold visitor can land, install, and make their first successful jarvis tool call using only the public pages — no external context required.
-**Current focus:** Phase 02 — Docs Rebuild — Tutorial-First Content
+**Current focus:** Phase 06 — Plugin & Skills Enhancement (plugin + skills realignment to jarvis 0.9.1, new plugin capabilities, CI drift guards, synchronized tagged release)
 
-Phase: 5
-Plan: Not started
-Status: v0.7.3 milestone complete
-Last activity: 2026-08-23
-
-Progress: [██░░░░░░░░] 20%
+Phase: 06
+Current Plan: 8 (final plan: 06-08 release gate — branch merge to main required first, see Blockers)
+Total Plans in Phase: 8
+Status: In Progress — 06-01, 06-02, 06-03, 06-04, 06-05, 06-06, 06-07 complete
+Last activity: 2026-09-12
 
 ## Performance Metrics
 
@@ -61,6 +62,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02 P05 | 6min | 2 tasks | 8 files |
 | Phase 02 P06 | 12min | 3 tasks | 5 files |
 | Phase 02 P07 | 12min | 2 tasks | 2 files |
+| Phase 06 P01 | 8m | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -109,6 +111,8 @@ Recent decisions affecting current work:
 - [Phase 3]: Phase-02 human verification closed via real system Chrome against npm run preview: the harness's embedded headless Chromium blob-wraps Web Workers, breaking Pagefind worker-mode relative fetches while the site is fine — all Phase 5 browser verification must use real Chrome via app.path
 - [Phase 4]: [Phase 03]: Landing rebuilt as single-scroll conversion surface — real-Chrome verification found+fixed 2 runtime defects (hero grid minmax(0,1fr) 8c0ffc6; widget roving tabindex 6ff3335); code review fixed 5/6 (WR-01 anchor claim rejected — built id IS bash--44); UI review 23/24 advisory, accent-shadow dark override + inline-style extraction applied
 - [Phase 5]: [Phase 04]: Plugin 0.7.3 shipped — skills realigned to settled voice, reading links at tag v0.7.3 (setup.sh command stays main by design), manifests synced, Cursor validator + check-manifests green, tag pushed at 651d66a
+- [Phase 06]: P1 derives its ten-name roster from plugin/skills/jarvis-use/references/tool-roster.md and explicitly does not claim to validate the private server repository.
+- [Phase 06]: The plugin guard is a sibling of check-manifests.mjs, preserving the existing manifest guard stable three-invariant contract.
 
 ### Blockers/Concerns
 
@@ -120,6 +124,7 @@ Recent decisions affecting current work:
 - [Phase 02] Plan 02-06: `state.advance-plan` and `requirements mark-complete DOCS-01 DOCS-03 DOCS-10 DOCS-12` recurred identically (same two gaps documented above). Hand-edited the `Plan:` prose line and all four requirements' checkboxes + traceability Status cells. DOCS-04 and DOCS-09 rows still carry stale `Planned` wording (DOCS-04 belongs to already-complete plan 02-02 and was left as a pre-existing gap out of this plan's scope; DOCS-09 remains genuinely open).
 - [Phase 02] Plan 02-07 (phase close-out): both gaps recurred one final time for this phase — `state.advance-plan` errored identically on the `Plan:` prose line, and `requirements mark-complete DOCS-11` returned `not_found` (its traceability row read `Planned`). Hand-edited the `Plan:` line and DOCS-11's checkbox + traceability Status cell. Phase 2 is now fully complete except DOCS-09, whose row still carries stale `Planned` wording — genuinely open, tracked for a future audit/maintainer pass, not silently dropped.
 - [Phase 02] Verification pass (02-VERIFICATION.md): confirmed DOCS-04 and DOCS-09 were content-complete all along (never a real gap) — the 02-06 note above was itself the stale-wording symptom, not a missed requirement. Hand-edited both rows' checkboxes + traceability Status cells to `Complete`. All 12 DOCS-01..12 requirements now read `Complete` in REQUIREMENTS.md; the tooling-recognition gap itself (not the wording) remains open for a future gsd-tools fix.
+- [Phase 06] Plan 06-08 (release gate) cannot run as written: its Task 1 precondition requires `git log --oneline -1 main` to show this phase's merge commit, but `main` is still at `b456bbb` (06-01's README fix) while `gsd/v0.9.1-milestone` is 30 commits ahead, unmerged. Pushing `v0.9.1` now would tag an unmerged feature branch, not the state D-15 requires. Blocked pending a PR merge to `main`; not silently skipped.
 
 ## Deferred Items
 
@@ -130,17 +135,19 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-22T17:11:15.002Z
-Stopped at: Phase 5 complete — all phases complete
-Resume file: .planning/phases/03-landing-page-rebuild/03-UI-SPEC.md
+Last session: 2026-09-12T03:34:55.360Z
+Stopped at: Completed 06-01-PLAN.md
+Resume file: .planning/phases/06-plugin-skills-enhancement/06-02-PLAN.md
 
 ## Current Position
 
-Phase: Milestone v0.7.3 complete
-Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-08-23 — Milestone v0.7.3 completed and archived
+Phase: 06 (Plugin & Skills Enhancement) — IN PROGRESS
+Plan: 06-01 complete (06-02 next)
+Status: 1/8 plans complete
+Last activity: 2026-09-12 — 06-01 tracer guard and safe-resume closeout recorded
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Execute the next planned phase: `/gsd-execute-phase 6` (it resumes at 06-02 from /Users/ddphuong/Projects/jarvis-ai/jarvis-index).
+- Phase 06 was appended to the CURRENT roadmap by explicit operator choice this session — do NOT run `/gsd-new-milestone` to start it. The v0.7.3 milestone is shipped and archived under `.planning/milestones/`; `milestone: v0.9.1` in the frontmatter names the release Phase 06 ships (D-16), not a new milestone block in ROADMAP.md.
+- Preserve the committed 06-01 P1 contract when extending `scripts/check-plugin.mjs` in later plans.

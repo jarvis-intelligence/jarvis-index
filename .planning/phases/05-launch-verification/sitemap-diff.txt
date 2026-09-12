@@ -1,3 +1,0 @@
-OK: sitemap matches contract (sitemap 38 entries; 1 passthrough URLs excluded: https://jarvis-intelligence.github.io/jarvis-index/brand-logo.html)
-
-All checks passed.

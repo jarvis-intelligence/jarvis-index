@@ -1,6 +1,6 @@
 {
   "name": "jarvis",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Local-first structural code intelligence over your own indexed repositories, with skills that teach the agent to prefer structural queries over grep.",
   "author": {
     "name": "phuongddx",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "jarvis",
     "shortDescription": "Local-first SCIP code navigation & Zoekt search",
-    "longDescription": "Indexes your own git repositories with SCIP indexers and Zoekt, then answers structural questions \u2014 go-to-definition, find-references, call/type hierarchy, document symbols, lexical and semantic search, and cross-repo blast radius \u2014 through nine MCP tools. Skills steer the agent toward structural queries over grep and handle setup, everyday use, and bug reporting.",
+    "longDescription": "Indexes your own git repositories with SCIP indexers and Zoekt, then answers structural questions \u2014 go-to-definition, find-references, call/type hierarchy, document symbols, lexical and semantic search, and cross-repo blast radius \u2014 through ten MCP tools. Skills steer the agent toward structural queries over grep and handle setup, everyday use, and bug reporting.",
     "developerName": "phuongddx",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,8 +36,8 @@
       "Index this repo for code navigation."
     ],
     "websiteURL": "https://github.com/jarvis-intelligence/jarvis-index",
-    "privacyPolicyURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.9.0/plugin/README.md#privacy",
-    "termsOfServiceURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.9.0/plugin/LICENSE",
+    "privacyPolicyURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.9.1/plugin/README.md#privacy",
+    "termsOfServiceURL": "https://github.com/jarvis-intelligence/jarvis-index/blob/v0.9.1/plugin/LICENSE",
     "brandColor": "#3B82F6",
     "composerIcon": "./plugin/assets/jarvis-small.svg",
     "logo": "./plugin/assets/app-icon.png",

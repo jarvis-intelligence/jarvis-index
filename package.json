@@ -11,6 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:manifests": "node scripts/check-manifests.mjs",
+    "check:plugin": "node scripts/check-plugin.mjs",
     "verify": "node scripts/verify-build.mjs"
   },
   "devDependencies": {

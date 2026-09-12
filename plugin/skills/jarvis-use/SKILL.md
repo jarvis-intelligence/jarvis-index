@@ -1,7 +1,6 @@
 ---
 name: jarvis-use
 description: "Use jarvis local-first code intelligence for code structure queries: Tree-sitter declaration outlines and definition navigation, SCIP references and hierarchies, natural-language semantic search, and status capability checks. Prefer over grep for indexed structural questions."
-version: "0.1.0"
 ---
 
 # jarvis everyday use
@@ -29,9 +28,13 @@ For any **structural** code question, prefer the jarvis tool over grep when the 
 
 `goToDefinition` accepts a **bare name**, e.g. `search_zoekt`, a **qualified name** such as
 `SemanticStore.__init__` (or `package-name.search_zoekt` when a bare name collides), a full SCIP
-symbol string, or the opaque `syntax:` identifier returned by a syntax-baseline result. Bare and
-qualified names search both SCIP and Tree-sitter providers. An ambiguous name returns an error
-payload with `candidates` and `candidateTotal`; retry with the intended candidate's qualified name.
+symbol string, or the opaque `syntax:` identifier returned by a syntax-baseline result. Of the four
+symbol-taking navigation tools, only `goToDefinition` accepts an opaque `syntax:` identifier;
+`findReferences`, `callHierarchy`, and `typeHierarchy` each reject one with a capability error.
+`documentSymbols` takes `(repo, path)` and no symbol at all, so it produces `syntax:` identifiers
+rather than consuming them. Bare and qualified names search both SCIP and Tree-sitter providers. An
+ambiguous name returns an error payload with `candidates` and `candidateTotal`; retry with the
+intended candidate's qualified name.
 
 When resolution changes a bare or qualified input, the response includes `resolvedSymbol`. Every
 definition location carries `source` (`"scip"` or `"tree-sitter"`) and `positionEncoding`; syntax
@@ -55,15 +58,15 @@ Before a structural tool call:
 ## Gotchas
 
 - **The Tree-sitter syntax baseline is always on.** `index`, `reindex`, and `watch` parse git-tracked files for 17 supported parser selections using the `tree-sitter` runtime and 16 pip-installed grammar distributions. It works offline without a compiler, build system, external indexer, or index-time download. A publish is an immutable `index-<sha>-<generation>.db` snapshot, so reindexing the same commit never mutates the snapshot currently serving queries.
-- **SCIP is reversible optional enrichment.** `--search-only`, `--fallback-search-only`, `--no-fallback-search-only`, and `JARVIS_FALLBACK_SEARCH_ONLY` are removed. Use persisted `--scip` / `--no-scip` on `jarvis index`, `jarvis reindex`, or `jarvis watch`; omitted means the persisted choice, defaulting to enabled for a new repo. A missing or failed SCIP stage publishes the syntax baseline with `status: degraded` and an actionable recovery instead of suppressing declaration navigation.
+- **SCIP is reversible optional enrichment.** `--search-only`, `--fallback-search-only`, `--no-fallback-search-only`, and `JARVIS_FALLBACK_SEARCH_ONLY` are removed. Their rejection exits with status `2` in `main` before argparse, so it fires for every subcommand rather than only `index`. Use persisted `--scip` / `--no-scip` on `jarvis index`, `jarvis reindex`, or `jarvis watch`; omitted means the persisted choice, defaulting to enabled for a new repo. A missing or failed SCIP stage publishes the syntax baseline with `status: degraded` and an actionable recovery instead of suppressing declaration navigation.
 - **References and hierarchies are SCIP-only.** `findReferences`, `callHierarchy`, and `typeHierarchy` never infer edges from syntax declarations. Without usable SCIP data they return the established error payload plus `requiredCapability`, `reason`, and `recovery`, never an empty list. Install or repair the relevant indexer, then run `jarvis reindex <slug> --scip`.
 - **`typeHierarchy` also needs the patched `scip` build.** Upstream `scip expt-convert` through v0.9.0 never populated relationships; setup.sh installs a fixed fork. Re-run setup.sh and then `jarvis reindex <slug> --scip` if the capability remains unavailable.
 - **An ambiguous bare name returns `candidates`, not the wrong answer.** Select the intended entry's qualified name and retry. A name that matches nothing returns a `SymbolNotFoundError`-style message, never a silent empty result.
 - **`semanticSearch` needs the `semantic` extra.** If the repo was indexed without `uv tool install "jarvis-mcp[semantic]"`, it returns `{"error": "..."}` with an install hint; index or reindex after installing the extra.
 - **The default plugin registration deliberately omits the `semantic` extra.** A semantic query must go to a separately registered server:
   ```bash
-  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
-  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.0" --python ">=3.12" jarvis-server
+  claude mcp add jarvis-semantic --scope user -- uvx --from "jarvis-mcp[semantic]>=0.9.1" --python ">=3.12" jarvis-server
+  codex mcp add jarvis-semantic -- uvx --from "jarvis-mcp[semantic]>=0.9.1" --python ">=3.12" jarvis-server
   ```
   In Cursor there is no `mcp add` CLI — add the same server entry to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) by hand (exact JSON in the plugin README's Optional extras).
 - **`blastRadius` only sees already-indexed repos.** Index the dependency first, or re-run `jarvis index`/`reindex` after indexing it, for an edge to appear.
@@ -72,5 +75,5 @@ Before a structural tool call:
 
 ## Trigger examples (lightweight validation)
 
-Should trigger: "find all callers of `index_repo`", "where is `QueryService` defined", "call hierarchy of `blast_radius`", "list symbols in server.py".
+Should trigger: "find all callers of `indexRepo`", "where is `QueryService` defined", "call hierarchy of `blastRadius`", "list symbols in server.py".
 Should NOT trigger: "search for the string TODO" (text → grep/searchCode), "how do I install jarvis" (→ jarvis-setup).

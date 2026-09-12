@@ -1,7 +1,6 @@
 ---
 name: jarvis-issues
 description: Report bugs and request features for the jarvis MCP server via GitHub issues. Use when jarvis errors, an index fails, a limitation bites, or to request an improvement.
-version: "0.1.0"
 ---
 
 # jarvis issues
@@ -24,7 +23,7 @@ Before drafting, collect:
 
 Decide: **bug**, **feature**, or **known limitation**. Before filing a bug, confirm it isn't one of these already-documented gaps (do NOT file duplicates of these):
 
-- `typeHierarchy` returns an error only on indexes built with an unpatched `scip` — the fix is `jarvis reindex <slug>` after re-running setup.sh, not a bug report. DO file a bug if it still errors on a freshly reindexed repo.
+- `typeHierarchy` returns an error when the index has no relationship data; an unpatched `scip` is one cause. Re-run setup.sh and `jarvis reindex <slug> --scip` before filing. DO file a bug if it still errors on a freshly reindexed repo with the bundled patched `scip`.
 - Single-tenant hardcoding: `config.py` pins `PROJECT = "_"` / `BRANCH = "_"`. Not multi-tenancy.
 - One language per repo — no multi-language merge.
 - `blastRadius` reports `freshness: unknown` — the package graph has no per-node timestamp.
