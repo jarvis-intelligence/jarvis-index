@@ -17,7 +17,19 @@
 //        P2a deliberately does not re-assert three-way manifest equality or
 //        MCP-config byte-identity: scripts/check-manifests.mjs owns both, and
 //        one contract must have one owner.
-//   P2b — release-pinned URLs reference the matching published git tag.
+//   P2b — release gate, the script's only network dimension. Runs only behind
+//        --release (or CHECK_PLUGIN_RELEASE=1). Asserts every URL into this
+//        repository found in .codex-plugin/plugin.json, the three SKILL.md,
+//        and both READMEs pins a ref — the tag form of the manifest version,
+//        except the installer command URL, which stays on main per D-05 — and
+//        that the tag exists on the remote. The ordering constraint that
+//        forces the gate: GitHub does not serve a blob/<ref> path before the
+//        ref exists (the identical URL shape returned 404 for a missing tag
+//        and 200 for an existing one — phase 6 research), so the commit
+//        carrying the tag-bearing URLs is necessarily the commit the tag
+//        points at, and a pull request cannot make its own future tag exist.
+//        P2b therefore belongs to the post-tag release step and must never be
+//        wired into PR-time CI.
 //   P3 — both marketplace.json files parse and stay inside this checkout:
 //        lowercase kebab-case name, owner.name, and a non-empty plugins array
 //        whose entries match the plugin.json their source resolves to and
@@ -44,6 +56,7 @@
 // own location — this is the testability seam that lets this script run
 // unmodified against a scratch copy of the repo by changing the working
 // directory before invoking it.
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, join, normalize, resolve } from 'node:path'
 
@@ -221,6 +234,101 @@ if (mcpFloorRequirement !== null) {
   }
   if (releaseVersion !== null && floor !== releaseVersion) {
     fail('P2a', `${MCP_CONFIG_PATH}: jarvis-mcp floor ${floor} does not equal the manifest version ${releaseVersion} — the floor and the release version must read as one fact`)
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// P2b — repository URL refs pin the release tag; the tag exists on origin
+// ─────────────────────────────────────────────────────────────────────────
+const RELEASE_MODE =
+  process.argv.includes('--release') || process.env.CHECK_PLUGIN_RELEASE === '1'
+
+let expectedTag = null
+let p2bRefs = 0
+// True only after the tag-existence half actually ran AND passed — a skipped
+// check must never be reported as if it had verified the tag (T-06-41).
+let p2bTagPresent = false
+
+if (RELEASE_MODE) {
+  expectedTag = `v${releaseVersion}`
+
+  // First half — ref correctness across the shipped manifest + prose surface.
+  const P2B_SUBJECTS = [
+    '.codex-plugin/plugin.json',
+    'plugin/skills/jarvis-setup/SKILL.md',
+    'plugin/skills/jarvis-use/SKILL.md',
+    'plugin/skills/jarvis-issues/SKILL.md',
+    'plugin/README.md',
+    'README.md',
+  ]
+
+  // Both URL families that carry a ref segment into this repository: the code
+  // host's blob/<ref>/ form and raw.githubusercontent's <owner>/<repo>/<ref>/
+  // form. URLs without a ref segment (homepage, /issues, the .git clone URL)
+  // carry nothing to pin; URLs whose owner/repo segments are not this
+  // project's — including an upstream project's version cited in prose — are
+  // never matched by these patterns.
+  const REPO_BLOB_URL =
+    /https:\/\/github\.com\/jarvis-intelligence\/jarvis-index\/blob\/([^/\s"'`<>#]+)((?:\/[^\s"'`<>#]*)?)/g
+  const REPO_RAW_URL =
+    /https:\/\/raw\.githubusercontent\.com\/jarvis-intelligence\/jarvis-index\/([^/\s"'`<>#]+)((?:\/[^\s"'`<>#]*)?)/g
+
+  // The one URL D-05 deliberately keeps on main: the installer command. It
+  // appears verbatim in more than one subject file (jarvis-setup/SKILL.md and
+  // the root README quick start), so the exemption belongs to the URL, not to
+  // a file — any OTHER main ref, above all a blob/main/ reading link, still
+  // fails everywhere.
+  const INSTALLER_PATH = '/setup.sh'
+
+  const checkRef = (relPath, url, ref, path) => {
+    if (ref === 'main' && path === INSTALLER_PATH) return
+    if (ref === 'main') {
+      fail('P2b', `${relPath}: ${url} pins main — main is permitted only for the installer command URL; expected ${expectedTag}`)
+      return
+    }
+    if (ref !== expectedTag) {
+      fail('P2b', `${relPath}: ${url} pins ${ref}, expected ${expectedTag}`)
+      return
+    }
+    p2bRefs++
+  }
+
+  for (const relPath of P2B_SUBJECTS) {
+    let text
+    try {
+      text = readFileSync(resolve(process.cwd(), relPath), 'utf8')
+    } catch (err) {
+      fail('P2b', `${relPath}: could not read file (${err.message})`)
+      continue
+    }
+    for (const m of text.matchAll(REPO_BLOB_URL)) checkRef(relPath, m[0], m[1], m[2])
+    for (const m of text.matchAll(REPO_RAW_URL)) checkRef(relPath, m[0], m[1], m[2])
+  }
+
+  // Second half — tag existence. One round trip to the configured remote with
+  // `git ls-remote --tags origin`: no HTTP client in this script, no token
+  // needed for a public repository. If the command fails for any reason — no
+  // remote configured, no network, a sandbox without outbound access — print
+  // a skip note and do NOT fail: a guard that cannot run must not become a
+  // guard that blocks.
+  if (releaseVersion === null) {
+    fail('P2b', 'no manifest version readable — cannot derive the expected tag')
+  } else {
+    let tagList = null
+    try {
+      tagList = execFileSync('git', ['ls-remote', '--tags', 'origin'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+    } catch (err) {
+      console.log(`P2b: skipped (no remote reachable — ${String(err.message).split('\n')[0]})`)
+    }
+    if (tagList !== null) {
+      const remoteTags = [...tagList.matchAll(/refs\/tags\/(\S+)$/gm)].map((m) => m[1])
+      if (!remoteTags.includes(expectedTag)) {
+        fail('P2b', `tag ${expectedTag} does not exist on origin — push the release tag, then re-run this check`)
+      } else {
+        p2bTagPresent = true
+      }
+    }
   }
 }
 
@@ -641,6 +749,16 @@ if (failed) {
   process.exit(1)
 }
 
-console.log(
-  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P2a (${mcpFloorRequirement} floor matches manifest version ${releaseVersion}), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources), P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets), P5 (${resolvedPaths} referenced paths resolve, hook script executable) all green`
-)
+const dimensions = [
+  `P1 (${tools.size} roster tools agree across shipped surfaces)`,
+  `P2a (${mcpFloorRequirement} floor matches manifest version ${releaseVersion})`,
+  `P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources)`,
+  `P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets)`,
+  `P5 (${resolvedPaths} referenced paths resolve, hook script executable)`,
+]
+// P2b reports separately from the always-on dimensions so a green default run
+// can never be mistaken for release readiness (T-06-41).
+if (RELEASE_MODE && p2bTagPresent) {
+  dimensions.push(`P2b (${p2bRefs} repository URLs pinned at ${expectedTag}, tag present on origin)`)
+}
+console.log(`ok: ${dimensions.join(', ')} all green`)
