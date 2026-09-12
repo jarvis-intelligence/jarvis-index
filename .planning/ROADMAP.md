@@ -173,7 +173,7 @@ Plans:
   4. Every drift class this phase fixes is guarded by an automated check that fails red before it passes green: tool-roster ↔ server tool set, manifest ↔ MCP pin ↔ tag existence, marketplace manifest validity, SKILL.md frontmatter conformance to the Agent Skills spec
   5. The release is shippable and verifiable in one synchronized bump: all three `plugin.json` manifests agree, `plugin/.mcp.json` is byte-identical to `plugin/mcp.json`, the Cursor submission checklist passes, and the git tag the manifests reference is created and pushed
 
-**Plans**: 8 plans
+**Plans**: 1/8 plans executed
 
 Plans (planned 2026-09-11 — tracer-first: plan 01 proves the whole machine end-to-end on one drift
 class before anything expands from it. No REQ-IDs exist for this phase, so plans trace to CONTEXT
@@ -181,7 +181,7 @@ decision IDs D-01..D-18 and success criteria SC-1..SC-5):
 
 **Wave 1** *(tracer — verified before any expansion)*
 
-- [ ] 06-01-PLAN.md — Tracer: tool-roster truth (root README, Codex longDescription, snake_case trigger examples) + guard dimension P1 shown red-then-green + `check:plugin` alias, CI step, and the D-14 path-filter additions (D-01, D-12, D-13, D-14)
+- [x] 06-01-PLAN.md — Tracer: tool-roster truth (root README, Codex longDescription, snake_case trigger examples) + guard dimension P1 shown red-then-green + `check:plugin` alias, CI step, and the D-14 path-filter additions (D-01, D-12, D-13, D-14)
 
 **Wave 2** *(four parallel plans, zero file overlap)*
 
@@ -214,7 +214,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Landing Page Rebuild | 3/3 | Complete    | 2026-08-23 |
 | 4. Plugin Skills Realignment & Release | 2/2 | Complete    | 2026-08-23 |
 | 5. Launch Verification & Community | 2/2 | Complete    | 2026-08-23 |
-| 6. Plugin & Skills Enhancement | 0/8 | Planning    | - |
+| 6. Plugin & Skills Enhancement | 1/8 | In Progress|  |
 
 ## Notes
 
