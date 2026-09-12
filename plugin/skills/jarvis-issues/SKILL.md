@@ -1,7 +1,6 @@
 ---
 name: jarvis-issues
 description: Report bugs and request features for the jarvis MCP server via GitHub issues. Use when jarvis errors, an index fails, a limitation bites, or to request an improvement.
-version: "0.1.0"
 ---
 
 # jarvis issues

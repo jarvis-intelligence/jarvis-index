@@ -1,7 +1,6 @@
 ---
 name: jarvis-use
 description: "Use jarvis local-first code intelligence for code structure queries: Tree-sitter declaration outlines and definition navigation, SCIP references and hierarchies, natural-language semantic search, and status capability checks. Prefer over grep for indexed structural questions."
-version: "0.1.0"
 ---
 
 # jarvis everyday use

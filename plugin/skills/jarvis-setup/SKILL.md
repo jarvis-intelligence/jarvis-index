@@ -1,7 +1,6 @@
 ---
 name: jarvis-setup
 description: Install and configure jarvis, the local-first structural code intelligence with an always-on Tree-sitter syntax baseline. Use when onboarding, running setup.sh, registering the MCP server, or indexing a repo for the first time.
-version: "0.1.0"
 ---
 
 # jarvis setup
