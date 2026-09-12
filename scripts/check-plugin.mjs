@@ -24,14 +24,19 @@
 //        `hooks`, `mcpServers`, and `permissionMode` fail by name:
 //        unsupported in plugin scope for security reasons, and Claude Code
 //        would otherwise load the agent anyway via silent filename fallback.
-//   P5 — manifest-referenced components and hook executables exist.
+//   P5 — every path a manifest, hook config, or skill retrieval command
+//        references resolves to a real file or directory: plugin-root-
+//        relative fields resolve against plugin/, repository-root-relative
+//        Codex fields against the checkout root. Hook scripts keep an
+//        execute bit — without one, hooks silently do not fire — and
+//        component markdown is never empty.
 //
 // All subject paths resolve against process.cwd(), never against this file's
 // own location — this is the testability seam that lets this script run
 // unmodified against a scratch copy of the repo by changing the working
 // directory before invoking it.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { basename, join, resolve } from 'node:path'
+import { basename, join, normalize, resolve } from 'node:path'
 
 const ROSTER_PATH = 'plugin/skills/jarvis-use/references/tool-roster.md'
 const SURFACE_PATHS = ['plugin/README.md', 'README.md']
@@ -374,10 +379,171 @@ for (const [dirRelPath, allowed, forbidden] of [
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// P5 — referenced paths resolve, hook script executable
+// ─────────────────────────────────────────────────────────────────────────
+// Walk a parsed JSON value and return [field, value] pairs whose value looks
+// like a filesystem path: contains a separator, no whitespace, no URL scheme.
+// Reading the values out of the manifests (rather than hard-coding resolved
+// paths) keeps a future field addition covered automatically; the
+// whitespace and scheme filters keep prose (the Codex longDescription's
+// "call/type hierarchy") and https URLs out of the subject set.
+function pathFields(value, prefix = '') {
+  if (typeof value === 'string') {
+    return /\//.test(value) && !/\s/.test(value) && !/^[a-z]+:\/\//i.test(value)
+      ? [[prefix, value]]
+      : []
+  }
+  if (Array.isArray(value)) return value.flatMap((v, i) => pathFields(v, `${prefix}[${i}]`))
+  if (typeof value === 'object' && value !== null) {
+    return Object.entries(value).flatMap(([k, v]) => pathFields(v, prefix ? `${prefix}.${k}` : k))
+  }
+  return []
+}
+
+// Every "command" string field in a hook config tree.
+function commandStrings(value) {
+  if (Array.isArray(value)) return value.flatMap(commandStrings)
+  if (typeof value === 'object' && value !== null) {
+    return Object.entries(value).flatMap(([k, v]) =>
+      k === 'command' && typeof v === 'string' ? [v] : commandStrings(v)
+    )
+  }
+  return []
+}
+
+function hookCommandTarget(command) {
+  const unquoted = command.replaceAll('"', '')
+  if (unquoted.includes('${CLAUDE_PLUGIN_ROOT}')) {
+    // The Claude/Codex config references the plugin root through the
+    // variable; substitute plugin/ rather than treating the literal as a
+    // path segment. (cursor.json's top-level version: 1 is Cursor's
+    // hook-file schema version, not a plugin version — nothing reads it.)
+    return normalize(unquoted.replaceAll('${CLAUDE_PLUGIN_ROOT}', 'plugin/'))
+  }
+  return join('plugin', unquoted)
+}
+
+let resolvedPaths = 0
+
+// Two relativity families, deliberately separate: every path field in the
+// Cursor plugin manifest is plugin-root-relative (resolve against plugin/),
+// while the Codex manifest's skills and interface icons are repository-
+// root-relative. Conflating the two is the easiest way to fabricate a
+// P5 failure.
+for (const [manifestRelPath, base] of [
+  ['plugin/.cursor-plugin/plugin.json', 'plugin'],
+  ['.codex-plugin/plugin.json', ''],
+]) {
+  let raw
+  try {
+    raw = readFileSync(resolve(process.cwd(), manifestRelPath), 'utf8')
+  } catch (err) {
+    fail('P5', `${manifestRelPath}: could not read file (${err.message})`)
+    continue
+  }
+  let data
+  try {
+    data = JSON.parse(raw)
+  } catch (err) {
+    fail('P5', `${manifestRelPath}: JSON parse error — ${err.message}`)
+    continue
+  }
+  for (const [field, target] of pathFields(data)) {
+    const absPath = resolve(process.cwd(), base, target)
+    if (!existsSync(absPath)) {
+      fail('P5', `${manifestRelPath}: ${field} ${JSON.stringify(target)} resolves to missing ${join(base, target)}`)
+      continue
+    }
+    resolvedPaths++
+  }
+}
+
+for (const hookConfigPath of ['plugin/hooks/hooks.json', 'plugin/hooks/cursor.json']) {
+  let raw
+  try {
+    raw = readFileSync(resolve(process.cwd(), hookConfigPath), 'utf8')
+  } catch (err) {
+    fail('P5', `${hookConfigPath}: could not read file (${err.message})`)
+    continue
+  }
+  let data
+  try {
+    data = JSON.parse(raw)
+  } catch (err) {
+    fail('P5', `${hookConfigPath}: JSON parse error — ${err.message}`)
+    continue
+  }
+  const commands = commandStrings(data)
+  if (commands.length === 0) {
+    fail('P5', `${hookConfigPath}: declares no command — a hook config that runs nothing is a packaging mistake`)
+  }
+  for (const command of commands) {
+    const target = hookCommandTarget(command)
+    const absPath = resolve(process.cwd(), target)
+    if (!existsSync(absPath)) {
+      fail('P5', `${hookConfigPath}: command ${JSON.stringify(command)} resolves to missing ${target}`)
+      continue
+    }
+    resolvedPaths++
+    if (target.endsWith('.sh') && (statSync(absPath).mode & 0o111) === 0) {
+      fail('P5', `${hookConfigPath}: hook script ${target} has no execute bit — hooks silently do not fire when the script is not executable (chmod +x fixes it)`)
+    }
+  }
+}
+
+// On-demand retrieval commands: every `grep … "<heading>" references/<file>`
+// inside a SKILL.md must point at an existing file carrying that heading —
+// the mechanical half of D-10 (the move is only real if the pointer resolves
+// and the anchor is there). Targets are discovered by scanning the skills,
+// never hard-coded.
+const RETRIEVAL_COMMAND = /`grep\s+(?:-\S+\s+)*"([^"]+)"\s+(references\/[A-Za-z0-9._/-]+)`/g
+if (existsSync(resolve(process.cwd(), skillsDir))) {
+  const skillDirs = readdirSync(resolve(process.cwd(), skillsDir), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => join(skillsDir, entry.name))
+  for (const dir of skillDirs) {
+    const skillRelPath = join(dir, 'SKILL.md')
+    const absSkill = resolve(process.cwd(), skillRelPath)
+    if (!existsSync(absSkill)) continue
+    const text = readFileSync(absSkill, 'utf8')
+    for (const match of text.matchAll(RETRIEVAL_COMMAND)) {
+      const [, heading, refRel] = match
+      const refRelPath = join(dir, refRel)
+      const absRef = resolve(process.cwd(), refRelPath)
+      if (!existsSync(absRef)) {
+        fail('P5', `${skillRelPath}: retrieval command names missing ${refRel}`)
+        continue
+      }
+      if (!readFileSync(absRef, 'utf8').includes(heading)) {
+        fail('P5', `${skillRelPath}: retrieval heading ${JSON.stringify(heading)} not found in ${refRel}`)
+        continue
+      }
+      resolvedPaths++
+    }
+  }
+}
+
+// An existing command/agent component that installs must actually install
+// something: at least one markdown file, and none of them zero bytes — an
+// empty component file installs cleanly and does nothing.
+for (const dirRelPath of ['plugin/commands', 'plugin/agents']) {
+  const files = componentMarkdownFiles(dirRelPath)
+  failIfEmpty(dirRelPath, files)
+  for (const relPath of files ?? []) {
+    const absPath = resolve(process.cwd(), relPath)
+    if (statSync(absPath).size === 0) {
+      fail('P5', `${relPath}: is zero bytes — an empty component file installs cleanly and does nothing`)
+      continue
+    }
+    resolvedPaths++
+  }
+}
+
 if (failed) {
   process.exit(1)
 }
 
 console.log(
-  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources), P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets) green`
+  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources), P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets), P5 (${resolvedPaths} referenced paths resolve, hook script executable) all green`
 )
