@@ -9,15 +9,22 @@
 //        server changes; P1 is not a server diff.
 //   P2a — manifest versions and MCP package floors agree before release.
 //   P2b — release-pinned URLs reference the matching published git tag.
-//   P3 — marketplace manifests parse and reference paths inside this checkout.
+//   P3 — both marketplace.json files parse and stay inside this checkout:
+//        lowercase kebab-case name, owner.name, and a non-empty plugins array
+//        whose entries match the plugin.json their source resolves to and
+//        declare no component fields. Claude Code also rejects a marketplace
+//        whose name collides with a reserved name; that list is re-checked by
+//        the client on every load and is not enumerated here — P3 asserts
+//        shape and resolution, not name availability.
 //   P4 — skill, command, and agent frontmatter uses only allowed keys.
 //   P5 — manifest-referenced components and hook executables exist.
 //
-// All subject paths resolve against process.cwd() (not import.meta.url) — this
-// is the testability seam that lets this script run unmodified against a
-// scratch copy of the repo by changing the working directory before invoking it.
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+// All subject paths resolve against process.cwd(), never against this file's
+// own location — this is the testability seam that lets this script run
+// unmodified against a scratch copy of the repo by changing the working
+// directory before invoking it.
+import { existsSync, readFileSync, statSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 
 const ROSTER_PATH = 'plugin/skills/jarvis-use/references/tool-roster.md'
 const SURFACE_PATHS = ['plugin/README.md', 'README.md']
@@ -109,8 +116,110 @@ for (const relPath of SNAKE_CASE_PATHS) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// P3 — marketplace manifests
+// ─────────────────────────────────────────────────────────────────────────
+const MARKETPLACES = [
+  // Each marketplace pairs with the client manifest that its plugins[].source
+  // entries must resolve to and match by name.
+  { path: '.claude-plugin/marketplace.json', clientManifest: '.claude-plugin/plugin.json' },
+  { path: '.cursor-plugin/marketplace.json', clientManifest: '.cursor-plugin/plugin.json' },
+]
+const MARKETPLACE_COMPONENT_KEYS = ['skills', 'commands', 'agents', 'hooks', 'mcpServers']
+const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
+for (const marketplace of MARKETPLACES) {
+  let raw
+  try {
+    raw = readFileSync(resolve(process.cwd(), marketplace.path), 'utf8')
+  } catch (err) {
+    fail('P3', `${marketplace.path}: could not read file (${err.message})`)
+    continue
+  }
+  let data
+  try {
+    data = JSON.parse(raw)
+  } catch (err) {
+    fail('P3', `${marketplace.path}: JSON parse error — ${err.message}`)
+    continue
+  }
+
+  // Read by key, never by position: the two marketplace files order their
+  // fields differently (owner precedes metadata in the Cursor one).
+  if (typeof data.name !== 'string' || !KEBAB_CASE.test(data.name)) {
+    fail('P3', `${marketplace.path}: name must be a lowercase kebab-case string, got ${JSON.stringify(data.name ?? null)}`)
+  }
+
+  const ownerName = data.owner?.name
+  if (typeof ownerName !== 'string' || ownerName.length === 0) {
+    fail('P3', `${marketplace.path}: owner.name must be a non-empty string, got ${JSON.stringify(ownerName ?? null)}`)
+  }
+
+  const plugins = data.plugins
+  if (!Array.isArray(plugins) || plugins.length === 0) {
+    fail('P3', `${marketplace.path}: plugins must be a non-empty array, got ${JSON.stringify(plugins ?? null)}`)
+    continue
+  }
+
+  for (let i = 0; i < plugins.length; i++) {
+    const entry = plugins[i]
+    const where = `${marketplace.path}: plugins[${i}]`
+    if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
+      fail('P3', `${where}: entry must be an object, got ${JSON.stringify(entry ?? null)}`)
+      continue
+    }
+
+    // A component field here conflicts with plugin.json and produces
+    // "Plugin … has conflicting manifests" at install time.
+    for (const key of MARKETPLACE_COMPONENT_KEYS) {
+      if (key in entry) {
+        fail('P3', `${where}: declares component field ${key} — components belong in plugin.json, not the marketplace entry (conflicting manifests)`)
+      }
+    }
+
+    const source = entry.source
+    // Shape checks run BEFORE any resolution so a source can never point the
+    // install outside this checkout (T-06-29).
+    if (typeof source !== 'string' || !source.startsWith('./')) {
+      fail('P3', `${where}: source must begin with ./, got ${JSON.stringify(source ?? null)}`)
+      continue
+    }
+    if (source.includes('\\')) {
+      fail('P3', `${where}: source must not contain a backslash, got ${JSON.stringify(source)}`)
+      continue
+    }
+    if (source.split('/').includes('..')) {
+      fail('P3', `${where}: source must not contain a .. segment, got ${JSON.stringify(source)}`)
+      continue
+    }
+
+    const sourceDir = resolve(process.cwd(), source)
+    if (!existsSync(sourceDir) || !statSync(sourceDir).isDirectory()) {
+      fail('P3', `${where}: source ${JSON.stringify(source)} does not resolve to an existing directory`)
+      continue
+    }
+    const manifestPath = join(sourceDir, marketplace.clientManifest)
+    if (!existsSync(manifestPath)) {
+      fail('P3', `${where}: source ${JSON.stringify(source)} does not contain the expected manifest ${marketplace.clientManifest}`)
+      continue
+    }
+    let pluginName
+    try {
+      pluginName = JSON.parse(readFileSync(manifestPath, 'utf8')).name
+    } catch (err) {
+      fail('P3', `${where}: expected manifest ${marketplace.clientManifest} is unreadable or not JSON (${err.message})`)
+      continue
+    }
+    if (entry.name !== pluginName) {
+      fail('P3', `${where}: entry name ${JSON.stringify(entry.name ?? null)} does not match ${marketplace.clientManifest} name ${JSON.stringify(pluginName ?? null)}`)
+    }
+  }
+}
+
 if (failed) {
   process.exit(1)
 }
 
-console.log(`ok: P1 (${tools.size} roster tools agree across shipped surfaces) green`)
+console.log(
+  `ok: P1 (${tools.size} roster tools agree across shipped surfaces), P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources) green`
+)
