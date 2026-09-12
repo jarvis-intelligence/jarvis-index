@@ -5,7 +5,7 @@ current_phase: 06
 current_phase_name: Plugin & Skills Enhancement
 current_plan: 8
 status: planning
-stopped_at: Completed 06-07 (0.9.1 synchronized; P2a/P2b red-proven, green); 06-05 awaits human gate; 06-08 awaits release-gate decision
+stopped_at: Completed 06-05 (vendor validator pinned, package legitimacy verified and approved); only 06-08 (release gate) outstanding
 last_updated: "2026-09-12T04:41:40.147Z"
 last_activity: 2026-09-12
 state_head: 4a2e04aae7f79af9e5b2200846e67234e61b191a
@@ -13,7 +13,7 @@ progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-08-21)
 **Current focus:** Phase 06 — Plugin & Skills Enhancement (plugin + skills realignment to jarvis 0.9.1, new plugin capabilities, CI drift guards, synchronized tagged release)
 
 Phase: 06
-Current Plan: 8 (next runnable: 06-08 release gate; 06-05 gated on human decision)
+Current Plan: 8 (final plan: 06-08 release gate — branch merge to main required first, see Blockers)
 Total Plans in Phase: 8
-Status: In Progress — 06-01, 06-02, 06-03, 06-04, 06-06, 06-07 complete
+Status: In Progress — 06-01, 06-02, 06-03, 06-04, 06-05, 06-06, 06-07 complete
 Last activity: 2026-09-12
 
 ## Performance Metrics
@@ -124,6 +124,7 @@ Recent decisions affecting current work:
 - [Phase 02] Plan 02-06: `state.advance-plan` and `requirements mark-complete DOCS-01 DOCS-03 DOCS-10 DOCS-12` recurred identically (same two gaps documented above). Hand-edited the `Plan:` prose line and all four requirements' checkboxes + traceability Status cells. DOCS-04 and DOCS-09 rows still carry stale `Planned` wording (DOCS-04 belongs to already-complete plan 02-02 and was left as a pre-existing gap out of this plan's scope; DOCS-09 remains genuinely open).
 - [Phase 02] Plan 02-07 (phase close-out): both gaps recurred one final time for this phase — `state.advance-plan` errored identically on the `Plan:` prose line, and `requirements mark-complete DOCS-11` returned `not_found` (its traceability row read `Planned`). Hand-edited the `Plan:` line and DOCS-11's checkbox + traceability Status cell. Phase 2 is now fully complete except DOCS-09, whose row still carries stale `Planned` wording — genuinely open, tracked for a future audit/maintainer pass, not silently dropped.
 - [Phase 02] Verification pass (02-VERIFICATION.md): confirmed DOCS-04 and DOCS-09 were content-complete all along (never a real gap) — the 02-06 note above was itself the stale-wording symptom, not a missed requirement. Hand-edited both rows' checkboxes + traceability Status cells to `Complete`. All 12 DOCS-01..12 requirements now read `Complete` in REQUIREMENTS.md; the tooling-recognition gap itself (not the wording) remains open for a future gsd-tools fix.
+- [Phase 06] Plan 06-08 (release gate) cannot run as written: its Task 1 precondition requires `git log --oneline -1 main` to show this phase's merge commit, but `main` is still at `b456bbb` (06-01's README fix) while `gsd/v0.9.1-milestone` is 30 commits ahead, unmerged. Pushing `v0.9.1` now would tag an unmerged feature branch, not the state D-15 requires. Blocked pending a PR merge to `main`; not silently skipped.
 
 ## Deferred Items
 
