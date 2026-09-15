@@ -17,7 +17,7 @@ Ten MCP tools (navigation tools take `repo` = the slug from `jarvis index`):
 - `semanticSearch` — registered for MCP compatibility; unavailable in the Homebrew distribution and returns a Homebrew-specific error.
 - `blastRadius` — 2-hop package-dependency BFS across indexed repos.
 
-`jarvis index`, `reindex`, and `watch` build the syntax baseline for 17 parser selections (Python, JavaScript, TypeScript/TSX, Java, Kotlin, Swift, Go, Ruby, Rust, C, C++, C#, PHP, Scala, Bash, and SQL) from the `tree-sitter` runtime plus 16 pip-installed grammar distributions. The baseline needs no compiler, build system, external indexer, or index-time download. Each successful publish is an immutable `index-<sha>-<generation>.db` snapshot, so a same-commit reindex never mutates a live result.
+`jarvis index`, `reindex`, and `watch` build the syntax baseline for 17 parser selections (Python, JavaScript, TypeScript/TSX, Java, Kotlin, Swift, Go, Ruby, Rust, C, C++, C#, PHP, Scala, Bash, and SQL) from the `tree-sitter` runtime plus 16 bundled grammar packages. The baseline needs no compiler, build system, external indexer, or index-time download. Each successful publish is an immutable `index-<sha>-<generation>.db` snapshot, so a same-commit reindex never mutates a live result.
 
 Full signatures and return shapes: see the `jarvis-use` skill's `references/tool-roster.md`.
 

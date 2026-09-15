@@ -10,8 +10,9 @@ instead of guessing from grep.
 
 Everything runs on your machine. No code leaves it, no telemetry, no account.
 
-This repo is the **public distribution surface**: the installer, the plugins, the binary release
-assets, and the issue tracker. It holds no source — see [Why this repo exists](#why-this-repo-exists).
+This repo is the **public distribution surface**: the Homebrew tap and formula, the optional
+language-tooling installer, the plugins, the binary release assets, and the issue tracker. It holds
+no source — see [Why this repo exists](#why-this-repo-exists).
 
 ---
 
@@ -86,7 +87,7 @@ One language per index — a polyglot repo indexes only its plurality language.
 | TypeScript / JavaScript | `scip-typescript` | |
 | Python | `scip-python` | |
 | Swift | `scip-swift` | macOS arm64 only; pass `--scheme` if the Xcode project has several |
-| Java / Kotlin | `scip-java` | Android/Gradle projects and repos off the pinned Kotlin version are published **search-only** — lexical and semantic search work, navigation does not |
+| Java / Kotlin | `scip-java` | Android/Gradle projects and repos off the pinned Kotlin version are published **search-only** — lexical search works, SCIP navigation does not, and `semanticSearch` is unavailable in the Homebrew distribution |
 
 ## Why this repo exists
 
@@ -95,6 +96,7 @@ viewers of the owning repo**. An unauthenticated `curl` against a private repo's
 which is every real user. So every user-facing install path lives here, in public:
 
 - optional language-tooling installer, fetchable by anyone
+- the Homebrew tap and formula
 - the Claude Code / Codex / Cursor plugins
 - the `scip` and `zoekt` binaries, as GitHub release assets
 - the issue tracker

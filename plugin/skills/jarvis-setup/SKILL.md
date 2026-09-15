@@ -13,7 +13,7 @@ To take a machine from zero to "jarvis answering queries", run these in order.
 
 - **OS:** macOS or Linux. jarvis does not support Windows.
 - **Homebrew jarvis:** run `jarvis --version`. If it is missing, install it with `brew install jarvis-intelligence/jarvis/jarvis`.
-- **PATH:** `~/.jarvis/bin` must be on `PATH` when you want optional SCIP/Zoekt enrichment. Verify an installed binary with `command -v scip`; the built-in syntax baseline itself needs no external binary.
+- **Homebrew-managed binaries:** patched `scip`, Zoekt, and `universal-ctags` are embedded by the formula. Use `jarvis status <slug>` for capability checks rather than probing `PATH`.
 
 ## 2. Install jarvis and optional indexers
 

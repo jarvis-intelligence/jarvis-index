@@ -19,10 +19,10 @@ For any **structural** code question, prefer the jarvis tool over grep when the 
 | Super/subtypes of `X`? | `typeHierarchy(repo, X)` | SCIP-only; returns a capability error when relationship data is unavailable |
 | Symbols in a file? | `documentSymbols(repo, path)` | SCIP outline when usable for that file, otherwise Tree-sitter declarations |
 | Is this repo indexed or capable? | `getIndexStatus(repo, repo_path)` | Freshness, snapshot generation, providers for all five navigation tools, and the in-flight `indexing` block while an `indexRepo` run is live |
-| Repo has no index (or errors name `recoveryTool: "indexRepo"`)? | `indexRepo(path)` | Builds the index itself; returns `{slug, state, pid, log}` immediately, then poll `getIndexStatus(repo=slug)` until `indexed` or the `indexing.state` is terminal. `semantic` defaults to false — no embedding download unless asked |
+| Repo has no index (or errors name `recoveryTool: "indexRepo"`)? | `indexRepo(path)` | Builds the index itself; returns `{slug, state, pid, log}` immediately, then poll `getIndexStatus(repo=slug)` until `indexed` or the `indexing.state` is terminal. `semantic` defaults to false, and the Homebrew distribution skips semantic indexing |
 | Cross-repo dependents of a package? | `blastRadius(repo, pkg)` | — |
 | Lexical text search? | grep **or** `searchCode(query, repo?)` | — |
-| Natural-language / conceptual code search? | `semanticSearch(repo, query, limit?)` | `searchCode` (needs `semantic` extra + reindex) |
+| Natural-language / conceptual code search? | `semanticSearch(repo, query, limit?)` | Unavailable in the Homebrew distribution; use `searchCode` |
 
 ## Symbol format
 
@@ -57,7 +57,7 @@ Before a structural tool call:
 
 ## Gotchas
 
-- **The Tree-sitter syntax baseline is always on.** `index`, `reindex`, and `watch` parse git-tracked files for 17 supported parser selections using the `tree-sitter` runtime and 16 pip-installed grammar distributions. It works offline without a compiler, build system, external indexer, or index-time download. A publish is an immutable `index-<sha>-<generation>.db` snapshot, so reindexing the same commit never mutates the snapshot currently serving queries.
+- **The Tree-sitter syntax baseline is always on.** `index`, `reindex`, and `watch` parse git-tracked files for 17 supported parser selections using the `tree-sitter` runtime and 16 bundled grammar packages. It works offline without a compiler, build system, external indexer, or index-time download. A publish is an immutable `index-<sha>-<generation>.db` snapshot, so reindexing the same commit never mutates the snapshot currently serving queries.
 - **SCIP is reversible optional enrichment.** `--search-only`, `--fallback-search-only`, `--no-fallback-search-only`, and `JARVIS_FALLBACK_SEARCH_ONLY` are removed. Their rejection exits with status `2` in `main` before argparse, so it fires for every subcommand rather than only `index`. Use persisted `--scip` / `--no-scip` on `jarvis index`, `jarvis reindex`, or `jarvis watch`; omitted means the persisted choice, defaulting to enabled for a new repo. A missing or failed SCIP stage publishes the syntax baseline with `status: degraded` and an actionable recovery instead of suppressing declaration navigation.
 - **References and hierarchies are SCIP-only.** `findReferences`, `callHierarchy`, and `typeHierarchy` never infer edges from syntax declarations. Without usable SCIP data they return the established error payload plus `requiredCapability`, `reason`, and `recovery`, never an empty list. Install or repair the relevant indexer, then run `jarvis reindex <slug> --scip`.
 - **`typeHierarchy` also needs the Homebrew-bundled patched `scip` build.** Upstream `scip expt-convert` through v0.9.0 never populated relationships. Reinstall the Homebrew formula and then `jarvis reindex <slug> --scip` if the capability remains unavailable.
