@@ -5,8 +5,9 @@
 # notice at every session start. The PATH remains user-trusted; this hook never
 # fetches a replacement CLI or evaluates data returned by jarvis.
 
-# Do not fall back to uvx: resolving a cold dependency tree would perform network
-# work during session start and contradict the plugin's local-first promise.
+# Never fall back to package-manager execution: resolving a cold package
+# dependency tree would perform network/session-start installation and
+# contradict the plugin's local-first promise.
 if ! command -v jarvis >/dev/null 2>&1; then
   exit 0
 fi
