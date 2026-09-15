@@ -31,7 +31,43 @@ curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/ma
 curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh -s -- --only scip-python
 ```
 
-Use `--only scip-swift` on macOS arm64 with Xcode, `--only scip-java` when a JDK is already installed, and `--only bash-shim` when macOS Java indexing needs bash 4.4 or newer. Do not run `setup.sh` without `--only`; the Homebrew formula is the jarvis installation. `semanticSearch` dependencies are not available in this binary distribution.
+Use `--only scip-swift` on macOS arm64 with Xcode, `--only scip-java` when a JDK is already installed, and `--only bash-shim` when macOS Java indexing needs bash 4.4 or newer. Do not run `setup.sh` without `--only`; the Homebrew formula is the jarvis installation.
+
+### Optional: semantic search
+
+Homebrew jarvis cannot include `semanticSearch` (the frozen binary excludes its
+Python dependencies). After the Homebrew install succeeds, **ask the user**:
+
+> Semantic search is optional. Enabling it requires a jarvis source checkout
+> and a one-time ~4.3 GB model download (`BAAI/bge-m3`, cached globally and
+> shared by all repos). Enable it now? (y/N)
+
+- **Skip the question** when source-mode jarvis with the semantic extra is
+  already active: `python -c "import lancedb, sentence_transformers"` succeeds
+  in the jarvis venv the MCP server runs from.
+- **If declined:** continue setup normally. The offer reappears per-repo on the
+  next interactive `jarvis index` in a source checkout; do not persist a global
+  opt-out.
+- **If accepted**, check `uv` is installed (`uv --version`; install from
+  https://docs.astral.sh/uv/ if missing), then guide:
+
+  ```bash
+  git clone https://github.com/phuongddx/jarvis.git
+  cd jarvis
+  uv sync --extra semantic --extra watch --group native
+  uv run jarvis install-semantic   # also pre-downloads the model
+  ```
+
+  Then point the MCP client at the source server (overriding the Homebrew
+  binary):
+
+  ```bash
+  codex mcp add jarvis -- "$(pwd)/.venv/bin/jarvis-server"
+  # claude mcp add jarvis --scope user -- "$(pwd)/.venv/bin/jarvis-server"
+  ```
+
+  Re-run `jarvis status <slug>` from the checkout to confirm the
+  `semanticSearch` capability before reporting success.
 
 ## 3. Register the MCP server
 
