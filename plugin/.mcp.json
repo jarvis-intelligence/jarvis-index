@@ -1,14 +1,7 @@
 {
   "mcpServers": {
     "jarvis": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "jarvis-mcp>=0.9.1",
-        "--python",
-        ">=3.12",
-        "jarvis-server"
-      ]
+      "command": "jarvis-server"
     }
   }
 }
