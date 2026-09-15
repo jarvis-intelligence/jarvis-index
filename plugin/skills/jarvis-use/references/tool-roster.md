@@ -21,7 +21,7 @@ Single-level incoming and outgoing call hierarchy for `symbol`. **SCIP-only:** m
 Returns: `{"symbol": ..., "resolvedSymbol"?: ..., "incomingCalls": [...], "outgoingCalls": [...], "freshness": {...}}`.
 
 ### typeHierarchy(repo, symbol) → dict
-Single-level supertypes/subtypes for `symbol`. **SCIP-only:** missing relationship data returns `requiredCapability`/`reason`/`recovery`. The bundled setup.sh installs a patched `scip` because upstream through v0.9.0 did not populate relationships; re-run setup.sh and `jarvis reindex <slug> --scip` after upgrading it.
+Single-level supertypes/subtypes for `symbol`. **SCIP-only:** missing relationship data returns `requiredCapability`/`reason`/`recovery`. The Homebrew formula bundles a patched `scip` because upstream through v0.9.0 did not populate relationships; reinstall the Homebrew formula and run `jarvis reindex <slug> --scip` after upgrading it.
 
 ### getIndexStatus(repo, repo_path=None) → dict
 
@@ -37,7 +37,7 @@ Lexical search via an embedded Zoekt index (lazy-started on first call). `repo`,
 Returns: `{"query": ..., "hits": [{"repo","path","lineNumber","lineText"}], "total": int}`.
 
 ### semanticSearch(repo, query, limit=10) → dict
-Natural-language code search over `repo`: embeds `query`, retrieves top vector matches from the repo's semantic index, and fuses them with Zoekt lexical hits and SCIP symbol-definition matches (when a SCIP index exists) via reciprocal rank fusion. Requires `repo` to have been indexed with the `semantic` extra installed (`uv tool install "jarvis-mcp[semantic]"`); otherwise returns `{"error": "..."}` with an install hint.
+Natural-language code search over `repo`: embeds `query`, retrieves top vector matches from the repo's semantic index, and fuses them with Zoekt lexical hits and SCIP symbol-definition matches (when a SCIP index exists) via reciprocal rank fusion. In the Homebrew binary distribution, semantic indexing and search are unavailable; the tool remains registered for MCP compatibility and returns a Homebrew-specific unavailability error.
 Returns: `{"query": ..., "results": [{"repo","filePath","startLine","endLine","symbolName","content","score","sources"}], "total": int}` (plus an optional `"warning"` if the configured embedding model differs from the index's). `sources` may include `"symbol"`; a symbol-only hit has `content=""` (SCIP stores no source text) and `symbolName` set to the definition's dotted path. Swift repos get no benefit from this signal — scip-swift emits clang USR strings as symbol names, which NL query tokens never match (same caveat as bare-name resolution in the nav tools).
 
 ### blastRadius(repo, symbol_or_package) → dict

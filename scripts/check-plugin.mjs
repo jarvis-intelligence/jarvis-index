@@ -7,16 +7,10 @@
 //        available in CI: it cannot detect the server registering an eleventh
 //        tool. Maintainers must re-read ../jarvis/src/jarvis/server.py when the
 //        server changes; P1 is not a server diff.
-//   P2a — the jarvis-mcp requirement parsed from plugin/mcp.json's
-//        mcpServers.jarvis.args is a >= floor (never an exact pin), carries no
-//        bracketed extra, is not below 0.6.0, and EQUALS the version the three
-//        plugin.json files agree on. That fourth check is an identity rather
-//        than a relation because D-16 mirrored the server version into the
-//        plugin number — one release, one number; if a future release
-//        decouples the two, it becomes a floor <= serverVersion relation.
-//        P2a deliberately does not re-assert three-way manifest equality or
-//        MCP-config byte-identity: scripts/check-manifests.mjs owns both, and
-//        one contract must have one owner.
+//   P2a — the default registration launches the Homebrew-owned
+//        jarvis-server command and carries no uv-managed args. The three
+//        plugin.json versions still supply releaseVersion for P2b's tag
+//        identity; check-manifests.mjs owns three-way version equality.
 //   P2b — release gate, the script's only network dimension. Runs only behind
 //        --release (or CHECK_PLUGIN_RELEASE=1). Asserts every URL into this
 //        repository found in .codex-plugin/plugin.json, the three SKILL.md,
@@ -151,7 +145,7 @@ for (const relPath of SNAKE_CASE_PATHS) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// P2a — manifest version ↔ jarvis-mcp floor identity
+// P2a — Homebrew launcher identity
 // ─────────────────────────────────────────────────────────────────────────
 const PLUGIN_MANIFEST_PATHS = [
   'plugin/.claude-plugin/plugin.json',
@@ -177,64 +171,32 @@ function readManifestVersion() {
   return null
 }
 
-// Numeric dotted-version compare, no semver dependency. Sufficient for
-// x.y.z release numbers; a pre-release floor would need real semver.
-function versionLessThan(a, b) {
-  const pa = a.split('.').map(Number)
-  const pb = b.split('.').map(Number)
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const left = pa[i] ?? 0
-    const right = pb[i] ?? 0
-    if (left !== right) return left < right
-  }
-  return false
-}
-
 const releaseVersion = readManifestVersion()
 
-// P2a reads the requirement out of plugin/mcp.json alone; plugin/.mcp.json is
+// P2a reads the launcher out of plugin/mcp.json alone; plugin/.mcp.json is
 // its byte-identical twin, and that equality is check-manifests.mjs's
 // contract, not this dimension's.
 const MCP_CONFIG_PATH = 'plugin/mcp.json'
-let mcpFloorRequirement = null
+let mcpCommand = null
+let parsedServer = null
 try {
-  const args = JSON.parse(readFileSync(resolve(process.cwd(), MCP_CONFIG_PATH), 'utf8'))
-    ?.mcpServers?.jarvis?.args
-  if (!Array.isArray(args)) {
-    fail('P2a', `${MCP_CONFIG_PATH}: mcpServers.jarvis.args must be an array`)
+  const config = JSON.parse(readFileSync(resolve(process.cwd(), MCP_CONFIG_PATH), 'utf8'))
+    ?.mcpServers?.jarvis
+  if (typeof config !== 'object' || config === null || Array.isArray(config)) {
+    fail('P2a', `${MCP_CONFIG_PATH}: mcpServers.jarvis must be an object`)
   } else {
-    // Locate the requirement by naming the distribution, never by fixed
-    // position: an element inserted before it must not silently break the guard.
-    const reqs = args.filter((arg) => typeof arg === 'string' && arg.startsWith('jarvis-mcp'))
-    if (reqs.length !== 1) {
-      fail('P2a', `${MCP_CONFIG_PATH}: expected exactly 1 jarvis-mcp requirement in mcpServers.jarvis.args, found ${reqs.length} (${JSON.stringify(reqs)})`)
-    } else {
-      mcpFloorRequirement = reqs[0]
-    }
+    parsedServer = config
+    mcpCommand = config.command
   }
 } catch (err) {
   fail('P2a', `${MCP_CONFIG_PATH}: could not read or parse (${err.message})`)
 }
 
-if (mcpFloorRequirement !== null) {
-  const m = mcpFloorRequirement.match(/^jarvis-mcp(\[([^\]]*)\])?(>=|<=|===|==|=|<|>|~=?|\^)?(.*)$/)
-  const extra = m[2]
-  const operator = m[3]
-  const floor = (m[4] ?? '').trim()
-  if (extra !== undefined) {
-    fail('P2a', `${MCP_CONFIG_PATH}: requirement "${mcpFloorRequirement}" carries extra [${extra}] — the default plugin registration must never install the semantic extra`)
-  }
-  if (operator !== '>=') {
-    fail('P2a', `${MCP_CONFIG_PATH}: requirement "${mcpFloorRequirement}" is not a >= floor (operator ${operator === undefined ? 'missing' : `"${operator}"`}) — the registration must stay a floor, never an exact pin`)
-  }
-  if (!/^\d+(\.\d+)*/.test(floor)) {
-    fail('P2a', `${MCP_CONFIG_PATH}: requirement "${mcpFloorRequirement}" carries no parseable floor version`)
-  } else if (versionLessThan(floor, '0.6.0')) {
-    fail('P2a', `${MCP_CONFIG_PATH}: jarvis-mcp floor ${floor} is below the 0.6.0 minimum`)
-  }
-  if (releaseVersion !== null && floor !== releaseVersion) {
-    fail('P2a', `${MCP_CONFIG_PATH}: jarvis-mcp floor ${floor} does not equal the manifest version ${releaseVersion} — the floor and the release version must read as one fact`)
-  }
+if (mcpCommand !== 'jarvis-server') {
+  fail('P2a', `${MCP_CONFIG_PATH}: command must be "jarvis-server" from the Homebrew install, got ${JSON.stringify(mcpCommand ?? null)}`)
+}
+if (mcpCommand === 'jarvis-server' && parsedServer?.args !== undefined) {
+  fail('P2a', `${MCP_CONFIG_PATH}: args must be absent — Homebrew owns the launcher and its environment`)
 }
 
 
@@ -751,7 +713,7 @@ if (failed) {
 
 const dimensions = [
   `P1 (${tools.size} roster tools agree across shipped surfaces)`,
-  `P2a (${mcpFloorRequirement} floor matches manifest version ${releaseVersion})`,
+  `P2a (jarvis-server is the Homebrew-owned MCP launcher)`,
   `P3 (${MARKETPLACES.length} marketplace manifests valid with resolving sources)`,
   `P4 (${frontmatterSubjects} frontmatter blocks within allowed key sets)`,
   `P5 (${resolvedPaths} referenced paths resolve, hook script executable)`,

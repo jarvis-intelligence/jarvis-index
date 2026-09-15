@@ -1,6 +1,6 @@
 ---
 name: jarvis-setup
-description: Install and configure jarvis, the local-first structural code intelligence with an always-on Tree-sitter syntax baseline. Use when onboarding, running setup.sh, registering the MCP server, or indexing a repo for the first time.
+description: Install and configure Homebrew jarvis, the local-first structural code intelligence with an always-on Tree-sitter syntax baseline. Use when onboarding, registering the MCP server, or indexing a repo for the first time.
 ---
 
 # jarvis setup
@@ -12,24 +12,26 @@ To take a machine from zero to "jarvis answering queries", run these in order.
 ## 1. Check prerequisites
 
 - **OS:** macOS or Linux. jarvis does not support Windows.
-- **`uv`:** run `uv --version`. If missing, install from https://docs.astral.sh/uv/.
-- **PATH:** `~/.jarvis/bin` must be on `PATH` when you want optional SCIP/Zoekt enrichment. Verify an installed binary with `command -v scip`; the built-in syntax baseline itself needs no external binary.
+- **Homebrew jarvis:** run `jarvis --version`. If it is missing, install it with `brew install jarvis-intelligence/jarvis/jarvis`.
+- **Homebrew-managed binaries:** patched `scip`, Zoekt, and `universal-ctags` are embedded by the formula. Use `jarvis status <slug>` for capability checks rather than probing `PATH`.
 
-## 2. Install jarvis + external binaries
+## 2. Install jarvis and optional indexers
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
+brew install jarvis-intelligence/jarvis/jarvis
+jarvis --version
 ```
 
-`setup.sh` installs the optional external binaries for SCIP enrichment and Zoekt into `~/.jarvis/bin`, appends that directory to the shell rc, and runs `uv tool install jarvis-mcp` to pre-warm the package cache before an MCP client connects. It is idempotent — re-running skips what is present. Options: `--only <name>` (one dependency, including `jarvis-mcp`), `--force` (reinstall), `--help`.
+Expected output: `jarvis 0.11.0`. Homebrew installs the CLI, `jarvis-server`, patched `scip`, Zoekt, and `universal-ctags`; it does not require uv, pip, or PyPI.
 
-Binaries installed for optional enrichment: `scip` (a fork build — upstream v0.9.0 plus the scip#465 relationships fix that makes `typeHierarchy` work; the install is version-gated, so re-running setup.sh upgrades an older binary automatically), `zoekt-git-index` / `zoekt-webserver` (search), and one SCIP indexer per language: `scip-typescript`, `scip-python`, `scip-swift` (macOS arm64 only), `scip-java` (a JVM launcher; needs `java` on `PATH`), plus `jarvis-mcp` itself (the `jarvis` CLI and `jarvis-server` MCP server) via `uv tool install`.
+The syntax baseline parses git-tracked files without external tools. For language-specific SCIP enrichment, install only the needed toolchain separately:
 
-Every `index` run also builds a Tree-sitter syntax baseline from the package's base dependencies: 17 parser selections backed by the `tree-sitter` runtime and 16 pip-installed grammar distributions. It parses offline and requires no compiler, build system, external indexer, or index-time download. SCIP is optional enrichment: Java/Kotlin projects that cannot produce SCIP data still publish syntax declarations and Zoekt search, but `findReferences`, `callHierarchy`, and `typeHierarchy` require usable SCIP data. See [Requirements & Limits](https://jarvis-intelligence.github.io/jarvis-index/docs/guide/requirements/) for the full language-support matrix and caveats.
+```bash
+curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh -s -- --only scip-typescript
+curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh -s -- --only scip-python
+```
 
-Optional extras are not covered by the default install: `uv tool install "jarvis-mcp[semantic]"` for `semanticSearch`, `[watch]` for `jarvis watch`.
-
-Plugin users: this step used to require a separate `uv tool install jarvis-mcp` before the first tool call, to avoid the plugin's `uvx` launch losing the race against the MCP client's 30s connect window on a cold cache — setup.sh now does that for you. Run `uv tool install jarvis-mcp` by hand if you skipped setup.sh, used `--only` to install a single native binary, or ran a setup.sh from before this fix.
+Use `--only scip-swift` on macOS arm64 with Xcode, `--only scip-java` when a JDK is already installed, and `--only bash-shim` when macOS Java indexing needs bash 4.4 or newer. Do not run `setup.sh` without `--only`; the Homebrew formula is the jarvis installation. `semanticSearch` dependencies are not available in this binary distribution.
 
 ## 3. Register the MCP server
 
