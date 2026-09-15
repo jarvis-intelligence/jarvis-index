@@ -4,7 +4,7 @@
 Zoekt, then let the agent ask structural questions — *who calls this?*, *where is this defined?* —
 instead of guessing from grep.
 
-[![PyPI](https://img.shields.io/pypi/v/jarvis-mcp?label=jarvis-mcp)](https://pypi.org/project/jarvis-mcp/)
+[![Plugin release](https://img.shields.io/github/v/tag/jarvis-intelligence/jarvis-index?label=plugin)](https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.0)
 [![License](https://img.shields.io/badge/license-MIT-blue)](plugin/LICENSE)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
 
@@ -27,7 +27,7 @@ Ten MCP tools, exposed to any MCP client:
 | | `typeHierarchy` | Super/subtypes of `X` |
 | | `documentSymbols` | Every symbol in a file |
 | **Search** | `searchCode` | Lexical search across indexed repos (Zoekt) |
-| | `semanticSearch` | Natural-language search — needs the `[semantic]` extra |
+| | `semanticSearch` | Registered for compatibility; unavailable in the Homebrew distribution |
 | **Scope** | `blastRadius` | Which other indexed repos depend on this package |
 | | `indexRepo` | Builds an index for a local git repo and returns immediately for polling |
 | | `getIndexStatus` | Is this repo indexed, and is the index stale? |
@@ -41,24 +41,20 @@ Full signatures and return shapes: [`plugin/skills/jarvis-use/references/tool-ro
 ## Quick start
 
 ```bash
-# 1. External binaries (scip, zoekt, language indexers) → ~/.jarvis/bin
-curl -fsSL https://raw.githubusercontent.com/jarvis-intelligence/jarvis-index/main/setup.sh | sh
+# 1. Install the standalone binary and MCP server
+brew install jarvis-intelligence/jarvis/jarvis
 
-# 2. The CLI + MCP server
-uv tool install jarvis-mcp
+# 2. Verify
+jarvis --version                    # expect: jarvis 0.11.0
 
 # 3. Index a repo (slug defaults to the directory name)
 jarvis index /path/to/your/repo
 
 # 4. Verify
-jarvis status <slug>          # expect: indexed
+jarvis status <slug>                # expect: indexed
 ```
 
-Then register the MCP server — or skip that entirely by installing the plugin below, which
-registers it for you.
-
-`setup.sh` is idempotent; re-running skips what is already present. Options: `--only <name>`,
-`--force`, `--help`.
+Then install the plugin below to register `jarvis-server` and install the agent skills.
 
 ## Install as a plugin
 
@@ -71,14 +67,14 @@ The plugin bundles the MCP registration and all three skills, so there is no man
 | **Cursor** | Dashboard → Plugins → Add Marketplace → Import from Repo *(Teams/Enterprise)*<br>or clone and `ln -s "$PWD/jarvis-index/plugin" ~/.cursor/plugins/local/jarvis` |
 | **Other MCP clients** | Point them at the stdio command `jarvis-server` |
 
-Still run `setup.sh` + `jarvis index` afterwards — the plugin ships the wiring, not the binaries.
+The plugin launches the Homebrew-installed `jarvis-server`. If needed, install optional language-specific SCIP tooling afterward with the setup skill's `--only` commands.
 
-Details, the optional `[semantic]` extra, and privacy notes: [`plugin/README.md`](plugin/README.md).
+Details, Homebrew limits, and privacy notes: [`plugin/README.md`](plugin/README.md).
 
 ## Requirements
 
-- **macOS or Linux.** Windows is not supported.
-- [`uv`](https://docs.astral.sh/uv/) on `PATH`.
+- **macOS or Linux with Homebrew/Linuxbrew.** Windows is not supported.
+- `jarvis 0.11.0` installed by `brew install jarvis-intelligence/jarvis/jarvis`.
 - `java` on `PATH` only if you index Java/Kotlin repos.
 
 ## Language support
@@ -98,17 +94,15 @@ jarvis's development repo is private, and GitHub serves raw files and release as
 viewers of the owning repo**. An unauthenticated `curl` against a private repo's `setup.sh` 404s —
 which is every real user. So every user-facing install path lives here, in public:
 
-- `setup.sh`, fetchable by anyone
+- optional language-tooling installer, fetchable by anyone
 - the Claude Code / Codex / Cursor plugins
 - the `scip` and `zoekt` binaries, as GitHub release assets
 - the issue tracker
 
-The Python package itself is on PyPI as [`jarvis-mcp`](https://pypi.org/project/jarvis-mcp/).
-
 ## Repo layout
 
 ```
-setup.sh              Dependency bootstrapper — SYNCED from the dev repo, do not edit here
+setup.sh              optional language-tooling installer — SYNCED from the dev repo, do not edit here
 plugin/               The plugin: skills, MCP config, assets — source of truth, edit directly
 .claude-plugin/       Claude Code marketplace manifest
 .codex-plugin/        Codex CLI plugin manifest
@@ -120,13 +114,12 @@ docs/                 Maintainer documentation for this repo
 
 | Path | Rule |
 |---|---|
-| `setup.sh` | **Never edit here.** Published automatically from the development repo and overwritten on the next release. Fix it upstream. |
+| `setup.sh` | **Never edit here.** The optional language-tooling installer is published automatically from the development repo and overwritten on the next release. Fix it upstream. |
 | everything else | Source of truth is **here** — edit directly. |
 
 Any change under `plugin/` must bump the `version` in **all three** plugin manifests, to the same
 value, or it reaches nobody: `plugin/.claude-plugin/plugin.json`,
-`plugin/.cursor-plugin/plugin.json`, `.codex-plugin/plugin.json`. The plugin versions
-independently of the `jarvis-mcp` package on PyPI.
+`plugin/.cursor-plugin/plugin.json`, `.codex-plugin/plugin.json`. Plugin `0.11.0` aligns with the Homebrew jarvis `0.11.0` release.
 
 Full conventions: [`docs/code-standards.md`](docs/code-standards.md).
 
@@ -142,5 +135,5 @@ Full conventions: [`docs/code-standards.md`](docs/code-standards.md).
 ## Links
 
 - **Issues / feature requests:** <https://github.com/jarvis-intelligence/jarvis-index/issues>
-- **Changelog:** [PyPI release history](https://pypi.org/project/jarvis-mcp/#history)
+- **Changelog:** <https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.0>
 - **License:** [MIT](plugin/LICENSE)

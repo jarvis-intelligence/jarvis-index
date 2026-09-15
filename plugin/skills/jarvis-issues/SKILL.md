@@ -16,14 +16,14 @@ Before drafting, collect:
 - Repo + slug, and `jarvis status <slug>` output.
 - The tool name + arguments if it was an MCP call (e.g. `findReferences(repo="foo", symbol="bar")`).
 - The full error payload — every jarvis tool returns `{"error": "..."}`, copy it verbatim.
-- jarvis version: `uv run --python 3.12 --with jarvis-mcp python3 -c "import importlib.metadata; print(importlib.metadata.version('jarvis-mcp'))"` (jarvis has no `--version` flag; this reads it from the distribution metadata. `uv run --with` builds a throwaway env containing the package just for this one command, so it resolves correctly regardless of how jarvis is installed — `uv tool install`, the plugin's `uvx` registration, or anything else — without depending on bare `python3` being able to see an isolated tool venv. Note the distribution is `jarvis-mcp`, not `jarvis`.)
+- jarvis version: `jarvis --version` (expected format: `jarvis X.Y.Z`; report the complete output).
 - OS/arch (`uname -s`, `uname -m`).
 
 ## 2. Classify — and check known limitations
 
 Decide: **bug**, **feature**, or **known limitation**. Before filing a bug, confirm it isn't one of these already-documented gaps (do NOT file duplicates of these):
 
-- `typeHierarchy` returns an error when the index has no relationship data; an unpatched `scip` is one cause. Re-run setup.sh and `jarvis reindex <slug> --scip` before filing. DO file a bug if it still errors on a freshly reindexed repo with the bundled patched `scip`.
+- `typeHierarchy` returns an error when the index has no relationship data; an unpatched `scip` is one cause. Reinstall the Homebrew formula with `brew install jarvis-intelligence/jarvis/jarvis`, then reindex with `jarvis reindex <slug> --scip` before filing. DO file a bug if it still errors on a freshly reindexed repo with the bundled patched `scip`.
 - Single-tenant hardcoding: `config.py` pins `PROJECT = "_"` / `BRANCH = "_"`. Not multi-tenancy.
 - One language per repo — no multi-language merge.
 - `blastRadius` reports `freshness: unknown` — the package graph has no per-node timestamp.
