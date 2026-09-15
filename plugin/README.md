@@ -102,6 +102,6 @@ jarvis is local-first. Installing the Homebrew formula contacts Homebrew and the
 ## Links
 
 - Repository: <https://github.com/jarvis-intelligence/jarvis-index>
-- Changelog: <https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.0>
+- Changelog: <https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.1>
 - Issues: <https://github.com/jarvis-intelligence/jarvis-index/issues>
 - Full onboarding: the `jarvis-setup` skill.
