@@ -4,7 +4,7 @@
 Zoekt, then let the agent ask structural questions — *who calls this?*, *where is this defined?* —
 instead of guessing from grep.
 
-[![Plugin release](https://img.shields.io/github/v/tag/jarvis-intelligence/jarvis-index?label=plugin)](https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.0)
+[![Plugin release](https://img.shields.io/github/v/tag/jarvis-intelligence/jarvis-index?label=plugin)](https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.1)
 [![License](https://img.shields.io/badge/license-MIT-blue)](plugin/LICENSE)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
 
@@ -121,7 +121,7 @@ docs/                 Maintainer documentation for this repo
 
 Any change under `plugin/` must bump the `version` in **all three** plugin manifests, to the same
 value, or it reaches nobody: `plugin/.claude-plugin/plugin.json`,
-`plugin/.cursor-plugin/plugin.json`, `.codex-plugin/plugin.json`. Plugin `0.11.0` aligns with the Homebrew jarvis `0.11.0` release.
+`plugin/.cursor-plugin/plugin.json`, `.codex-plugin/plugin.json`. Plugin `0.11.1` versions independently of the Homebrew jarvis CLI.
 
 Full conventions: [`docs/code-standards.md`](docs/code-standards.md).
 
@@ -137,5 +137,5 @@ Full conventions: [`docs/code-standards.md`](docs/code-standards.md).
 ## Links
 
 - **Issues / feature requests:** <https://github.com/jarvis-intelligence/jarvis-index/issues>
-- **Changelog:** <https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.0>
+- **Changelog:** <https://github.com/jarvis-intelligence/jarvis-index/releases/tag/v0.11.1>
 - **License:** [MIT](plugin/LICENSE)
